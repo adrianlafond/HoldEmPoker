@@ -27,7 +27,6 @@
     
     options = options || {}
     this._cards = []
-    
     this._in = []
     this._out = []
     
