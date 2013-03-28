@@ -10,14 +10,14 @@
   /**
    * 
    */
-  NS.HoldEm = function (options) { 
+  NS.HoldEmGame = function (options) { 
     var key, val, i, len
        
-    if (!(this instanceof NS.HoldEm)) {
-      return new NS.HoldEm(options)
+    if (!(this instanceof NS.HoldEmGame)) {
+      return new NS.HoldEmGame(options)
     }
     
-    this.options = NS.defaults()
+    this.options = NS.holdem.defaults()
     for (key in options) {
       if (options.hasOwnProperty(key)) {
         this.options[key] = options[key]
@@ -39,7 +39,7 @@
   /**
    * @public API
    */
-  NS.HoldEm.prototype = {
+  NS.HoldEmGame.prototype = {
     
     deal: function () {
       //...
