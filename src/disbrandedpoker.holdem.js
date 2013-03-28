@@ -2,27 +2,29 @@
 ;(function (root) {
   'use strict'
 
-  var HEP = root.HOLDEM_POKER || (root.HOLDEM_POKER = {})
-
+  var NS
+  
+  root.DISBRANDED_POKER = (typeof root.DISBRANDED_POKER === 'undefined') ? {} : root.DISBRANDED_POKER
+  NS = root.DISBRANDED_POKER
 
   /**
    * 
    */
-  HEP.Game = function (options) { 
+  NS.HoldEm = function (options) { 
     var key, val, i, len
        
-    if (!(this instanceof HEP.Game)) {
-      return new HEP.Game(options)
+    if (!(this instanceof NS.HoldEm)) {
+      return new NS.HoldEm(options)
     }
     
-    this.options = HEP.defaults()
+    this.options = NS.defaults()
     for (key in options) {
       if (options.hasOwnProperty(key)) {
         this.options[key] = options[key]
       }
     }
     
-    this.deck = new HEP.Deck({ jokers: 2 })
+    this.deck = new NS.Deck({ jokers: 2 })
     // this.deck.removeJokers().shuffle().addJokers(2)
     this.deck.addJokers(6).removeJokers().addJokers(2).shuffle()
     var str = []
@@ -37,7 +39,7 @@
   /**
    * @public API
    */
-  HEP.Game.prototype = {
+  NS.HoldEm.prototype = {
     
     deal: function () {
       //...

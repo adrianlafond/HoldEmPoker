@@ -2,7 +2,7 @@
 ;(function (root) {
   'use strict'
 
-  var HEP = root.HOLDEM_POKER || (root.HOLDEM_POKER = {}),
+  var NS,
       
       cards = [
         '2C', '3C', '4C', '5C', '6C', '7C', '8C', '9C', 'TC', 'JC', 'QC', 'KC', 'AC',
@@ -14,9 +14,14 @@
       SIZE = cards.length,
       
       MAX_JOKERS = 4
+      
+
+  // @namespace
+  root.DISBRANDED_POKER = (typeof root.DISBRANDED_POKER === 'undefined') ? {} : root.DISBRANDED_POKER
+  NS = root.DISBRANDED_POKER
   
   
-  HEP.Deck = function (options) {
+  NS.Deck = function (options) {
     var i, len
     
     options = options || {}
@@ -40,7 +45,7 @@
   }
 
   
-  HEP.Deck.prototype = {
+  NS.Deck.prototype = {
     
     /**
      * @returns undealt cards remaining in deck.

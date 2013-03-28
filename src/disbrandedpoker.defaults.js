@@ -2,20 +2,24 @@
 ;(function (root) {
   'use strict'
 
-  var HEP = root.HOLDEM_POKER || (root.HOLDEM_POKER = {}),
+  var NS,
   
       defaults = {
         maxSeats: 13,
         minSeats: 2,
         seats: 5
       }
+      
+  // @namespace
+  root.DISBRANDED_POKER = (typeof root.DISBRANDED_POKER === 'undefined') ? {} : root.DISBRANDED_POKER
+  NS = root.DISBRANDED_POKER
 
 
   /**
    * @returns a copy of the defaults.
    * Original defaults stay intact.
    */
-  HEP.defaults = function () {
+  NS.defaults = function () {
     var key,
         obj = {}
     for (key in defaults) {
