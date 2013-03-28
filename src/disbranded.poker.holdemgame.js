@@ -4,8 +4,10 @@
 
   var NS
   
-  root.DISBRANDED_POKER = (typeof root.DISBRANDED_POKER === 'undefined') ? {} : root.DISBRANDED_POKER
-  NS = root.DISBRANDED_POKER
+  // @namespace
+  root.DISBRANDED = (typeof root.DISBRANDED === 'undefined') ? {} : root.DISBRANDED
+  root.DISBRANDED.poker = root.DISBRANDED.poker || {}
+  NS = root.DISBRANDED.poker
 
   /**
    * 

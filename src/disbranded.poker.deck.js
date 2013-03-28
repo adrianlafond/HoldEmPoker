@@ -17,8 +17,9 @@
       
 
   // @namespace
-  root.DISBRANDED_POKER = (typeof root.DISBRANDED_POKER === 'undefined') ? {} : root.DISBRANDED_POKER
-  NS = root.DISBRANDED_POKER
+  root.DISBRANDED = (typeof root.DISBRANDED === 'undefined') ? {} : root.DISBRANDED
+  root.DISBRANDED.poker = root.DISBRANDED.poker || {}
+  NS = root.DISBRANDED.poker
   
   
   NS.Deck = function (options) {
