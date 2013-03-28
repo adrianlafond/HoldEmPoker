@@ -36,17 +36,17 @@
       this._cards[i + SIZE] = 'J' + (i + 1)
     }
     
-    this._reset = true
+    this.reset(true)
   }
 
   
   HEP.Deck.prototype = {
     
     /**
-     * @returns current unshuffled deck, including jokers.
+     * @returns undealt cards remaining in deck.
      */
     cards: function () {
-      return this._cards
+      return this._in
     },
     
     /**
@@ -98,7 +98,7 @@
      */
     reset: function (override) {
       var i, len
-      if (!this._reset || !!override) {
+      if (!!override || !this._reset) {
         this._in = []
         this._out = []
         for (i = 0, len = this._cards.length; i < len; i++) {
