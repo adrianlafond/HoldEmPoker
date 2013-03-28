@@ -1,4 +1,4 @@
 HoldEmPoker
 ===========
 
-A hold'em poker engine build in JavaScript. Just because.
+A hold'em poker engine built in JavaScript. Just because.
