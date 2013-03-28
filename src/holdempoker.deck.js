@@ -42,6 +42,9 @@
   
   HEP.Deck.prototype = {
     
+    /**
+     * @returns current unshuffled deck, including jokers.
+     */
     cards: function () {
       return this._cards
     },
