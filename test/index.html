@@ -6,11 +6,24 @@
 
   <link rel="stylesheet" href="style.css" />
 
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="../src/holdempoker.game.js"></script>
+  <script src="../src/holdempoker.defaults.js"></script>
+  <script src="../src/holdempoker.deck.js"></script>
+  <script>
+  jQuery(function ($) {
+    var options = {
+      
+        },
+        game = HOLDEM_POKER.Game(options)
+    
+    console.log(game)
+  })
+  </script>
 </head>
 
 <body>
+
 
 
 
