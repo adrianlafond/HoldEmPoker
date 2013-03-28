@@ -23,7 +23,13 @@
     }
     
     this.deck = new HEP.Deck({ jokers: 2 })
-    console.log(this.deck.cards())
+    // this.deck.removeJokers().shuffle().addJokers(2)
+    this.deck.addJokers(6).removeJokers().addJokers(2).shuffle()
+    var str = []
+    for (i = 0, len = this.deck.cards().length; i < len; i++) {
+      str[i] = this.deck.deal()
+    }
+    console.log(str)
   }
   
   
