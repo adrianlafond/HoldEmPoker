@@ -42,6 +42,10 @@
     //   { id:'c', hand: ['2C', '3C', '5C', '2D', '6C', 'AD', 'KC'] }// 2 pair
     // ]
     // console.log('highest:', NS.hands.highest(hands))
+    
+    // var hand = new NS.Hand('a').add(['5C', '3C', '6C', '4H', '7C', '2C', 'KC']).updateStatus()
+    var hand = new NS.Hand('a').add(['8C', '7C', '8H', '9C', 'TD', 'TC', 'JC', 'QC']).updateStatus()
+    var hand2 = new NS.Hand('b').add(['AC', 'KC', '8H', '9C', 'TD', 'TC', 'JC', 'QC']).updateStatus()
   }
   
   
