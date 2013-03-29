@@ -35,6 +35,13 @@
     }
     console.log(str)
     console.log(this.deck.cards())
+    
+    var hands = [
+      { id:'a', hand: ['2C', '3C', '5C', '2D', '6C', 'AD', 'KC'] },// king-high flush
+      { id:'b', hand: ['2C', '3C', '5C', '2D', '6C', 'AD', 'KC'] },// 3 of a kind
+      { id:'c', hand: ['2C', '3C', '5C', '2D', '6C', 'AD', 'KC'] }// 2 pair
+    ]
+    console.log('highest:', NS.hands.highest(hands))
   }
   
   
