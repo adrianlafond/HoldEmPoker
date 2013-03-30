@@ -46,9 +46,20 @@
     // var hand = new NS.Hand('a').add(['5C', '3C', '6C', '4H', '7C', '2C', 'KC']).updateStatus()
     // var hand = new NS.Hand('a').add(['8C', '7C', '8H', '9C', 'TD', 'TC', 'JC', 'QC']).updateStatus()
     // var hand2 = new NS.Hand('b').add(['AC', 'KC', '8H', '9C', 'TD', 'TC', 'JC', 'QC']).updateStatus()
-    var hand3 = new NS.Hand('c').add(['AS', 'AC', '7C', '6D', 'TD', 'TC', 'JS', '9S']).updateStatus()
+    // var hand3 = new NS.Hand('c').add(['AS', 'AC', '7C', '6D', 'TD', 'TC', 'JS']).updateStatus()
     // var hand4 = new NS.Hand('d').add(['AS', 'KC', '7C', '7D', 'KD', 'TC', 'KS', 'QC']).updateStatus()
     
+    // var hand = new NS.Hand('e').add(['TC', '6D', '5H', 'KC', '2C', '3D', '9S'])
+    // var hand = new NS.Hand('e').add(['TC', '6D', '5H', 'KC', '2C', '9D', '9S'])
+    // var hand = new NS.Hand('e').add(['TC', '6D', '6H', 'KC', '2C', '9D', '9S'])
+    // var hand = new NS.Hand('e').add(['TC', '6D', '6H', 'KC', '6C', 'AD', '9S'])
+    // var hand = new NS.Hand('e').add(['TC', '7D', '6H', '5C', '6C', '9D', '8S'])
+    // var hand = new NS.Hand('e').add(['TC', '7C', '6H', '5C', '6C', '9D', '8C'])
+    // var hand = new NS.Hand('e').add(['TC', '6D', '6H', 'KC', '6C', '9D', '9S'])
+    // var hand = new NS.Hand('e').add(['TC', '7C', '6H', '7D', '7H', '9D', '7S'])
+    // var hand = new NS.Hand('e').add(['TS', '7C', '6H', '5C', '6C', '9C', '8C'])
+    var hand = new NS.Hand('e').add(['TH', 'JH', '6H', 'QH', 'AH', '9D', 'KH'])
+    console.log(hand.rank(), hand.high())
   }
   
   

@@ -77,8 +77,8 @@
     reset: function () {
       this._cards = []
       this._size = 0
-      this.title = this.titleHigh = this.high = null
-      this.titleLow = this.low = null
+      this._rank = 0
+      this._high = this._low = null
       return this
     },
     
@@ -95,7 +95,15 @@
      * @returns a number that corresponds to indices of Hand.titles
      */
     rank: function () {
-      return 0
+      return this._rank
+    },
+    
+    high: function () {
+      return this._high ? [].concat(this._high) : null
+    },
+    
+    low: function () {
+      return this._low ? [].concat(this._low) : null
     },
     
     
@@ -107,12 +115,11 @@
           ranks,
           suits,
           i,
-          isFlush,
-          isStraight,
-          isStraightFlush,
-          isRoyalFlush,
-          sets,
-          len
+          test,
+          len,
+          setsLen
+      
+      this._rank = 0
       
       if (this.size() >= 5) {
         ranks = []
@@ -124,51 +131,57 @@
         ranks.sort(compareRank)        
         suits.sort(compareRank)
         suits.sort(compareSuit)
-        
-        console.log('test:', this._cards)
-        isFlush = flush(suits, this.size())
-        if (isFlush) {
-          console.log('flush:', isFlush)
-        }
-        isStraight = straight(ranks, this.size())
-        if (isStraight) {
-          console.log('straight:', isStraight)
-        }
-        
-        if (isFlush) {
-          isStraightFlush = straight(isFlush, isFlush.length)
-          if (isStraightFlush) {
-            if (isStraightFlush[isStraightFlush.length - 1].charAt(0) === 'A') {
-              isRoyalFlush = isStraightFlush
-              console.log('royal flush:', isRoyalFlush)
-            } else {
-              console.log('straight flush:', isStraightFlush)
-            }            
-          }
-        }
-        
-        sets = findSets(ranks, this.size())
-        if (sets.length >= 1) {
-          console.log('sets:', sets)
-          len = sets[0].length
-          if (len === 4) {
-            console.log('4 of a kind:', sets[0])
-          } else if (len === 3) {
-            if (sets.length > 1) {
-              console.log('full house:', sets[0].concat(sets[1]))
-            } else {
-              console.log('3 of a kind:', sets[0])
-            }
-          } else if (sets.length > 1) {
-            console.log('2 pair:', sets[0].concat(sets[1]))
-          } else {
-            console.log('1 pair:', sets[0])
-          }
-        }
-        
-        console.log('')
 
-        this.title = this.titleHigh
+        if (test = flush(suits, this.size())) {
+          this._rank = NS.Hand.FLUSH
+          this._high = test.slice(0, 5)
+        } else if (test = straight(ranks, this.size())) {
+          this._rank = NS.Hand.STRAIGHT
+          this._high = test.slice(0, 5)
+        }
+        
+        if (this._rank === NS.Hand.FLUSH) {
+          if (test = straight(this._high, this._high.length)) {
+            if (test[test.length - 1].charAt(0) === 'A') {
+              this._rank = NS.Hand.ROYAL_FLUSH
+            } else {
+              this._rank = NS.Hand.STRAIGHT_FLUSH
+            }
+            this._high = test.slice(0, 5)
+          }
+        }
+        
+        if (this._rank < NS.Hand.FOUR_OF_A_KIND) {
+          test = findSets(ranks, this.size())
+          setsLen = test.length
+          if (setsLen >= 2) {
+            if (test[0].length === 4) {
+              this._rank = NS.Hand.FOUR_OF_A_KIND
+              this._high = test[0].concat(test[setsLen - 1][0])
+            }
+            if (test[0].length === 3) {
+              if (this._rank < NS.Hand.FULL_HOUSE && setsLen >= 3) {
+                this._rank = NS.Hand.FULL_HOUSE
+                this._high = test[0].concat(test[1].slice(0, 2))
+              } else if (this._rank < NS.Hand.THREE_OF_A_KIND) {
+                this._rank = NS.Hand.THREE_OF_A_KIND
+                this._high = test[0].concat(test[setsLen - 1].slice(0, 2))
+              }
+            }
+            if (setsLen >= 3 && this._rank < NS.Hand.TWO_PAIR) {
+              this._rank = NS.Hand.TWO_PAIR
+              this._high = test[0].concat(test[1]).concat(test[setsLen - 1][0])
+            } else if (this._rank < NS.Hand.ONE_PAIR) {
+              this._rank = NS.Hand.ONE_PAIR
+              this._high = test[0].concat(test[setsLen - 1].slice(0, 3))
+            }
+          }
+        }
+        
+        if (this._rank < NS.Hand.HIGH_CARD) {
+          this._rank = NS.Hand.HIGH_CARD
+          this._high = ranks.slice(-5)
+        }
       }
       return this
     }
@@ -238,7 +251,9 @@
         ++n
       } else {
         test = NS.Hand.RANKS.indexOf(hand[i].charAt(0))
-        if (rank + 1 === test) {
+        if (rank === test) {
+          continue
+        } else if (rank + 1 === test) {
           rank = test
           cards.push(hand[i])
           ++n
@@ -253,12 +268,27 @@
   }
   
   
+  /**
+   * TO DO: add non-necessary sets into others []
+   */
   function findSets(hand, len) {
     var c = [],
         i = 0,
         r1,
         r2,
-        temp = []
+        temp = [],
+        removed = [],
+        others = [],
+        j,
+        jlen,
+        flag = false,
+        
+        addTempToCards = function () {
+          if (temp.length >= 2) {
+            removed = removed.concat(temp)
+            c.push([].concat(temp))
+          }
+        }
 
     for (; i < len; i++) {
       r2 = hand[i].charAt(0)
@@ -268,12 +298,10 @@
       } else if (r1 === r2) {
         temp.push(hand[i])
         if (i === len - 1) {
-          c.push([].concat(temp))
+          addTempToCards()
         }
       } else {
-        if (temp.length >= 2) {
-          c.push([].concat(temp))
-        }
+        addTempToCards()
         r1 = r2
         temp = [hand[i]]
       }
@@ -302,6 +330,23 @@
       }
       return 0
     })
+    
+    jlen = removed.length
+    for (i = 0; i < len; i++) {
+      flag = true
+      for (j = 0; j < jlen; j++) {
+        if (hand[i] === removed[j]) {
+          flag = false
+          break
+        }
+      }
+      if (flag) {
+        others.push(hand[i])
+      }
+    }
+    others.sort(compareRank)
+    others.reverse()
+    c.push(others)
     return c
   }
 
@@ -321,6 +366,7 @@
   NS.Hand.HIGH_CARD       = 1
 
   NS.Hand.titles = [
+    null,
     'High Card',
     'One Pair',
     'Two Pair',
