@@ -44,9 +44,13 @@
     // console.log('highest:', NS.hands.highest(hands))
     
     // var hand = new NS.Hand('a').add(['5C', '3C', '6C', '4H', '7C', '2C', 'KC']).updateStatus()
-    var hand = new NS.Hand('a').add(['8C', '7C', '8H', '9C', 'TD', 'TC', 'JC', 'QC']).updateStatus()
-    var hand2 = new NS.Hand('b').add(['AC', 'KC', '8H', '9C', 'TD', 'TC', 'JC', 'QC']).updateStatus()
+    // var hand = new NS.Hand('a').add(['8C', '7C', '8H', '9C', 'TD', 'TC', 'JC', 'QC']).updateStatus()
+    // var hand2 = new NS.Hand('b').add(['AC', 'KC', '8H', '9C', 'TD', 'TC', 'JC', 'QC']).updateStatus()
+    var hand3 = new NS.Hand('c').add(['AS', 'AC', '7C', '6D', 'TD', 'TC', 'JS', '9S']).updateStatus()
+    // var hand4 = new NS.Hand('d').add(['AS', 'KC', '7C', '7D', 'KD', 'TC', 'KS', 'QC']).updateStatus()
+    
   }
+  
   
   
   /**

@@ -89,6 +89,16 @@
       return this._size
     },
     
+    
+    /**
+     * For quick comparisons between hands.
+     * @returns a number that corresponds to indices of Hand.titles
+     */
+    rank: function () {
+      return 0
+    },
+    
+    
     /**
      * 
      */
@@ -100,7 +110,9 @@
           isFlush,
           isStraight,
           isStraightFlush,
-          isRoyalFlush
+          isRoyalFlush,
+          sets,
+          len
       
       if (this.size() >= 5) {
         ranks = []
@@ -132,6 +144,25 @@
             } else {
               console.log('straight flush:', isStraightFlush)
             }            
+          }
+        }
+        
+        sets = findSets(ranks, this.size())
+        if (sets.length >= 1) {
+          console.log('sets:', sets)
+          len = sets[0].length
+          if (len === 4) {
+            console.log('4 of a kind:', sets[0])
+          } else if (len === 3) {
+            if (sets.length > 1) {
+              console.log('full house:', sets[0].concat(sets[1]))
+            } else {
+              console.log('3 of a kind:', sets[0])
+            }
+          } else if (sets.length > 1) {
+            console.log('2 pair:', sets[0].concat(sets[1]))
+          } else {
+            console.log('1 pair:', sets[0])
           }
         }
         
@@ -189,7 +220,7 @@
           cards = []
         }
       }
-    }    
+    }
     return (n >= 5) ? cards : null
   }
   
@@ -219,6 +250,59 @@
       }
     }
     return (n >= 5) ? cards : null
+  }
+  
+  
+  function findSets(hand, len) {
+    var c = [],
+        i = 0,
+        r1,
+        r2,
+        temp = []
+
+    for (; i < len; i++) {
+      r2 = hand[i].charAt(0)
+      if (!r1) {
+        r1 = r2
+        temp[0] = hand[i]
+      } else if (r1 === r2) {
+        temp.push(hand[i])
+        if (i === len - 1) {
+          c.push([].concat(temp))
+        }
+      } else {
+        if (temp.length >= 2) {
+          c.push([].concat(temp))
+        }
+        r1 = r2
+        temp = [hand[i]]
+      }
+    }
+    
+    // sort by rank, set sets with higher sets come before smaller
+    c.sort(function (a, b) {
+      var ar = NS.Hand.RANKS.indexOf(a[0].charAt(0)),
+          br = NS.Hand.RANKS.indexOf(b[0].charAt(0))
+      if (ar < br) {
+        return 1
+      } else if (ar > br) {
+        return -1
+      }
+      return 0
+    }) 
+    
+    // sort by # in each set, so larger sets come before smaller
+    c.sort(function (a, b) {
+      var alen = a.length,
+          blen = b.length
+      if (alen < blen) {
+        return 1
+      } else if (alen > blen) {
+        return -1
+      }
+      return 0
+    })
+    return c
   }
 
   
