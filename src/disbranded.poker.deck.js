@@ -12,8 +12,7 @@
       ],
       
       SIZE = cards.length,
-      
-      JOKER = 'W',
+
       MAX_JOKERS = 4
       
 
@@ -39,7 +38,7 @@
     // add jokers
     this._jokers = options.jokers ? Math.max(0, Math.min(MAX_JOKERS, parseInt(options.jokers, 10))) : 0
     for (i = 0, len = this._jokers; i < len; i++) {
-      this._cards[i + SIZE] = 'JOKER' + (i + 1)
+      this._cards[i + SIZE] = 'W' + (i + 1)
     }
     
     this.reset(true)
@@ -89,7 +88,7 @@
           num = Math.max(0, Math.min(MAX_JOKERS, parseInt(num, 10))),
           index = jokers + 1
       while (jokers < MAX_JOKERS && num > 0) {
-        this._cards.push(JOKER + index++)
+        this._cards.push('W' + index++)
         num--
         jokers ++
       }
