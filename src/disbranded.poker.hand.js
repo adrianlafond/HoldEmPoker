@@ -319,7 +319,7 @@
       return 0
     }) 
     
-    // sort by # in each set, so larger sets come before smaller
+    // sort by length of each set, so larger sets come before smaller
     c.sort(function (a, b) {
       var alen = a.length,
           blen = b.length
@@ -329,8 +329,9 @@
         return -1
       }
       return 0
-    })
+    }) 
     
+    // Create an array of cards not in sets, for use as kickers.
     jlen = removed.length
     for (i = 0; i < len; i++) {
       flag = true
@@ -344,6 +345,24 @@
         others.push(hand[i])
       }
     }
+    
+    // Add unneeded sets to kickers.
+    len = c.length
+    if (len > 0) {
+      jlen = c[0].length
+      if (jlen === 4) {
+        i = 1
+      } else if (jlen === 3) {
+        i = (len >= 2) ? 2 : 1
+      } else  {
+        i = 2
+      }
+      while (c.length > i) {
+        others = others.concat(c[i])
+        c.splice(i, 1)
+      }
+    }    
+    
     others.sort(compareRank)
     others.reverse()
     c.push(others)
