@@ -92,23 +92,30 @@
     
     /**
      * For quick comparisons between hands.
-     * @returns a number that corresponds to indices of Hand.titles
+     * @returns a number that corresponds to an index in Hand.titles
      */
     rank: function () {
       return this._rank
     },
     
+    /**
+     * @returns a copy of this hand's best 5-card poker hand.
+     */
     high: function () {
       return this._high ? [].concat(this._high) : null
     },
     
+    /**
+     * @returns a copy of this hand's best LOW 5-card poker hand.
+     */
     low: function () {
       return this._low ? [].concat(this._low) : null
     },
     
     
     /**
-     * 
+     * Updates the hand's rank (for comparison with other hands),
+     * set of 5 high cards, and set of 5 low cards.
      */
     updateStatus: function () {
       var result,
@@ -119,6 +126,7 @@
           setsLen
       
       this._rank = 0
+      this._high = this._low = null
       
       if (this.size() >= 5) {
         ranks = []
@@ -183,9 +191,88 @@
         }
       }
       return this
-    }
+    },
+    
+    
+    /**
+     * @static settings for lowball poker.
+     */
+    lowball: (function () {
+      var _acesLow = true,
+          _ignoreStraights = true,
+          _ignoreFlushes = true
+
+      return {
+        acesAreLow: function (value) {
+          if (typeof value === 'undefined') {
+            return _acesLow
+          }
+          _acesLow = !!value
+          return this
+        },
+
+        ignoreStraights: function (value) {
+          if (typeof value === 'undefined') {
+            return _ignoreStraights
+          }
+          _ignoreStraights = !!value
+          return this
+        },
+
+        ignoreFlushes: function (value) {
+          if (typeof value === 'undefined') {
+            return _ignoreFlushes
+          }
+          _ignoreFlushes = !!value
+          return this
+        },
+
+        aceToFive: function (value) {
+          if (typeof value === 'undefined') {
+            return _acesLow && _ignoreStraights && _ignoreFlushes
+          }
+          if (!!value) {
+            _acesLow = _ignoreStraights = _ignoreFlushes = true
+          }
+          return this
+        },
+
+        aceToSix: function (value) {
+          if (typeof value === 'undefined') {
+            return _acesLow && !_ignoreStraights && !_ignoreFlushes
+          }
+          if (!!value) {
+            _acesLow = true
+            _ignoreStraights = _ignoreFlushes = false 
+          }
+          return this
+        },
+
+        deuceToSeven: function (value) {
+          if (typeof value === 'undefined') {
+            return !_acesLow && !_ignoreStraights && !_ignoreFlushes
+          }
+          if (!!value) {
+            _acesLow = _ignoreStraights = _ignoreFlushes = false
+          }
+          return this
+        },
+
+        deuceToSix: function (value) {
+          if (typeof value === 'undefined') {
+            return !_acesLow && _ignoreStraights && _ignoreFlushes
+          }
+          if (!!value) {
+            _acesLow = false
+            _ignoreStraights = _ignoreFlushes = true
+          }
+          return this
+        }
+      }
+    }())
   }
   
+
   
   function compareRank(a, b) {
     var a = NS.Hand.RANKS.indexOf(a.charAt(0)),

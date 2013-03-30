@@ -60,6 +60,7 @@
     var hand = new NS.Hand('e').add(['AC', '7C', '6H', '5C', '6C', '9C', '8C'])
     // var hand = new NS.Hand('e').add(['TH', 'JH', '6H', 'QH', 'AH', '9D', 'KH'])
     console.log(hand.rank(), hand.high())
+
   }
   
   
