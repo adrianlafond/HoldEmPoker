@@ -54,11 +54,11 @@
     // var hand = new NS.Hand('e').add(['2D', '6D', '6H', 'KC', '2C', '9D', '9S'])
     // var hand = new NS.Hand('e').add(['TC', '6D', '6H', 'KC', '6C', 'AD', '9S'])
     // var hand = new NS.Hand('e').add(['TC', '7D', '6H', '5C', '6C', '9D', '8S'])
-    // var hand = new NS.Hand('e').add(['TC', '7C', '6H', '5C', '6C', '9D', '8C'])
+    // var hand = new NS.Hand('e').add(['AC', '7C', '6H', '5C', '6C', '9D', '8C'])
     // var hand = new NS.Hand('e').add(['KD', '6D', '6H', 'KC', '6C', '9D', '9S'])
     // var hand = new NS.Hand('e').add(['2C', '7C', '9H', '7D', '7H', '9D', '7S'])
-    // var hand = new NS.Hand('e').add(['TS', '7C', '6H', '5C', '6C', '9C', '8C'])
-    var hand = new NS.Hand('e').add(['TH', 'JH', '6H', 'QH', 'AH', '9D', 'KH'])
+    var hand = new NS.Hand('e').add(['AC', '7C', '6H', '5C', '6C', '9C', '8C'])
+    // var hand = new NS.Hand('e').add(['TH', 'JH', '6H', 'QH', 'AH', '9D', 'KH'])
     console.log(hand.rank(), hand.high())
   }
   

@@ -115,7 +115,6 @@
           ranks,
           suits,
           i,
-          test,
           len,
           setsLen
       
@@ -132,48 +131,48 @@
         suits.sort(compareRank)
         suits.sort(compareSuit)
 
-        if (test = flush(suits, this.size())) {
+        if (result = flush(suits, this.size())) {
           this._rank = NS.Hand.FLUSH
-          this._high = test.slice(0, 5)
-        } else if (test = straight(ranks, this.size())) {
+          this._high = result.slice(0, 5)
+        } else if (result = straight(ranks, this.size())) {
           this._rank = NS.Hand.STRAIGHT
-          this._high = test.slice(0, 5)
+          this._high = result.slice(0, 5)
         }
         
         if (this._rank === NS.Hand.FLUSH) {
-          if (test = straight(this._high, this._high.length)) {
-            if (test[test.length - 1].charAt(0) === 'A') {
+          if (result = straight(result, result.length)) {
+            if (result[result.length - 1].charAt(0) === 'A') {
               this._rank = NS.Hand.ROYAL_FLUSH
             } else {
               this._rank = NS.Hand.STRAIGHT_FLUSH
             }
-            this._high = test.slice(0, 5)
+            this._high = result.slice(0, 5)
           }
         }
         
         if (this._rank < NS.Hand.FOUR_OF_A_KIND) {
-          test = findSets(ranks, this.size())
-          setsLen = test.length
+          result = findSets(ranks, this.size())
+          setsLen = result.length
           if (setsLen >= 2) {
-            if (test[0].length === 4) {
+            if (result[0].length === 4) {
               this._rank = NS.Hand.FOUR_OF_A_KIND
-              this._high = test[0].concat(test[setsLen - 1][0])
+              this._high = result[0].concat(result[setsLen - 1][0])
             }
-            if (test[0].length === 3) {
+            if (result[0].length === 3) {
               if (this._rank < NS.Hand.FULL_HOUSE && setsLen >= 3) {
                 this._rank = NS.Hand.FULL_HOUSE
-                this._high = test[0].concat(test[1].slice(0, 2))
+                this._high = result[0].concat(result[1].slice(0, 2))
               } else if (this._rank < NS.Hand.THREE_OF_A_KIND) {
                 this._rank = NS.Hand.THREE_OF_A_KIND
-                this._high = test[0].concat(test[setsLen - 1].slice(0, 2))
+                this._high = result[0].concat(result[setsLen - 1].slice(0, 2))
               }
             }
             if (setsLen >= 3 && this._rank < NS.Hand.TWO_PAIR) {
               this._rank = NS.Hand.TWO_PAIR
-              this._high = test[0].concat(test[1]).concat(test[setsLen - 1][0])
+              this._high = result[0].concat(result[1]).concat(result[setsLen - 1][0])
             } else if (this._rank < NS.Hand.ONE_PAIR) {
               this._rank = NS.Hand.ONE_PAIR
-              this._high = test[0].concat(test[setsLen - 1].slice(0, 3))
+              this._high = result[0].concat(result[setsLen - 1].slice(0, 3))
             }
           }
         }
@@ -269,7 +268,7 @@
   
   
   /**
-   * TO DO: add non-necessary sets into others []
+   *
    */
   function findSets(hand, len) {
     var c = [],
