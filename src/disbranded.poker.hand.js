@@ -279,7 +279,7 @@
       }
     }
     
-    // sort by rank, set sets with higher sets come before smaller
+    // sort by rank, so sets with higher sets come before smaller
     c.sort(function (a, b) {
       var ar = NS.Hand.RANKS.indexOf(a[0].charAt(0)),
           br = NS.Hand.RANKS.indexOf(b[0].charAt(0))
