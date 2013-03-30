@@ -195,7 +195,10 @@
     
     
     /**
-     * @static settings for lowball poker.
+     * Settings for lowball poker.
+     * For aceToFive(), aceToFive(), deuceToSeven(), and deuceToSix(),
+     * TRUE will set them to true, but FALSE will not disable.
+     * To disable a lowball setting, enable a different one.
      */
     lowball: (function () {
       var _acesLow = true,
