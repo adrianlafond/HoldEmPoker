@@ -195,6 +195,48 @@
     
     
     /**
+     * @param {Hand} hand
+     */
+    compareTo: function (hand) {
+      var r1 = this.rank(),
+          r2 = hand.rank(),
+          h1,
+          h2
+          
+      if (r1 > r2) {
+        return NS.Hand.BETTER
+      } else if (r1 < r2) {
+        return NS.Hand.WORSE
+      }
+      
+      // royal flushes necessarily have the same rank
+      if (r1 < NS.Hand.ROYAL_FLUSH) {
+        
+        h1 = this.high()
+        h2 = hand.high()
+      }
+      
+
+      
+      // NS.Hand.RANKS = '23456789TJQKA'
+      // NS.Hand.SUITS = 'CDHS'
+      // 
+      // NS.Hand.ROYAL_FLUSH     = 10
+      // NS.Hand.STRAIGHT_FLUSH  = 9
+      // NS.Hand.FOUR_OF_A_KIND  = 8
+      // NS.Hand.FULL_HOUSE      = 7
+      // NS.Hand.FLUSH           = 6
+      // NS.Hand.STRAIGHT        = 5
+      // NS.Hand.THREE_OF_A_KIND = 4
+      // NS.Hand.TWO_PAIR        = 3
+      // NS.Hand.ONE_PAIR        = 2
+      // NS.Hand.HIGH_CARD       = 1
+      
+      return NS.Hand.EVEN
+    }
+    
+    
+    /**
      * Settings for lowball poker.
      * For aceToFive(), aceToFive(), deuceToSeven(), and deuceToSix(),
      * TRUE will set them to true, but FALSE will not disable.
@@ -276,6 +318,40 @@
   }
   
 
+
+  NS.Hand.RANKS = '23456789TJQKA'
+  NS.Hand.SUITS = 'CDHS'
+
+  NS.Hand.ROYAL_FLUSH     = 10
+  NS.Hand.STRAIGHT_FLUSH  = 9
+  NS.Hand.FOUR_OF_A_KIND  = 8
+  NS.Hand.FULL_HOUSE      = 7
+  NS.Hand.FLUSH           = 6
+  NS.Hand.STRAIGHT        = 5
+  NS.Hand.THREE_OF_A_KIND = 4
+  NS.Hand.TWO_PAIR        = 3
+  NS.Hand.ONE_PAIR        = 2
+  NS.Hand.HIGH_CARD       = 1
+
+  NS.Hand.titles = [
+    null,
+    'High Card',
+    'One Pair',
+    'Two Pair',
+    'Three of a Kind',
+    'Straight',
+    'Flush',
+    'Full House',
+    'Four of a Kind',
+    'Straight Flush',
+    'Royal Flush'
+  ]
+  
+  // for comparisons between hands
+  NS.Hand.BETTER = 1
+  NS.Hand.WORSE = -1
+  NS.Hand.EVEN = 0
+  
   
   function compareRank(a, b) {
     var a = NS.Hand.RANKS.indexOf(a.charAt(0)),
@@ -457,36 +533,6 @@
     c.push(others)
     return c
   }
-
-  
-  NS.Hand.RANKS = '23456789TJQKA'
-  NS.Hand.SUITS = 'CDHS'
-  
-  NS.Hand.ROYAL_FLUSH     = 10
-  NS.Hand.STRAIGHT_FLUSH  = 9
-  NS.Hand.FOUR_OF_A_KIND  = 8
-  NS.Hand.FULL_HOUSE      = 7
-  NS.Hand.FLUSH           = 6
-  NS.Hand.STRAIGHT        = 5
-  NS.Hand.THREE_OF_A_KIND = 4
-  NS.Hand.TWO_PAIR        = 3
-  NS.Hand.ONE_PAIR        = 2
-  NS.Hand.HIGH_CARD       = 1
-
-  NS.Hand.titles = [
-    null,
-    'High Card',
-    'One Pair',
-    'Two Pair',
-    'Three of a Kind',
-    'Straight',
-    'Flush',
-    'Full House',
-    'Four of a Kind',
-    'Straight Flush',
-    'Royal Flush'
-  ]
-
 
   
 }(this));
