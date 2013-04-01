@@ -60,11 +60,15 @@
     // var hand1 = new NS.Hand('e').add(['AC', '7C', '6H', '5C', '6C', '9C', '8C'])
     // var hand2 = new NS.Hand('e').add(['TH', 'JH', '6H', 'QH', 'AH', '9D', 'KH'])
     
-    var hand1 = NS.Hand('a').add(['8C', '8D', 'AC', '2H', '3D', 'JS', 'QD'])
-    var hand2 = NS.Hand('a').add(['8H', '8S', 'AS', '2D', '3H', 'TC', 'QH'])
-    console.log(hand1.rank(), hand1.high())
-    console.log(hand2.rank(), hand2.high())
-    console.log(hand1.compareTo(hand2))
+    var hand1 = NS.Hand('a').add(['8C', '2C', 'AC', '2H', '3D', 'JC', 'QC'])
+    var hand2 = NS.Hand('b').add(['8H', '5D', '6D', '2D', '3H', '7S', '9H'])
+    var hand3 = NS.Hand('c').add(['8H', '5H', '6H', '2D', '3H', '7H', '9H'])
+    var hand4 = NS.Hand('d').add(['5C', '3C', '6D', '9H', 'QD', 'AD', 'TS'])
+    console.log(NS.Hand.titles[hand1.rank()], hand1.high())
+    console.log(NS.Hand.titles[hand2.rank()], hand2.high())
+    console.log(NS.Hand.titles[hand3.rank()], hand3.high())
+    console.log(NS.Hand.titles[hand4.rank()], hand4.high())
+    // console.log(hand1.compareTo(hand2))
   }
   
   

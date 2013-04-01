@@ -122,6 +122,7 @@
      */
     updateStatus: function () {
       var result,
+          tempResult,
           ranks,
           suits,
           i,
@@ -142,16 +143,19 @@
         suits.sort(compareRank)
         suits.sort(compareSuit)
 
-        if (result = flush(suits, this.size())) {
+        if (tempResult = flush(suits, this.size())) {
+          result = tempResult
           this._rank = NS.Hand.FLUSH
           this._high = result.slice(0, 5)
-        } else if (result = straight(ranks, this.size())) {
+        } else if (tempResult = straight(ranks, this.size())) {
+          result = tempResult
           this._rank = NS.Hand.STRAIGHT
           this._high = result.slice(0, 5)
         }
         
         if (this._rank === NS.Hand.FLUSH) {
-          if (result = straight(result, result.length)) {
+          if (tempResult = straight(suits, this.size())) {
+            result = tempResult
             if (result[result.length - 1].charAt(0) === 'A') {
               this._rank = NS.Hand.ROYAL_FLUSH
             } else {
@@ -190,7 +194,7 @@
         
         if (this._rank < NS.Hand.HIGH_CARD) {
           this._rank = NS.Hand.HIGH_CARD
-          this._high = ranks.slice(-5)
+          this._high = ranks.slice(0, 5)
         }
       }
       return this
@@ -370,9 +374,9 @@
     var a = NS.Hand.RANKS.indexOf(a.charAt(0)),
         b = NS.Hand.RANKS.indexOf(b.charAt(0))
     if (a < b) {
-      return -1
-    } else if (a > b) {
       return 1
+    } else if (a > b) {
+      return -1
     }
     return 0
   }
@@ -437,14 +441,14 @@
         test = NS.Hand.RANKS.indexOf(hand[i].charAt(0))
         if (rank === test) {
           continue
-        } else if (rank + 1 === test) {
+        } else if (rank - 1 === test) {
           rank = test
           cards.push(hand[i])
           ++n
         } else if (n < 5) {
-          rank = -999
-          n = 0
-          cards = []
+          rank = test
+          n = 1
+          cards.splice(0, cards.length, hand[i])
         }
       }
     }
@@ -491,7 +495,7 @@
       }
     }
     
-    // sort by rank, so sets with higher sets come before smaller
+    // Sort by rank, so sets with higher sets come before smaller.
     c.sort(function (a, b) {
       var ar = NS.Hand.RANKS.indexOf(a[0].charAt(0)),
           br = NS.Hand.RANKS.indexOf(b[0].charAt(0))
@@ -503,7 +507,7 @@
       return 0
     }) 
     
-    // sort by length of each set, so larger sets come before smaller
+    // Sort by length of each set, so larger sets come before smaller.
     c.sort(function (a, b) {
       var alen = a.length,
           blen = b.length
@@ -548,7 +552,6 @@
     }    
     
     others.sort(compareRank)
-    others.reverse()
     c.push(others)
     return c
   }
