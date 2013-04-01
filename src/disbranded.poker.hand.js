@@ -389,6 +389,9 @@
   }
   
   
+  /**
+   * TO DO: run loops *backwards* to find straights from highest not lowest.
+   */
   function flush(hand, len) {
     var n = 0,
         i = 0,
@@ -416,6 +419,9 @@
   }
   
   
+  /**
+   * TO DO: run loops *backwards* to find straights from highest not lowest.
+   */
   function straight(hand, len) {
     var n = 0,
         i = 0,
@@ -447,7 +453,7 @@
   
   
   /**
-   *
+   * Finds 4 of a kind, 3 of a kind, and pairs in @param hand
    */
   function findSets(hand, len) {
     var c = [],
