@@ -235,7 +235,6 @@
           return compareRank(h1[4], h2[4])  
         }
         
-        result = NS.Hand.EVEN
         n = 0
         while (n < 5) {
           result = compareRank(h1[n], h2[n])
