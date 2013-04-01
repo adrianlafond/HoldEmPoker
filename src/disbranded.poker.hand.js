@@ -12,6 +12,9 @@
   
   
   NS.Hand = function (id) {
+    if (!(this instanceof NS.Hand)) {
+      return new NS.Hand(id)
+    }
     this.id = id
     this.reset()
   }
@@ -195,14 +198,24 @@
     
     
     /**
+     * Compares this Hand to another Hand instance.
      * @param {Hand} hand
+     * @returns  1 / BETTER if this Hand is better
+     *          -1 / WORSE if param Hand is better
+     *           0 / EVEN if Hands are event
      */
     compareTo: function (hand) {
       var r1 = this.rank(),
           r2 = hand.rank(),
           h1,
-          h2
-          
+          h2,
+          result,
+          n
+      
+      if (r1 === 0 || r2 === 0) {
+        return NS.Hand.EVEN
+      }
+      
       if (r1 > r2) {
         return NS.Hand.BETTER
       } else if (r1 < r2) {
@@ -214,26 +227,27 @@
         
         h1 = this.high()
         h2 = hand.high()
+        
+        // hands where no kicker need be compared
+        if (r1 === NS.Hand.STRAIGHT_FLUSH
+            || r1 === NS.Hand.FLUSH
+            || r1 === NS.Hand.STRAIGHT) {
+          return compareRank(h1[4], h2[4])  
+        }
+        
+        result = NS.Hand.EVEN
+        n = 0
+        while (n < 5) {
+          result = compareRank(h1[n], h2[n])
+          if (result !== NS.Hand.EVEN) {
+            return result
+          }
+          ++n
+        }
       }
       
-
-      
-      // NS.Hand.RANKS = '23456789TJQKA'
-      // NS.Hand.SUITS = 'CDHS'
-      // 
-      // NS.Hand.ROYAL_FLUSH     = 10
-      // NS.Hand.STRAIGHT_FLUSH  = 9
-      // NS.Hand.FOUR_OF_A_KIND  = 8
-      // NS.Hand.FULL_HOUSE      = 7
-      // NS.Hand.FLUSH           = 6
-      // NS.Hand.STRAIGHT        = 5
-      // NS.Hand.THREE_OF_A_KIND = 4
-      // NS.Hand.TWO_PAIR        = 3
-      // NS.Hand.ONE_PAIR        = 2
-      // NS.Hand.HIGH_CARD       = 1
-      
       return NS.Hand.EVEN
-    }
+    },
     
     
     /**
