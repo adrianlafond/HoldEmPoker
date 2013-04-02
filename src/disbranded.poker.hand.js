@@ -349,20 +349,7 @@
   NS.Hand.TWO_PAIR        = 3
   NS.Hand.ONE_PAIR        = 2
   NS.Hand.HIGH_CARD       = 1
-
-  NS.Hand.titles = [
-    null,
-    'High Card',
-    'One Pair',
-    'Two Pair',
-    'Three of a Kind',
-    'Straight',
-    'Flush',
-    'Full House',
-    'Four of a Kind',
-    'Straight Flush',
-    'Royal Flush'
-  ]
+  
   
   // for comparisons between hands
   NS.Hand.BETTER = 1
@@ -394,7 +381,7 @@
   
   
   /**
-   * TO DO: run loops *backwards* to find straights from highest not lowest.
+   * Find highest flush in @param hand.
    */
   function flush(hand, len) {
     var n = 0,
@@ -424,7 +411,7 @@
   
   
   /**
-   * TO DO: run loops *backwards* to find straights from highest not lowest.
+   * Find highest straight in @param hand.
    */
   function straight(hand, len) {
     var n = 0,
