@@ -69,7 +69,12 @@
     console.log(NS.string.en.cards[hand2.rank()], hand2.high())
     console.log(NS.string.en.cards[hand3.rank()], hand3.high())
     console.log(NS.string.en.cards[hand4.rank()], hand4.high())
+    
     // console.log(hand1.compareTo(hand2))
+    var sorted = NS.Hand.sort([hand1, hand2, hand3, hand4])
+    for (var i = 0, len = sorted.length; i < len; i++) {
+      console.log(sorted[i].id, sorted[i].high(), NS.string.en.cards[sorted[i].rank()])
+    }
   }
   
   

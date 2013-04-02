@@ -334,6 +334,19 @@
     }())
   }
   
+  
+  /**
+   * Sorts @params hands from highest to lowest.
+   * @param hands {array} of Hand instances.
+   * @returns {array} of hands, sorted.
+   */
+  NS.Hand.sort = function (hands) {
+    hands.sort(function (a, b) {
+      return a.compareTo(b)
+    })
+    return hands
+  }
+  
 
 
   NS.Hand.RANKS = '23456789TJQKA'
@@ -352,8 +365,8 @@
   
   
   // for comparisons between hands
-  NS.Hand.BETTER = 1
-  NS.Hand.WORSE = -1
+  NS.Hand.BETTER = -1
+  NS.Hand.WORSE = 1
   NS.Hand.EVEN = 0
   
   
