@@ -8,15 +8,16 @@
   root.DISBRANDED = (typeof root.DISBRANDED === 'undefined') ? {} : root.DISBRANDED
   root.DISBRANDED.poker = root.DISBRANDED.poker || {}
   NS = root.DISBRANDED.poker
+  NS.holdem = NS.holdem || {}
 
   /**
    * 
    */
-  NS.HoldEmGame = function (options) { 
+  NS.holdem.Game = function (options) { 
     var key, val, i, len
        
-    if (!(this instanceof NS.HoldEmGame)) {
-      return new NS.HoldEmGame(options)
+    if (!(this instanceof NS.holdem.Game)) {
+      return new NS.holdem.Game(options)
     }
     
     this.options = NS.holdem.defaults()
@@ -76,7 +77,7 @@
   /**
    * @public API
    */
-  NS.HoldEmGame.prototype = {
+  NS.holdem.Game.prototype = {
     
     deal: function () {
       //...
