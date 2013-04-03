@@ -1,6 +1,7 @@
 /**
  * Must be loaded prior to all other poker modules.
  * Sets up namespaces and other defaults.
+ * DISBRANDED.poker depends on Underscore http://underscorejs.org/
  */
 ;(function (root) {
   'use strict'

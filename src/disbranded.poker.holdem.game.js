@@ -3,6 +3,22 @@
   'use strict'
 
   var NS = root.DISBRANDED.poker
+  
+  
+  /**
+   * Works like jQuery.extend()
+   */
+  function extend() {
+    var obj = arguments[0],
+        i = 1,
+        len = arguments.length,
+        key
+    for (; i < len; i++) {
+      for (key in arguments[i]) {
+        obj[key] = arguments[i][key]
+      }
+    }
+  }
 
   /**
    * 
@@ -13,10 +29,8 @@
     }
     
     this.options = NS.holdem.defaults()
-    for (key in options) {
-      if (options.hasOwnProperty(key)) {
-        this.options[key] = options[key]
-      }
+    if (options) {
+      extend(this.options, options)
     }
     
     this.dealer = new NS.Dealer
@@ -44,8 +58,20 @@
    */
   NS.holdem.Game.prototype = {
     
-    deal: function () {
-      //...
+    get: function (key) {
+      return (this.options.hasOwnProperty(key)) ? this.options[key] : null
+    },
+    
+    set: function (key, value) {
+      if (this.options.hasOwnProperty(key)) {
+        this.options[key] = value
+      }
+      return this
+    },
+    
+    
+    deal: function (options) {
+      extend(this.options, options)
     }
   }
   
