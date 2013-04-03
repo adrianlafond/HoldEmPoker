@@ -2,13 +2,8 @@
 ;(function (root) {
   'use strict'
 
-  var NS
-      
-  
-  // @namespace
-  root.DISBRANDED = (typeof root.DISBRANDED === 'undefined') ? {} : root.DISBRANDED
-  root.DISBRANDED.poker = root.DISBRANDED.poker || {}
-  NS = root.DISBRANDED.poker
+  var NS = root.DISBRANDED.poker
+
   
   
   NS.Hand = function (id) {

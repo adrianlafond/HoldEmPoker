@@ -2,7 +2,7 @@
 ;(function (root) {
   'use strict'
 
-  var NS,
+  var NS = root.DISBRANDED.poker,
       
       cards = [
         '2C', '3C', '4C', '5C', '6C', '7C', '8C', '9C', 'TC', 'JC', 'QC', 'KC', 'AC',
@@ -14,12 +14,6 @@
       SIZE = cards.length,
 
       MAX_JOKERS = 4
-      
-
-  // @namespace
-  root.DISBRANDED = (typeof root.DISBRANDED === 'undefined') ? {} : root.DISBRANDED
-  root.DISBRANDED.poker = root.DISBRANDED.poker || {}
-  NS = root.DISBRANDED.poker
   
   
   NS.Deck = function (options) {
