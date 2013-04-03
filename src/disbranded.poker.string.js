@@ -2,10 +2,7 @@
 ;(function (root) {
   'use strict'
 
-  var NS = root.DISBRANDED.poker
-
-
-  NS.string = {
+  root.DISBRANDED.poker.string = {
     
     en: {
       cards: [
