@@ -33,7 +33,8 @@
       extend(this.options, options)
     }
     
-    this.players = new NS.Players
+    this._players = new NS.Players
+    this._deck = new NS.Deck
     
     var key, val, i, len    
     var hand1 = NS.Hand('a').add(['8C', '2C', 'AC', '2H', '3D', 'JC', 'QC'])
@@ -49,6 +50,12 @@
     for (var i = 0, len = sorted.length; i < len; i++) {
       console.log(sorted[i].id, sorted[i].high(), NS.string.en.cards[sorted[i].rank()])
     }
+    
+    console.log(hand1.size())
+    console.log(hand1.has('8C'), hand1.has('KC'))
+    console.log(hand1.get(0), hand1.get(1), hand1.get(-1), hand1.get(10))
+    console.log(hand1.set(1, 'KC').has('KC'), hand1.get(1))
+    console.log(hand1.set('LAST', 'AS').has('AS'))
   }
   
   

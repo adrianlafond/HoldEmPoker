@@ -10,6 +10,8 @@
   root.DISBRANDED = (typeof root.DISBRANDED === 'undefined') ? {} : root.DISBRANDED
   root.DISBRANDED.poker = {
     
+    debug: false,
+    
     // sub namespaces
     holdem: {},
     

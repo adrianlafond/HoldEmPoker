@@ -4,6 +4,7 @@
 
   var NS = root.DISBRANDED.poker
 
+
   
   
   NS.Hand = function (id) {
@@ -11,6 +12,7 @@
       return new NS.Hand(id)
     }
     this.id = id
+    this.lowball = new NS.Hand.Lowball
     this.reset()
   }
   
@@ -20,71 +22,70 @@
      * @param {string} card
      * @returns {boolean}
      */
-    hasCard: function (card) {
-      var i = 0, len = this._cards.length
-      for (; i < len; i++) {
-        if (this._cards[i] === card) {
-          return true
-        }
-      }
-      return false
+    has: function (card) {
+      return _.contains(this._cards, card)
     },
     
     /**
      * @param {string|array}
      */
-    add: function (card) {
-      var i, len
-      if (typeof card === 'string') {
-        if (!this.hasCard(card)) {
-          this._cards[this._size] = card
-          this._size += 1
-          this.updateStatus()
+    add: function () {
+      var self = this
+      _.each(arguments, function (card, i) {
+        if (_.isString(card)) {
+          if (!self.has(card)) {
+            self._cards[self.size()] = card
+            self.updateStatus()
+          }
+        } else if (_.isArray(card)) {
+          self.add.apply(self, card)
+        } else if (NS.debug) {
+          throw 'Error: Hand.add() argument value is invalid.'
         }
-      } else if (Object.prototype.toString.call(card) === '[object Array]') {
-        for (i = 0, len = card.length; i < len; i++) {
-          this.add(card[i])
-        }
-        // this._cards = this._cards.concat(card)
-      } else {
-        throw 'Error: @param "card" must be a string or an array.'
+      })
+      if (NS.debug && arguments.length === 0) {
+        throw 'Error: Hand.add() needs at least one argument.'
       }
-      return this
+      return self
     },
     
     /**
      * @return {string} card at index; null if index is out of range
      */
     get: function (index) {
-      return (index in this._cards) ? this._cards[index] : null
+      return _.has(this._cards, index) ? this._cards[index] : null
     },
     
     /**
      * Set the card at a specific index.
      */
     set: function (index, card) {
-      this._cards[Math.max(0, Math.min(this._size, parseInt(index, 10)))] = card
-      this._size = this._cards.length
-      this.updateStatus()
+      index = parseInt(index, 10)
+      if (_.isNumber(index) && !_.isNaN(index)) {
+        index = Math.max(0, Math.min(this._cards.length, index))
+        this._cards[index] = card
+        this.updateStatus()
+      } else if (NS.debug) {
+        throw 'Error: Hand.set() first argument must be a number.'
+      }
       return this
     },
     
     /**
-     *
+     * Empties the hand.
      */
     reset: function () {
       this._cards = []
-      this._size = 0
       this._rank = 0
       this._high = this._low = null
       return this
     },
     
     /**
-     * @return number of cards in hand
+     * @returns number of cards in hand
      */
     size: function () {
-      return this._size
+      return this._cards.length
     },
     
     
@@ -100,14 +101,14 @@
      * @returns a copy of this hand's best 5-card poker hand.
      */
     high: function () {
-      return this._high ? [].concat(this._high) : null
+      return this._high ? this._high.slice(0) : null
     },
     
     /**
      * @returns a copy of this hand's best LOW 5-card poker hand.
      */
     low: function () {
-      return this._low ? [].concat(this._low) : null
+      return this._low ? this._low.slice(0) : null
     },
     
     
@@ -122,7 +123,10 @@
           suits,
           i,
           len,
-          setsLen
+          setsLen,
+          
+          fnSuit,
+          fnRank
       
       this._rank = 0
       this._high = this._low = null
@@ -133,10 +137,11 @@
         for (i = 0; i < this.size(); i++) {
           ranks[i] = suits[i] = this.get(i)
         }
-        ranks.sort(compareSuit)
-        ranks.sort(compareRank)        
-        suits.sort(compareRank)
-        suits.sort(compareSuit)
+        
+        ranks.sort(compareCardsBySuit)
+        ranks.sort(compareCardsByRank)        
+        suits.sort(compareCardsByRank)
+        suits.sort(compareCardsBySuit)
 
         if (tempResult = flush(suits, this.size())) {
           result = tempResult
@@ -231,12 +236,12 @@
         if (r1 === NS.Hand.STRAIGHT_FLUSH
             || r1 === NS.Hand.FLUSH
             || r1 === NS.Hand.STRAIGHT) {
-          return compareRank(h1[4], h2[4])  
+          return compareCardsByRank(h1[4], h2[4])  
         }
         
         n = 0
         while (n < 5) {
-          result = compareRank(h1[n], h2[n])
+          result = compareCardsByRank(h1[n], h2[n])
           if (result !== NS.Hand.EVEN) {
             return result
           }
@@ -245,88 +250,91 @@
       }
       
       return NS.Hand.EVEN
-    },
-    
-    
-    /**
-     * Settings for lowball poker.
-     * For aceToFive(), aceToFive(), deuceToSeven(), and deuceToSix(),
-     * TRUE will set them to true, but FALSE will not disable.
-     * To disable a lowball setting, enable a different one.
-     */
-    lowball: (function () {
-      var _acesLow = true,
-          _ignoreStraights = true,
-          _ignoreFlushes = true
-
-      return {
-        acesAreLow: function (value) {
-          if (typeof value === 'undefined') {
-            return _acesLow
-          }
-          _acesLow = !!value
-          return this
-        },
-
-        ignoreStraights: function (value) {
-          if (typeof value === 'undefined') {
-            return _ignoreStraights
-          }
-          _ignoreStraights = !!value
-          return this
-        },
-
-        ignoreFlushes: function (value) {
-          if (typeof value === 'undefined') {
-            return _ignoreFlushes
-          }
-          _ignoreFlushes = !!value
-          return this
-        },
-
-        aceToFive: function (value) {
-          if (typeof value === 'undefined') {
-            return _acesLow && _ignoreStraights && _ignoreFlushes
-          }
-          if (!!value) {
-            _acesLow = _ignoreStraights = _ignoreFlushes = true
-          }
-          return this
-        },
-
-        aceToSix: function (value) {
-          if (typeof value === 'undefined') {
-            return _acesLow && !_ignoreStraights && !_ignoreFlushes
-          }
-          if (!!value) {
-            _acesLow = true
-            _ignoreStraights = _ignoreFlushes = false 
-          }
-          return this
-        },
-
-        deuceToSeven: function (value) {
-          if (typeof value === 'undefined') {
-            return !_acesLow && !_ignoreStraights && !_ignoreFlushes
-          }
-          if (!!value) {
-            _acesLow = _ignoreStraights = _ignoreFlushes = false
-          }
-          return this
-        },
-
-        deuceToSix: function (value) {
-          if (typeof value === 'undefined') {
-            return !_acesLow && _ignoreStraights && _ignoreFlushes
-          }
-          if (!!value) {
-            _acesLow = false
-            _ignoreStraights = _ignoreFlushes = true
-          }
-          return this
-        }
+    }
+  }
+  
+  
+  /**
+   * Settings for lowball poker.
+   * For aceToFive(), aceToFive(), deuceToSeven(), and deuceToSix(),
+   * TRUE will set them to true, but FALSE will not disable.
+   * To disable a lowball setting, enable a different one.
+   * For internal use by Hand, but there's no technical reason
+   * why it could not be used on its own.
+   */
+  NS.Hand.Lowball = function (options) {
+    options = options || {}
+    this._acesLow = !!options.acesAreLow || true
+    this._ignoreStraights = !!options.ignoreStraights || true
+    this._ignoreFlushes = !!options.ignoreFlushes || true
+  }
+  
+  NS.Hand.Lowball.prototype = {
+    acesAreLow: function () {
+      if (arguments.length === 0) {
+        return this._acesLow
       }
-    }())
+      this._acesLow = !!arguments[0]
+      return this
+    },
+
+    ignoreStraights: function () {
+      if (arguments.length === 0) {
+        return this._ignoreStraights
+      }
+      this._ignoreStraights = !!arguments[0]
+      return this
+    },
+
+    ignoreFlushes: function () {
+      if (arguments.length === 0) {
+        return this._ignoreFlushes
+      }
+      this._ignoreFlushes = !!arguments[0]
+      return this
+    },
+
+    aceToFive: function () {
+      if (arguments.length === 0) {
+        return this._acesLow && this._ignoreStraights && this._ignoreFlushes
+      }
+      if (!!arguments[0]) {
+        this._acesLow = this._ignoreStraights = this._ignoreFlushes = true
+      }
+      return this
+    },
+
+    aceToSix: function () {
+      if (arguments.length === 0) {
+        return this._acesLow && !this._ignoreStraights && !this._ignoreFlushes
+      }
+      if (!!arguments[0]) {
+        this._acesLow = true
+        this._ignoreStraights = this._ignoreFlushes = false 
+      }
+      return this
+    },
+
+    deuceToSeven: function () {
+      if (arguments.length === 0) {
+        return !this._acesLow && !this._ignoreStraights && !this._ignoreFlushes
+      }
+      if (!!arguments[0]) {
+        this._acesLow = this._ignoreStraights = this._ignoreFlushes = false
+      }
+      return this
+    },
+
+    deuceToSix: function () {
+      if (arguments.length === 0) {
+        return !this._acesLow && this._ignoreStraights && this._ignoreFlushes
+      }
+      if (!!arguments[0]) {
+        this._acesLow = false
+        this._ignoreStraights = this._ignoreFlushes = true
+      }
+      return this
+    }
   }
   
   
@@ -344,7 +352,7 @@
   
 
 
-  NS.Hand.RANKS = '23456789TJQKA'
+  NS.Hand.RANKS = '23456789TJQKAW'
   NS.Hand.SUITS = 'CDHS'
 
   NS.Hand.ROYAL_FLUSH     = 10
@@ -365,9 +373,12 @@
   NS.Hand.EVEN = 0
   
   
+  function compareCardsByRank(a, b) {
+    return compareRank(NS.Hand.RANKS.indexOf(a.charAt(0)),
+                       NS.Hand.RANKS.indexOf(b.charAt(0)))
+  }
+  
   function compareRank(a, b) {
-    var a = NS.Hand.RANKS.indexOf(a.charAt(0)),
-        b = NS.Hand.RANKS.indexOf(b.charAt(0))
     if (a < b) {
       return 1
     } else if (a > b) {
@@ -376,9 +387,12 @@
     return 0
   }
   
+  function compareCardsBySuit(a, b) {
+    return compareSuit(NS.Hand.SUITS.indexOf(a.charAt(1)),
+                       NS.Hand.SUITS.indexOf(b.charAt(1)))
+  }
+  
   function compareSuit(a, b) {
-    var a = NS.Hand.SUITS.indexOf(a.charAt(1)),
-        b = NS.Hand.SUITS.indexOf(b.charAt(1))
     if (a < b) {
       return -1
     } else if (a > b) {
@@ -492,14 +506,8 @@
     
     // Sort by rank, so sets with higher sets come before smaller.
     c.sort(function (a, b) {
-      var ar = NS.Hand.RANKS.indexOf(a[0].charAt(0)),
-          br = NS.Hand.RANKS.indexOf(b[0].charAt(0))
-      if (ar < br) {
-        return 1
-      } else if (ar > br) {
-        return -1
-      }
-      return 0
+      return compareRank(NS.Hand.RANKS.indexOf(a[0].charAt(0)),
+                         NS.Hand.RANKS.indexOf(b[0].charAt(0)))
     }) 
     
     // Sort by length of each set, so larger sets come before smaller.
@@ -546,7 +554,7 @@
       }
     }    
     
-    others.sort(compareRank)
+    others.sort(compareCardsByRank)
     c.push(others)
     return c
   }
