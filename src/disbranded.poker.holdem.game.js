@@ -33,7 +33,7 @@
       extend(this.options, options)
     }
     
-    this.dealer = new NS.Dealer
+    this.players = new NS.Players
     
     var key, val, i, len    
     var hand1 = NS.Hand('a').add(['8C', '2C', 'AC', '2H', '3D', 'JC', 'QC'])
