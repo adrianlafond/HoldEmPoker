@@ -1,5 +1,5 @@
 
-;(function (root) {
+;(function (root, _) {
   'use strict'
 
   var NS = root.DISBRANDED.poker
@@ -552,4 +552,4 @@
   }
 
   
-}(this));
+}(this, _));

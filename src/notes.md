@@ -16,7 +16,7 @@ poker
     - Game (exends poker.Game)
 
 
-TO DO: Change poker.Dealer to poker.Players (because holdem.Game will be the dealer whereas Players will strictly be a model for the current players).
+TO DO: Develop out Player.
 
 TO DO: Find lowball hands in poker.Hand.
 
