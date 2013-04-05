@@ -451,7 +451,7 @@
         n = 0,
         rank = 0,
         test,
-        combo = [],
+        combo,
         others
         
     hand = hand.sort(compareCardsByRank)
