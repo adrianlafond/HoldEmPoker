@@ -36,6 +36,8 @@
     this._players = new NS.Players
     this._deck = new NS.Deck
     
+    console.log(this._deck.addJokers(2).shuffle().cards())
+    
     var key, val, i, len    
     var hand1 = NS.Hand('a').add(['8C', '2C', 'AC', '2H', '3D', 'JC', 'QC'])
     var hand2 = NS.Hand('b').add(['8H', '5D', '6D', '2D', '3H', '7S', '9H'])

@@ -1,5 +1,5 @@
 
-;(function (root) {
+;(function (root, _) {
   'use strict'
 
   var NS = root.DISBRANDED.poker,
@@ -17,24 +17,19 @@
   
   
   NS.Deck = function (options) {
-    var i, len
-    
     options = options || {}
     this._cards = []
     this._in = []
     this._out = []
     
     // add cards
-    for (i = 0, len = cards.length; i < len; i++) {
-      this._cards[i] = cards[i]
-    }
+    this._cards = cards.slice(0)
     
     // add jokers
-    this._jokers = options.jokers ? Math.max(0, Math.min(MAX_JOKERS, parseInt(options.jokers, 10))) : 0
-    for (i = 0, len = this._jokers; i < len; i++) {
-      this._cards[i + SIZE] = 'W' + (i + 1)
-    }
-    
+    this._jokers = Math.max(0, Math.min(MAX_JOKERS, parseInt(options.hasOwnProperty('jokers') ? options.jokers : 0, 10)))
+    _.times(this._jokers, function (n) {
+      this._cards[n + SIZE] = 'W' + (n + 1)
+    }, this)
     this.reset(true)
   }
 
@@ -78,15 +73,11 @@
      * @param {number} num Number of jokers to add.
      */
     addJokers: function (num) {
-      var jokers = this.jokers(),
-          num = Math.max(0, Math.min(MAX_JOKERS, parseInt(num, 10))),
-          index = jokers + 1
-      while (jokers < MAX_JOKERS && num > 0) {
-        this._cards.push('W' + index++)
-        num--
-        jokers ++
-      }
-      this._jokers = jokers
+      num = Math.min(num, MAX_JOKERS - this._jokers)
+      _.times(num, function (n) {
+        this._cards.push('W' + (n + 1))
+      }, this)
+      this._jokers += num
       this.reset(true)
       return this
     },
@@ -98,11 +89,8 @@
     reset: function (override) {
       var i, len
       if (!!override || !this._reset) {
-        this._in = []
+        this._in = this._cards.slice(0)
         this._out = []
-        for (i = 0, len = this._cards.length; i < len; i++) {
-          this._in[i] = this._cards[i]
-        }
         this._reset = true
       }
       return this
@@ -113,13 +101,7 @@
      * Shuffle/randomize the deck.
      */
     shuffle: function () {
-      var len,
-          temp = []
-      this.reset()
-      while ((len = this._in.length) > 0) {
-        temp.push(this._in.splice(Math.floor(Math.random() * len), 1)[0])
-      }
-      this._in = temp
+      this._in = _.shuffle(this._in)
       this._reset = false
       return this
     },
@@ -140,4 +122,4 @@
       return card
     }
   }
-}(this));
+}(this, _));
