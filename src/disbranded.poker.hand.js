@@ -373,6 +373,10 @@
   NS.Hand.EVEN = 0
   
   
+  
+  /**
+   * Sorting functions
+   */
   function compareCardsByRank(a, b) {
     return compareRank(NS.Hand.RANKS.indexOf(a.charAt(0)),
                        NS.Hand.RANKS.indexOf(b.charAt(0)))
@@ -391,7 +395,7 @@
     return compareSuit(NS.Hand.SUITS.indexOf(a.charAt(1)),
                        NS.Hand.SUITS.indexOf(b.charAt(1)))
   }
-  
+
   function compareSuit(a, b) {
     if (a < b) {
       return -1
@@ -402,33 +406,40 @@
   }
   
   
+  
   /**
    * Find highest flush in @param hand.
    */
-  function flush(hand, len) {
-    var n = 0,
-        i = 0,
-        suit = null,
-        test = null,
-        cards = []
-    for (; i < len; i++) {
-      if (i === 0) {
-        suit = hand[i].charAt(1)
-        cards[0] = hand[i]
-        ++n
-      } else {
-        test = hand[i].charAt(1)
-        if (suit === test) {
-          cards.push(hand[i])
-          ++n
-        } else if (n < 5) {
-          suit = test
-          n = 0
-          cards = []
-        }
+  function flush(hand) {
+    var suits = {},
+        high = -1, rank,
+        flush, others
+        
+    _.times(4, function (suitIndex) {
+      var suit = NS.Hand.SUITS.charAt(suitIndex)
+      suits[suit] = _.filter(hand, function (card) {
+        return card.charAt(1) === suit
+      })
+      if (suits[suit].length < 5) {
+        delete suits[suit]
       }
+    })
+
+    if (_.size(suits) > 0) {
+      _.each(suits, function (cards, suit) {
+        cards.sort(compareCardsByRank)
+        rank = NS.Hand.RANKS.indexOf(cards[0].charAt(0))
+        if (rank > high) {
+          high = rank
+          flush = cards
+        }
+      })
+
+      others = _.difference(hand, flush).sort(compareCardsByRank)
+      return flush.concat(others)
     }
-    return (n >= 5) ? cards : null
+    
+    return null
   }
   
   
