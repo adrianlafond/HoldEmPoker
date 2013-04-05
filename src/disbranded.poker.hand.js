@@ -143,11 +143,11 @@
         suits.sort(compareCardsByRank)
         suits.sort(compareCardsBySuit)
 
-        if (tempResult = flush(suits, this.size())) {
+        if (tempResult = flush(suits)) {
           result = tempResult
           this._rank = NS.Hand.FLUSH
           this._high = result.slice(0, 5)
-        } else if (tempResult = straight(ranks, this.size())) {
+        } else if (tempResult = straight(ranks)) {
           result = tempResult
           this._rank = NS.Hand.STRAIGHT
           this._high = result.slice(0, 5)
@@ -413,7 +413,7 @@
   function flush(hand) {
     var suits = {},
         high = -1, rank,
-        flush, others
+        combo, others
         
     _.times(4, function (suitIndex) {
       var suit = NS.Hand.SUITS.charAt(suitIndex)
@@ -431,12 +431,12 @@
         rank = NS.Hand.RANKS.indexOf(cards[0].charAt(0))
         if (rank > high) {
           high = rank
-          flush = cards
+          combo = cards
         }
       })
 
-      others = _.difference(hand, flush).sort(compareCardsByRank)
-      return flush.concat(others)
+      others = _.difference(hand, combo).sort(compareCardsByRank)
+      return combo.concat(others)
     }
     
     return null
@@ -446,33 +446,41 @@
   /**
    * Find highest straight in @param hand.
    */
-  function straight(hand, len) {
-    var n = 0,
-        i = 0,
-        cards = [],
-        rank,
-        test
-    for (; i < len; i++) {
-      if (i === 0) {
-        rank = NS.Hand.RANKS.indexOf(hand[i].charAt(0))
-        cards[i] = hand[i]
-        ++n
+  function straight(hand) {
+    var straights = [[]],
+        n = 0,
+        rank = 0,
+        test,
+        combo = [],
+        others
+        
+    hand = hand.sort(compareCardsByRank)
+    _.each(hand, function (card, index) {
+      test = NS.Hand.RANKS.indexOf(card.charAt(0))
+      if (test === rank - 1) {
+        straights[n].push(card)
       } else {
-        test = NS.Hand.RANKS.indexOf(hand[i].charAt(0))
-        if (rank === test) {
-          continue
-        } else if (rank - 1 === test) {
-          rank = test
-          cards.push(hand[i])
-          ++n
-        } else if (n < 5) {
-          rank = test
-          n = 1
-          cards.splice(0, cards.length, hand[i])
+        if (straights[n].length < 5) {
+          straights[n] = []
         }
-      }
+        straights[++n] = [card]
+      }   
+      rank = test
+    })
+    
+    straights = _.filter(straights, function (s) {
+      return s.length >= 5
+    })
+    
+    if (straights.length) {
+      combo = _.max(straights, function (s) {
+        return NS.Hand.RANKS.indexOf(s[0].charAt(0))
+      })      
+      others = _.difference(hand, combo).sort(compareCardsByRank)
+      return combo.concat(others)
     }
-    return (n >= 5) ? cards : null
+    
+    return null
   }
   
   
