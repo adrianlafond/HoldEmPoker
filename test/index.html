@@ -27,7 +27,7 @@
     
     var output = $.fn.output
     $.fn.output = function (method, args, result) {
-      DISBRANED.poker[method].call(this, args)
+      DISBRANDED.poker[method].call(this, args)
     }
 
     var $outputHand = $('ul.hand'),
@@ -47,17 +47,20 @@
           if (!result) {
             return 'null'
           }
-          for (i = 0, len = result.length; i < len; i++) {
-            str += result[i]
+          for (i = 0, len = result.cards.length; i < len; i++) {
+            str += result.cards[i]
             if (i < len - 1) {
               str += ' + '
             }
           }
+          str += ' / "' + DISBRANDED.poker.string.en.cards[result.type] + '"'
           return str
-        }
+        },
+        
+        hands = []
 
     $outputHand.append("<li>Hand.isFlush(['KS','4H','5S','9S','TS','5C','2S']) = "
-                       + P.Hand.isFlush(['KS','4H','5S','9S','TS','5C','2S'])
+                       + P.Hand.isFlush(['KS','4H','5S','9S','TS','5C','2S']).cards
                        + elapsed() + "</li>")
     //                  
     $outputHand.append("<li>Hand.isFlush(['KS','4H','5S','9H','TS','5C','2S']) = "
@@ -65,7 +68,7 @@
                        + elapsed() + "</li>")
     //
     $outputHand.append("<li>Hand.isFlush(['KS','JS','9S','7S','5S','KH','JH','9H','7H','4H']) = "
-                       + P.Hand.isFlush(['KS','JS','9S','7S','5S','KH','JH','9H','7H','4H'])
+                       + P.Hand.isFlush(['KS','JS','9S','7S','5S','KH','JH','9H','7H','4H']).cards
                        + elapsed() + "</li>")
     //
     $outputHand.append("<li>Hand.isFlush(['KS','4S','5S','9S']) = "
@@ -73,11 +76,11 @@
                        + elapsed() + "</li>")
     //
     $outputHand.append("<li>Hand.isStraight(['KS','4S','5S','9S','QH','TD','JD']) = "
-                       + P.Hand.isStraight(['KS','4S','5S','9S','QH','TD','JD'])
+                       + P.Hand.isStraight(['KS','4S','5S','9S','QH','TD','JD']).cards
                        + elapsed() + "</li>")
     //
     $outputHand.append("<li>Hand.isStraight(['AS','8D','7S','9S','QH','TD','JD']) = "
-                       + P.Hand.isStraight(['AS','8D','7S','9S','QH','TD','JD'])
+                       + P.Hand.isStraight(['AS','8D','7S','9S','QH','TD','JD']).cards
                        + elapsed() + "</li>")
     //
     $outputHand.append("<li>Hand.isStraight(['KS','4S','5S','9S','QH','TD','7C']) = "
@@ -85,23 +88,26 @@
                        + elapsed() + "</li>")
     //
     $outputHand.append("<li>Hand.isStraight(['3H','4D','5C','7S','6H','KS','JH','QD','TC','9H']) = "
-                       + P.Hand.isStraight(['3H','4D','5C','7S','6H','KS','JH','QD','TC','9H'])
+                       + P.Hand.isStraight(['3H','4D','5C','7S','6H','KS','JH','QD','TC','9H']).cards
                        + elapsed() + "</li>")
     //
     $outputHand.append("<li>Hand.isStraight(['TC','JC','QC','KC']) = "
                        + P.Hand.isStraight(['TC','JC','QC','KC'])
                        + elapsed() + "</li>")
     //
+    result = P.Hand.isStraightFlush(['KS','4S','5S','9S','QH','TD','JD'])
     $outputHand.append("<li>Hand.isStraightFlush(['KS','4S','5S','9S','QH','TD','JD']) = "
-                       + P.Hand.isStraightFlush(['KS','4S','5S','9S','QH','TD','JD'])
+                       + (result ? (result.cards + ' / Royal Flush: ' + result.royalFlush) : 'null')
                        + elapsed() + "</li>")
     //  
-    $outputHand.append("<li>Hand.isStraightFlush(['KD','4S','5S','9D','QD','TD','JD']) = "
-                       + P.Hand.isStraightFlush(['KD','4S','5S','9D','QD','TD','JD'])
+    result = P.Hand.isStraightFlush(['KD','4S','5S','AD','QD','TD','JD'])
+    $outputHand.append("<li>Hand.isStraightFlush(['KD','4S','5S','AD','QD','TD','JD']) = "
+                       + result.cards + ' / Royal Flush: ' + result.royalFlush
                        + elapsed() + "</li>")
     //
+    result = P.Hand.isStraightFlush(['KD','4S','5S','9D','QD','TD','JD'])
     $outputHand.append("<li>Hand.isStraightFlush(['KD','4S','5S','9D','QD','TD','JD']) = "
-                       + P.Hand.isStraightFlush(['AD','KH','8D','9D','QD','TD','JD'])
+                       + result.cards + ' / Royal Flush: ' + result.royalFlush
                        + elapsed() + "</li>")
     //
     result = P.Hand.findSets(['5C','6D','8H','6C','6S','5S','6H'])
@@ -150,10 +156,57 @@
                        + P.Hand.sortByRank([])
                        + elapsed() + "</li>")
     //
-    
+    hands[0] = new P.Hand('a').add('KD','4S','5S','AD','QD','TD','JD')
+    $outputHand.append("<li>new Hand('a').add('KD','4S','5S','AD','QD','TD','JD')"
+                      + ' = ' + hands[0].high() +' / "'+ DISBRANDED.poker.string.en.cards[hands[0].rank()] +'"'
+                      + elapsed() + "</li>")
+    //
+    hands[1] = new P.Hand('b').add('KD','4S','5S','9D','QD','TD','JD')
+    $outputHand.append("<li>new Hand('b').add('KD','4S','5S','9D','QD','TD','JD')"
+                      + ' = ' + hands[1].high() +' / "'+ DISBRANDED.poker.string.en.cards[hands[1].rank()] +'"'
+                      + elapsed() + "</li>")
+    //
+    hands[2] = new P.Hand('c').add('KD','4S','5S','AD','QD','TD','JS')
+    $outputHand.append("<li>new Hand('c').add('KD','4S','5S','AD','QD','TD','JS')"
+                      + ' = ' + hands[2].high() +' / "'+ DISBRANDED.poker.string.en.cards[hands[2].rank()] +'"'
+                      + elapsed() + "</li>")
+    //
+    hands[3] = new P.Hand('d').add('KD','4S','5S','AD','QD','TD','2D')
+    $outputHand.append("<li>new Hand('d').add('KD','4S','5S','AD','QD','TD','2D')"
+                      + ' = ' + hands[3].high() +' / "'+ DISBRANDED.poker.string.en.cards[hands[3].rank()] +'"'
+                      + elapsed() + "</li>")
+    //
+    hands[4] = new P.Hand('e').add('KD','4S','5S','KH','QD','TD','2D')
+    $outputHand.append("<li>new Hand('e').add('KD','4S','5S','KH','QD','TD','2D')"
+                      + ' = ' + hands[4].high() +' / "'+ DISBRANDED.poker.string.en.cards[hands[4].rank()] +'"'
+                      + elapsed() + "</li>")
+    //
+    hands[5] = new P.Hand('f').add('KD','4S','5S','KH','QD','4D','2D')
+    $outputHand.append("<li>new Hand('f').add('KD','4S','5S','KH','QD','4D','2D')"
+                      + ' = ' + hands[5].high() +' / "'+ DISBRANDED.poker.string.en.cards[hands[5].rank()] +'"'
+                      + elapsed() + "</li>")
+    //
+    hands[6] = new P.Hand('g').add('KD','4S','5S','KH','QD','4D','4H')
+    $outputHand.append("<li>new Hand('g').add('KD','4S','5S','KH','QD','4D','4H')"
+                      + ' = ' + hands[6].high() +' / "'+ DISBRANDED.poker.string.en.cards[hands[6].rank()] +'"'
+                      + elapsed() + "</li>")
+    //
+    hands[7] = new P.Hand('h').add('KD','4S','5S','8H','QD','4D','4H')
+    $outputHand.append("<li>new Hand('h').add('KD','4S','5S','8H','QD','4D','4H')"
+                      + ' = ' + hands[7].high() +' / "'+ DISBRANDED.poker.string.en.cards[hands[7].rank()] +'"'
+                      + elapsed() + "</li>")
+    //
+    hands[8] = new P.Hand('i').add('KD','4S','5S','8H','QD','9D','JH')
+    $outputHand.append("<li>new Hand('i').add('KD','4S','5S','8H','QD','9D','JH')"
+                      + ' = ' + hands[8].high() +' / "'+ DISBRANDED.poker.string.en.cards[hands[8].rank()] +'"'
+                      + elapsed() + "</li>")
+    //
+    result = P.Hand.sort(hands)
+    $outputHand.append("<li>Hand.sort([Hand instances above]) best = "
+                      + result[0].high() +' / "'+ DISBRANDED.poker.string.en.cards[result[0].rank()] +'"'
+                      + elapsed() + "</li>")
+    //
     $outputHand.append("<li>TOTAL: " + (((new Date).getTime() - startTime) / 1000) + "s</li>")
-    
-    // DISBRANDED.poker.Hand.findSets(['5C', '6D', '8H', '6C', '6S', '5S', '6H'])
     
     $.fn.output = output
   })

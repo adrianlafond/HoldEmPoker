@@ -57,6 +57,14 @@
       return _.contains(this._cards, card)
     },
     
+    
+    /**
+     * @returns a copy of cards.
+     */
+    cards: function () {
+      return this._cards.slice(0)
+    },
+    
     /**
      * @param {string|array}
      */
@@ -66,7 +74,7 @@
         if (_.isString(card)) {
           if (!self.has(card)) {
             self._cards[self.size()] = card
-            self.updateStatus()
+            self.updateValue()
           }
         } else if (_.isArray(card)) {
           self.add.apply(self, card)
@@ -95,7 +103,7 @@
       if (_.isNumber(index) && !_.isNaN(index)) {
         index = Math.max(0, Math.min(this._cards.length, index))
         this._cards[index] = card
-        this.updateStatus()
+        this.updateValue()
       } else if (NS.debug) {
         throw 'Error: Hand.set() first argument must be a number.'
       }
@@ -135,97 +143,63 @@
      * @returns a copy of this hand's best 5-card poker hand.
      */
     high: function () {
-      return this._high ? this._high.slice(0) : null
+      return this._high.slice(0)
     },
     
     
     /**
-     * TO DO: !!! BROKEN !!! since switch to static testing methods.
-     * Updates the hand's rank (for comparison with other hands),
-     * set of 5 high cards, and set of 5 low cards.
+     * Update rank and high (array of cards that make the best hand).
+     * If lowball, also updates low hand.
      */
-    updateStatus: function () {
-      var result,
-          tempResult,
-          ranks,
-          suits,
-          i,
-          len,
-          setsLen,
-          
-          fnSuit,
-          fnRank
+    updateValue: function () {
+      var hand = this.cards(),
+          result = NS.Hand.isFlush(hand)
       
       this._rank = 0
-      this._high = null
-      
-      if (this.size() >= 5) {
-        ranks = []
-        suits = []
-        for (i = 0; i < this.size(); i++) {
-          ranks[i] = suits[i] = this.get(i)
-        }
-        
-        ranks.sort(compareCardsBySuit)
-        ranks.sort(compareCardsByRank)        
-        suits.sort(compareCardsByRank)
-        suits.sort(compareCardsBySuit)
 
-        if (tempResult = NS.Hand.isFlush(suits)) {
-          result = tempResult
-          this._rank = NS.Hand.FLUSH
-          this._high = result.slice(0, 5)
-        } else if (tempResult = NS.Hand.isStraight(ranks)) {
-          result = tempResult
-          this._rank = NS.Hand.STRAIGHT
-          this._high = result.slice(0, 5)
-        }
+      if (result) {
+        this._rank = NS.Hand.FLUSH
+        this._high = result.cards.slice(0)
         
-        if (this._rank === NS.Hand.FLUSH) {
-          if (tempResult = NS.Hand.isStraight(suits, this.size())) {
-            result = tempResult
-            if (result[result.length - 1].charAt(0) === 'A') {
-              this._rank = NS.Hand.ROYAL_FLUSH
-            } else {
-              this._rank = NS.Hand.STRAIGHT_FLUSH
-            }
-            this._high = result.slice(0, 5)
-          }
+        result = NS.Hand.isStraightFlush(hand)
+        if (result) {
+          this._rank = result.royalFlush ? NS.Hand.ROYAL_FLUSH : NS.Hand.STRAIGHT_FLUSH
+          this._high = result.cards.slice(0)
+          return
+        } 
+      }
+
+      result = NS.Hand.findSets(hand)
+      if (result) {
+        if (result.type === NS.Hand.FOUR_OF_A_KIND) {
+          this._rank = NS.Hand.FOUR_OF_A_KIND
+          this._high = result.cards.slice(0)
+          return
         }
-        
-        if (this._rank < NS.Hand.FOUR_OF_A_KIND) {
-          result = NS.Hand.findSets(ranks)
-          setsLen = result.length
-          if (setsLen >= 2) {
-            if (result[0].length === 4) {
-              this._rank = NS.Hand.FOUR_OF_A_KIND
-              this._high = result[0].concat(result[setsLen - 1][0])
-            }
-            if (result[0].length === 3) {
-              if (this._rank < NS.Hand.FULL_HOUSE && setsLen >= 3) {
-                this._rank = NS.Hand.FULL_HOUSE
-                this._high = result[0].concat(result[1].slice(0, 2))
-              } else if (this._rank < NS.Hand.THREE_OF_A_KIND) {
-                this._rank = NS.Hand.THREE_OF_A_KIND
-                this._high = result[0].concat(result[setsLen - 1].slice(0, 2))
-              }
-            }
-            if (setsLen >= 3 && this._rank < NS.Hand.TWO_PAIR) {
-              this._rank = NS.Hand.TWO_PAIR
-              this._high = result[0].concat(result[1]).concat(result[setsLen - 1][0])
-            }/* else if (this._rank < NS.Hand.ONE_PAIR) {
-              this._rank = NS.Hand.ONE_PAIR
-              this._high = result[0].concat(result[setsLen - 1].slice(0, 3))
-            }*/
-          }
+        if (result.type === NS.Hand.FULL_HOUSE) {
+          this._rank = NS.Hand.FULL_HOUSE
+          this._high = result.cards.slice(0)
+          return
         }
-        
-        if (this._rank < NS.Hand.HIGH_CARD) {
-          this._rank = NS.Hand.HIGH_CARD
-          this._high = ranks.slice(0, 5)
+        if (this._rank < NS.Hand.THREE_OF_A_KIND) {
+          this._rank = result.type
+          this._high = result.cards.slice(0)
         }
       }
-      return this
+      
+      if (this._rank < NS.Hand.STRAIGHT) {
+        result = NS.Hand.isStraight(hand)
+        if (result) {
+          this._rank = NS.Hand.STRAIGHT
+          this._high = result.cards.slice(0)
+          return
+        }
+      }
+      
+      if (this._rank < NS.Hand.HIGH_CARD) {
+        this._rank = NS.Hand.HIGH_CARD
+        this._high = NS.Hand.sortByRank(hand).slice(0, 5)
+      }
     },
     
     
@@ -391,7 +365,7 @@
   
   
   /**
-   * Sorts @params hands from highest to lowest.
+   * Sorts @param hands from highest to lowest.
    * @param hands {array} of Hand instances.
    * @returns {array} of hands, sorted.
    */
@@ -439,9 +413,7 @@
         }
       })
 
-      return flush
-      // others = _.difference(hand, flush).sort(compareCardsByRank)
-      // return flush.concat(others)
+      return { cards: flush }
     }
     
     return null
@@ -488,11 +460,10 @@
     })
     
     if (straights.length) {
-      return _.max(straights, function (s) {
+      straight = _.max(straights, function (s) {
         return NS.Hand.RANKS.indexOf(s[0].charAt(0))
       }).slice(0, 5)
-      // others = _.difference(hand, straight).sort(compareCardsByRank)
-      // return straight.concat(others)
+      return { cards: straight }
     }
     
     return null
@@ -504,7 +475,11 @@
    * @returns {null} or {array} sorted straight flush, kickers.
    */
   NS.Hand.isStraightFlush = function (hand) {
-    return NS.Hand.isStraight(hand, true)
+    var result = NS.Hand.isStraight(hand, true)
+    if (result) {
+      result.royalFlush = result.cards[0].charAt(0) === 'A'
+    }
+    return result
   }
   
   
@@ -516,7 +491,8 @@
   NS.Hand.findSets = function (hand) {
     var sets = [],
         set0Len,
-        result
+        result,
+        type
     
     if (hand.length < 5) {
       return null
@@ -543,8 +519,10 @@
       
       set0Len = sets[0].length
       if (set0Len === 4) {
-        return [sets[0], _.difference(hand, sets[0]).sort(compareCardsByRank).slice(0, 1)]
-        // return [sets[0], _.difference(hand, sets[0]).sort(compareCardsByRank)]
+        return {
+          cards: [sets[0], _.difference(hand, sets[0]).sort(compareCardsByRank).slice(0, 1)],
+          type: NS.Hand.FOUR_OF_A_KIND
+        }
       }
       
       result = [sets[0]]
@@ -554,12 +532,18 @@
         if (set0Len < 3) {
           // get kicker for 2 pair
           result[2] = _.difference(hand, sets[0], sets[1]).sort(compareCardsByRank).slice(0, 1)
-        }        
+        }
+        type = (set0Len === 3) ? NS.Hand.FULL_HOUSE : NS.Hand.TWO_PAIR
       } else {
-        // kickers for 1 pair
-        result[1] = _.difference(hand, sets[0]).sort(compareCardsByRank).slice(0, 3)
+        // kickers for three of a kind or 1 pair
+        result[1] = _.difference(hand, sets[0]).sort(compareCardsByRank)
+        result[1] = result[1].slice(0, (set0Len === 3) ? 2 : 3)
+        type = (set0Len === 3) ? NS.Hand.THREE_OF_A_KIND : NS.Hand.ONE_PAIR
       }
-      return result
+      return {
+        cards: result,
+        type: type
+      }
     }
     
     return null
