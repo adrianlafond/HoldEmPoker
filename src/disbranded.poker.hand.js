@@ -174,7 +174,7 @@
         }
         
         if (this._rank < NS.Hand.FOUR_OF_A_KIND) {
-          result = findSets(ranks, this.size())
+          result = NS.Hand.findSets(ranks)
           setsLen = result.length
           if (setsLen >= 2) {
             if (result[0].length === 4) {
@@ -193,10 +193,10 @@
             if (setsLen >= 3 && this._rank < NS.Hand.TWO_PAIR) {
               this._rank = NS.Hand.TWO_PAIR
               this._high = result[0].concat(result[1]).concat(result[setsLen - 1][0])
-            } else if (this._rank < NS.Hand.ONE_PAIR) {
+            }/* else if (this._rank < NS.Hand.ONE_PAIR) {
               this._rank = NS.Hand.ONE_PAIR
               this._high = result[0].concat(result[setsLen - 1].slice(0, 3))
-            }
+            }*/
           }
         }
         
@@ -361,6 +361,7 @@
   
   /**
    * Find highest flush in @param hand.
+   * @returns {null} if no flush or {array} sorted flush, kickers.
    */
   NS.Hand.isFlush = function (hand) {
     var suits = {},
@@ -405,6 +406,7 @@
   /**
    * Find highest straight in @param hand.
    * @param {boolean} flush Whether to test for straight flush.
+   * @returns {null} if no straight or {array} sorted straight, kickers.
    */
   NS.Hand.isStraight = function (hand, flush) {
     var straights = [],
@@ -452,8 +454,72 @@
   }
   
   
+  /**
+   * Find a straight flush in @param hand.
+   * @returns {null} or {array} sorted straight flush, kickers.
+   */
   NS.Hand.isStraightFlush = function (hand) {
     return NS.Hand.isStraight(hand, true)
+  }
+  
+  
+  /**
+   * Find sets in @param hand.
+   * @returns {null} if hand.length < 5 or no pairs.
+   * or @returns or {array} of arrays of sets sorted largest + highest sets first
+   */
+  NS.Hand.findSets = function (hand) {
+    var sets = [],
+        set0Len,
+        result
+    
+    if (hand.length < 5) {
+      return null
+    }
+    
+    _.times(13, function (n) {
+      var rank = NS.Hand.RANKS[n],
+        set = _.filter(hand, function (card) {
+          return card.charAt(0) === rank
+        })
+      if (set.length >= 2) {
+        sets.push(set)
+      }
+    })
+    
+    if (sets.length) {
+      // Sort by value of cards in each set.
+      sets.sort(function (a, b) {
+        return compareCardsByRank(a[0], b[0])
+      })
+      
+      // Sort by number of cards in each set.
+      sets.sort(compareSetLen)
+      
+      set0Len = sets[0].length
+      if (set0Len === 4) {
+        return [sets[0], _.difference(hand, sets[0]).sort(compareCardsByRank)]
+      }
+      
+      result = [sets[0]]
+      if (sets.length > 1) {
+        result[1] = (set0Len === 3) ? sets[1].slice(0, 2) : sets[1]
+        result[2] = _.difference(hand, sets[0], sets[1]).sort(compareCardsByRank)
+      } else {
+        result[1] = _.difference(hand, sets[0]).sort(compareCardsByRank)
+      }
+      return result
+    }
+    
+    return null
+  }
+  
+  
+  /**
+   * @returns copy of hand sorted by rank high to low.
+   */
+  NS.Hand.sortByRank = function (hand) {
+    return hand.slice(0).sort(compareCardsByRank)
   }
   
 
@@ -511,102 +577,18 @@
     return 0
   }
   
-
-  
-  
-  /**
-   * Finds 4 of a kind, 3 of a kind, and pairs in @param hand
-   */
-  function findSets(hand, len) {
-    var c = [],
-        i = 0,
-        r1,
-        r2,
-        temp = [],
-        removed = [],
-        others = [],
-        j,
-        jlen,
-        flag = false,
-        
-        addTempToCards = function () {
-          if (temp.length >= 2) {
-            removed = removed.concat(temp)
-            c.push([].concat(temp))
-          }
-        }
-
-    for (; i < len; i++) {
-      r2 = hand[i].charAt(0)
-      if (!r1) {
-        r1 = r2
-        temp[0] = hand[i]
-      } else if (r1 === r2) {
-        temp.push(hand[i])
-        if (i === len - 1) {
-          addTempToCards()
-        }
-      } else {
-        addTempToCards()
-        r1 = r2
-        temp = [hand[i]]
-      }
+  function compareSetLen(a, b) {
+    var al = a.length,
+        bl = b.length
+    if (al > bl) {
+      return -1
+    } else if (al < bl) {
+      return 1
     }
-    
-    // Sort by rank, so sets with higher sets come before smaller.
-    c.sort(function (a, b) {
-      return compareRank(NS.Hand.RANKS.indexOf(a[0].charAt(0)),
-                         NS.Hand.RANKS.indexOf(b[0].charAt(0)))
-    }) 
-    
-    // Sort by length of each set, so larger sets come before smaller.
-    c.sort(function (a, b) {
-      var alen = a.length,
-          blen = b.length
-      if (alen < blen) {
-        return 1
-      } else if (alen > blen) {
-        return -1
-      }
-      return 0
-    }) 
-    
-    // Create an array of cards not in sets, for use as kickers.
-    jlen = removed.length
-    for (i = 0; i < len; i++) {
-      flag = true
-      for (j = 0; j < jlen; j++) {
-        if (hand[i] === removed[j]) {
-          flag = false
-          break
-        }
-      }
-      if (flag) {
-        others.push(hand[i])
-      }
-    }
-    
-    // Add unneeded sets to kickers.
-    len = c.length
-    if (len > 0) {
-      jlen = c[0].length
-      if (jlen === 4) {
-        i = 1
-      } else if (jlen === 3) {
-        i = (len >= 2) ? 2 : 1
-      } else  {
-        i = 2
-      }
-      while (c.length > i) {
-        others = others.concat(c[i])
-        c.splice(i, 1)
-      }
-    }    
-    
-    others.sort(compareCardsByRank)
-    c.push(others)
-    return c
+    return 0
   }
+
+
 
   
 }(this, _));

@@ -39,6 +39,21 @@
               str = ' : ' + ((t - nowTime) / 1000) + 's'
           nowTime = t
           return str
+        },
+        
+        result,
+        getSetResult = function (result) {
+          var i, len, str = ''
+          if (!result) {
+            return 'null'
+          }
+          for (i = 0, len = result.length; i < len; i++) {
+            str += result[i]
+            if (i < len - 1) {
+              str += ' + '
+            }
+          }
+          return str
         }
 
     $outputHand.append("<li>Hand.isFlush(['KS','4H','5S','9S','TS','5C','2S']) = "
@@ -89,8 +104,56 @@
                        + P.Hand.isStraightFlush(['AD','KH','8D','9D','QD','TD','JD'])
                        + elapsed() + "</li>")
     //
+    result = P.Hand.findSets(['5C','6D','8H','6C','6S','5S','6H'])
+    $outputHand.append("<li>Hand.findSets(['5C','6D','8H','6C','6S','5S','6H']) = "
+                       + getSetResult(result)
+                       + elapsed() + "</li>")
     //
+    result = P.Hand.findSets(['5C','6D','8H','6C','QH','5S','6H'])
+    $outputHand.append("<li>Hand.findSets(['5C','6D','8H','6C','QH','5S','6H']) = "
+                       + getSetResult(result)
+                       + elapsed() + "</li>")
+    //
+    result = P.Hand.findSets(['5C','6D','8H','6C','QH','JS','6H'])
+    $outputHand.append("<li>Hand.findSets(['5C','6D','8H','6C','QH','JS','6H']) = "
+                       + getSetResult(result)
+                       + elapsed() + "</li>")
+    //
+    result = P.Hand.findSets(['5C','6D','8H','6C','QH','JS','5H'])
+    $outputHand.append("<li>Hand.findSets(['5C','6D','8H','6C','QH','JS','5H']) = "
+                       + getSetResult(result)
+                       + elapsed() + "</li>")
+    //
+    result = P.Hand.findSets(['5C','6D','8H','6C','QH','JS','9H'])
+    $outputHand.append("<li>Hand.findSets(['5C','6D','8H','6C','QH','JS','9H']) = "
+                       + getSetResult(result)
+                       + elapsed() + "</li>")
+    //
+    result = P.Hand.findSets(['5C','6D','8H','2C','QH','JS','9H'])
+    $outputHand.append("<li>Hand.findSets(['5C','6D','8H','2C','QH','JS','9H']) = "
+                       + getSetResult(result)
+                       + elapsed() + "</li>")
+    //
+    $outputHand.append("<li>Hand.sortByRank(['5C','6D','8H','2C','QH','JS','9H']) = "
+                       + P.Hand.sortByRank(['5C','6D','8H','2C','QH','JS','9H'])
+                       + elapsed() + "</li>")
+    //
+    $outputHand.append("<li>Hand.sortByRank(['5C','5D','8H','8C','QH','JS','9H']) = "
+                       + P.Hand.sortByRank(['5C','5D','8H','8C','QH','JS','9H'])
+                       + elapsed() + "</li>")
+    //
+    $outputHand.append("<li>Hand.sortByRank(['2H','AC','8D']) = "
+                       + P.Hand.sortByRank(['2H','AC','8D'])
+                       + elapsed() + "</li>")
+    //
+    $outputHand.append("<li>Hand.sortByRank([]) = "
+                       + P.Hand.sortByRank([])
+                       + elapsed() + "</li>")
+    //
+    
     $outputHand.append("<li>TOTAL: " + (((new Date).getTime() - startTime) / 1000) + "s</li>")
+    
+    // DISBRANDED.poker.Hand.findSets(['5C', '6D', '8H', '6C', '6S', '5S', '6H'])
     
     $.fn.output = output
   })
