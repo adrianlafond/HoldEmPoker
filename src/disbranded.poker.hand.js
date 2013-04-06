@@ -407,7 +407,7 @@
    * @param {boolean} flush Whether to test for straight flush.
    */
   NS.Hand.isStraight = function (hand, flush) {
-    var straights = [[]],
+    var straights = [],
         n = -1,
         rank = 0,
         suit,
@@ -423,13 +423,13 @@
     hand = hand.sort(compareCardsByRank)
     flush = !!flush
     
+    console.log('')
     _.each(hand, function (card, index) {
       var testRank = NS.Hand.RANKS.indexOf(card.charAt(0)),
-          testSuit = flush ? card.charAt(1) : null
-      if (index > 0) {
-        if (testRank === rank - 1 && (flush ? (testSuit === suit) : true)) {
-          straights[n].push(card)
-        }        
+          testSuit = flush ? card.charAt(1) : null,
+          rankOk = index > 0 && testRank === rank - 1
+      if (rankOk && (flush ? (testSuit === suit) : true)) {
+        straights[n].push(card)
       } else {
         straights[++n] = [card]
       }   
