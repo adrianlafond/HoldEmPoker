@@ -155,6 +155,10 @@
       var hand = this.cards(),
           result = NS.Hand.isFlush(hand)
       
+      if (this._lowball) {
+        this._lowball.updateValue()
+      }
+      
       this._rank = 0
 
       if (result) {
@@ -219,7 +223,7 @@
           n
           
       if (r1 === 0 || r2 === 0) {
-        NS.Hand.EVEN
+        return NS.Hand.EVEN
       }
 
       if (r1 > r2) {
@@ -291,6 +295,27 @@
       this._hand = arguments[0]
       return this
     },
+    
+    
+    /**
+     * 
+     */
+    updateValue: function () {
+      // ...
+    },
+    
+    
+    /**
+     * Compares this Hand to another Hand instance, in terms of lowball.
+     * @param {Hand} hand
+     * @returns  1 / BETTER if this Hand is better
+     *          -1 / WORSE if param Hand is better
+     *           0 / EVEN if Hands are event
+     */
+    compareTo: function (hand) {
+      return NS.Hand.EVEN
+    },
+    
     
     reset: function () {
       this._low = null
@@ -372,6 +397,19 @@
   NS.Hand.sort = function (hands) {
     hands.sort(function (a, b) {
       return a.compareTo(b)
+    })
+    return hands
+  }
+  
+  
+  /**
+   * Sorts @param hands from best to worst lowball.
+   * @param hands {array} of Hand instances.
+   * @returns {array} of hands, sorted.
+   */
+  NS.Hand.sortLow = function (hands) {
+    hands.sort(function (a, b) {
+      return a.lowball().compareTo(b)
     })
     return hands
   }
