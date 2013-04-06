@@ -201,9 +201,19 @@
                       + ' = ' + hands[8].high() +' / "'+ DISBRANDED.poker.string.en.cards[hands[8].rank()] +'"'
                       + elapsed() + "</li>")
     //
-    result = P.Hand.sort(hands)
+    result = P.Hand.sort(hands.slice(0))
     $outputHand.append("<li>Hand.sort([Hand instances above]) best = "
-                      + result[0].high() +' / "'+ DISBRANDED.poker.string.en.cards[result[0].rank()] +'"'
+                      + ' id:"'+ result[0].id +'" '+ result[0].high() +' / "'+ DISBRANDED.poker.string.en.cards[result[0].rank()] +'"'
+                      + elapsed() + "</li>")
+    //
+    result = P.Hand.sort([hands[2], hands[3], hands[7], hands[8]])
+    $outputHand.append("<li>Hand.sort(c, d, h, i) best = "
+                      + ' id:"'+ result[0].id +'" '+ result[0].high() +' / "'+ DISBRANDED.poker.string.en.cards[result[0].rank()] +'"'
+                      + elapsed() + "</li>")
+    //
+    result = P.Hand.sort([hands[4], hands[5], hands[8]])
+    $outputHand.append("<li>Hand.sort(e, f, i) best = "
+                      + ' id:"'+ result[0].id +'" '+ result[0].high() +' / "'+ DISBRANDED.poker.string.en.cards[result[0].rank()] +'"'
                       + elapsed() + "</li>")
     //
     $outputHand.append("<li>TOTAL: " + (((new Date).getTime() - startTime) / 1000) + "s</li>")

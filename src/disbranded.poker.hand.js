@@ -217,11 +217,11 @@
           h2,
           result,
           n
-      
+          
       if (r1 === 0 || r2 === 0) {
-        return NS.Hand.EVEN
+        NS.Hand.EVEN
       }
-      
+
       if (r1 > r2) {
         return NS.Hand.BETTER
       } else if (r1 < r2) {
