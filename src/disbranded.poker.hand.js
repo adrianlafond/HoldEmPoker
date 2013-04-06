@@ -15,6 +15,29 @@
     this.reset()
   }
   
+
+  // @constants correspond with indices in poker.string[lang].cards array.
+  NS.Hand.ROYAL_FLUSH     = 10
+  NS.Hand.STRAIGHT_FLUSH  = 9
+  NS.Hand.FOUR_OF_A_KIND  = 8
+  NS.Hand.FULL_HOUSE      = 7
+  NS.Hand.FLUSH           = 6
+  NS.Hand.STRAIGHT        = 5
+  NS.Hand.THREE_OF_A_KIND = 4
+  NS.Hand.TWO_PAIR        = 3
+  NS.Hand.ONE_PAIR        = 2
+  NS.Hand.HIGH_CARD       = 1  
+  
+  // @constants for comparisons between hands
+  NS.Hand.BETTER = -1
+  NS.Hand.WORSE = 1
+  NS.Hand.EVEN = 0
+  
+  
+  NS.Hand.RANKS = '23456789TJQKAW'
+  NS.Hand.SUITS = 'CDHS'
+  
+  
   NS.Hand.prototype = {
     
     
@@ -552,25 +575,7 @@
   
 
 
-  NS.Hand.RANKS = '23456789TJQKAW'
-  NS.Hand.SUITS = 'CDHS'
 
-  NS.Hand.ROYAL_FLUSH     = 10
-  NS.Hand.STRAIGHT_FLUSH  = 9
-  NS.Hand.FOUR_OF_A_KIND  = 8
-  NS.Hand.FULL_HOUSE      = 7
-  NS.Hand.FLUSH           = 6
-  NS.Hand.STRAIGHT        = 5
-  NS.Hand.THREE_OF_A_KIND = 4
-  NS.Hand.TWO_PAIR        = 3
-  NS.Hand.ONE_PAIR        = 2
-  NS.Hand.HIGH_CARD       = 1
-  
-  
-  // for comparisons between hands
-  NS.Hand.BETTER = -1
-  NS.Hand.WORSE = 1
-  NS.Hand.EVEN = 0
   
   
   
