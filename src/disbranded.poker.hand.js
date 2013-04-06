@@ -22,7 +22,7 @@
      * Create lowball only if/when it's needed.
      */
     lowball: function () {
-      return this._lowball || (this._lowball = new NS.Hand.Lowball)
+      return this._lowball || (this._lowball = new NS.Hand.Lowball({ hand: this }))
     },
     
     
@@ -85,7 +85,10 @@
     reset: function () {
       this._cards = []
       this._rank = 0
-      this._high = this._low = null
+      this._high = null
+      if (this._lowball) {
+        this._lowball.reset()
+      }
       return this
     },
     
@@ -112,13 +115,6 @@
       return this._high ? this._high.slice(0) : null
     },
     
-    /**
-     * @returns a copy of this hand's best LOW 5-card poker hand.
-     */
-    low: function () {
-      return this._low ? this._low.slice(0) : null
-    },
-    
     
     /**
      * TO DO: !!! BROKEN !!! since switch to static testing methods.
@@ -138,7 +134,7 @@
           fnRank
       
       this._rank = 0
-      this._high = this._low = null
+      this._high = null
       
       if (this.size() >= 5) {
         ranks = []
@@ -273,12 +269,36 @@
    */
   NS.Hand.Lowball = function (options) {
     options = options || {}
+    this._hand = options.hand || null
     this._acesLow = !!options.acesAreLow || true
     this._ignoreStraights = !!options.ignoreStraights || true
     this._ignoreFlushes = !!options.ignoreFlushes || true
+    this._low = null
   }
   
   NS.Hand.Lowball.prototype = {
+    /**
+     * @returns a copy of this hand's best LOW 5-card poker hand.
+     */
+    low: function () {
+      return this._low ? this._low.slice(0) : null
+    },
+    
+    /**
+     * Set the hand this lowball instance is associated with.
+     */
+    hand: function () {
+      if (arguments.length === 0) {
+        return this._hand
+      }
+      this._hand = arguments[0]
+      return this
+    },
+    
+    reset: function () {
+      this._low = null
+    },
+    
     acesAreLow: function () {
       if (arguments.length === 0) {
         return this._acesLow
@@ -595,8 +615,6 @@
     }
     return 0
   }
-
-
 
   
 }(this, _));
