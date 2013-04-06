@@ -121,6 +121,7 @@
     
     
     /**
+     * TO DO: !!! BROKEN !!! since switch to static testing methods.
      * Updates the hand's rank (for comparison with other hands),
      * set of 5 high cards, and set of 5 low cards.
      */
@@ -395,8 +396,9 @@
         }
       })
 
-      others = _.difference(hand, flush).sort(compareCardsByRank)
-      return flush.concat(others)
+      return flush
+      // others = _.difference(hand, flush).sort(compareCardsByRank)
+      // return flush.concat(others)
     }
     
     return null
@@ -443,11 +445,11 @@
     })
     
     if (straights.length) {
-      straight = _.max(straights, function (s) {
+      return _.max(straights, function (s) {
         return NS.Hand.RANKS.indexOf(s[0].charAt(0))
       }).slice(0, 5)
-      others = _.difference(hand, straight).sort(compareCardsByRank)
-      return straight.concat(others)
+      // others = _.difference(hand, straight).sort(compareCardsByRank)
+      // return straight.concat(others)
     }
     
     return null
@@ -498,15 +500,21 @@
       
       set0Len = sets[0].length
       if (set0Len === 4) {
-        return [sets[0], _.difference(hand, sets[0]).sort(compareCardsByRank)]
+        return [sets[0], _.difference(hand, sets[0]).sort(compareCardsByRank).slice(0, 1)]
+        // return [sets[0], _.difference(hand, sets[0]).sort(compareCardsByRank)]
       }
       
       result = [sets[0]]
       if (sets.length > 1) {
+        // get_kickers_for ? fullhouse : 2_pair
         result[1] = (set0Len === 3) ? sets[1].slice(0, 2) : sets[1]
-        result[2] = _.difference(hand, sets[0], sets[1]).sort(compareCardsByRank)
+        if (set0Len < 3) {
+          // get kicker for 2 pair
+          result[2] = _.difference(hand, sets[0], sets[1]).sort(compareCardsByRank).slice(0, 1)
+        }        
       } else {
-        result[1] = _.difference(hand, sets[0]).sort(compareCardsByRank)
+        // kickers for 1 pair
+        result[1] = _.difference(hand, sets[0]).sort(compareCardsByRank).slice(0, 3)
       }
       return result
     }
