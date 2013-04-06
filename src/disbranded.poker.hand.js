@@ -423,7 +423,6 @@
     hand = hand.sort(compareCardsByRank)
     flush = !!flush
     
-    console.log('')
     _.each(hand, function (card, index) {
       var testRank = NS.Hand.RANKS.indexOf(card.charAt(0)),
           testSuit = flush ? card.charAt(1) : null,
