@@ -3,4 +3,15 @@ body {
   margin: 0;
   padding: 0;
   background: #eee;
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 12px;
+}
+
+div.test {
+  margin: 10px;
+}
+
+div.test ul {
+  list-style-type: none;
+  padding: 0;
 }

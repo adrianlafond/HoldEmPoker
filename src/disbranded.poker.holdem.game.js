@@ -38,8 +38,10 @@
     
     // console.log(this._deck.addJokers(2).shuffle().cards())
     
-    var h = NS.Hand('a').add('4C', '8C', '3D', 'AS', '6S', '7S', 'KD', 'QD', '5H', 'TH', 'JH')
-    console.log(NS.string.en.cards[h.rank()], h.high().join(' '))
+    
+    // var h = NS.Hand('a').add('4C', '8C', '3D', 'AS', '6S', '7S', 'KD', 'QD', '5H', 'TH', 'JH')
+    // var h = NS.Hand('b').add('KS', '4H', '5S', '9S', 'TS', '5C', '2S')
+    // console.log(NS.string.en.cards[h.rank()], h.high().join(' '))
     
     // console.log(h.lowball().acesAreLow())
     

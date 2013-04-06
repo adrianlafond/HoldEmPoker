@@ -23,13 +23,41 @@
         },
         game = DISBRANDED.poker.holdem.Game(options)    
     // console.log(game)
+    
+    var output = $.fn.output
+    $.fn.output = function (method, args, result) {
+      DISBRANED.poker[method].call(this, args)
+    }
+
+    var $outputHand = $('ul.hand')
+
+    $outputHand.append("<li>Hand.isFlush(['KS', '4H', '5S', '9S', 'TS', '5C', '2S']) = "
+                       + DISBRANDED.poker.Hand.isFlush(['KS', '4H', '5S', '9S', 'TS', '5C', '2S'])
+                       + "</li>")
+    //                  
+    $outputHand.append("<li>Hand.isFlush(['KS', '4H', '5S', '9H', 'TS', '5C', '2S']) = "
+                       + DISBRANDED.poker.Hand.isFlush(['KS', '4H', '5S', '9H', 'TS', '5C', '2S'])
+                       + "</li>")
+    //
+    $outputHand.append("<li>Hand.isFlush(['KS', '4S', '5S', '9S', 'TS', 'AS', '2S']) = "
+                       + DISBRANDED.poker.Hand.isFlush(['KS', '4S', '5S', '9S', 'TS', 'AS', '2S'])
+                       + "</li>")
+    //
+    $outputHand.append("<li>Hand.isFlush(['KS', '4S', '5S', '9S']) = "
+                       + DISBRANDED.poker.Hand.isFlush(['KS', '4S', '5S', '9S'])
+                       + "</li>")
+    $.fn.output = output
   })
   </script>
 </head>
 
 <body>
 
+  <div class="test">
+    <ul class="hand">
 
+    </ul>
+  <div>
 
 </body>
 </html>
