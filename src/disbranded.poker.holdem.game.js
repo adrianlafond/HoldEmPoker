@@ -41,6 +41,8 @@
     var h = NS.Hand('a').add('4C', '8C', '3D', 'AS', '6S', '7S', 'KD', 'QD', '5H', 'TH', 'JH')
     console.log(NS.string.en.cards[h.rank()], h.high().join(' '))
     
+    // console.log(h.lowball().acesAreLow())
+    
     // var key, val, i, len    
     // var hand1 = NS.Hand('a').add(['8C', '2C', 'AC', '2H', '3D', 'JC', 'QC'])
     // var hand2 = NS.Hand('b').add(['8H', '5D', '6D', '2D', '3H', '7S', '9H'])

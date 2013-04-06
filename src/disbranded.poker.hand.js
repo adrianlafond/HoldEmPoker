@@ -12,11 +12,19 @@
       return new NS.Hand(id)
     }
     this.id = id
-    this.lowball = new NS.Hand.Lowball
     this.reset()
   }
   
   NS.Hand.prototype = {
+    
+    
+    /**
+     * Create lowball only if/when it's needed.
+     */
+    lowball: function () {
+      return this._lowball || (this._lowball = new NS.Hand.Lowball)
+    },
+    
     
     /**
      * @param {string} card
