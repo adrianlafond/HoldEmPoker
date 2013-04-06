@@ -155,14 +155,14 @@
           result = tempResult
           this._rank = NS.Hand.FLUSH
           this._high = result.slice(0, 5)
-        } else if (tempResult = straight(ranks)) {
+        } else if (tempResult = NS.Hand.isStraight(ranks)) {
           result = tempResult
           this._rank = NS.Hand.STRAIGHT
           this._high = result.slice(0, 5)
         }
         
         if (this._rank === NS.Hand.FLUSH) {
-          if (tempResult = straight(suits, this.size())) {
+          if (tempResult = NS.Hand.isStraight(suits, this.size())) {
             result = tempResult
             if (result[result.length - 1].charAt(0) === 'A') {
               this._rank = NS.Hand.ROYAL_FLUSH
@@ -384,7 +384,10 @@
     if (_.size(suits) > 0) {
       _.each(suits, function (cards, suit) {
         cards.sort(compareCardsByRank)
-        rank = NS.Hand.RANKS.indexOf(cards[0].charAt(0))
+        rank = 0
+        _.times(5, function (n) {
+          rank += NS.Hand.RANKS.indexOf(cards[n].charAt(0))
+        })
         if (rank > high) {
           high = rank
           flush = cards
@@ -393,6 +396,51 @@
 
       others = _.difference(hand, flush).sort(compareCardsByRank)
       return flush.concat(others)
+    }
+    
+    return null
+  }
+  
+  
+  /**
+   * Find highest straight in @param hand.
+   */
+  NS.Hand.isStraight = function (hand) {
+    var straights = [[]],
+        n = 0,
+        rank = 0,
+        test,
+        straight,
+        others
+    
+    if (hand.length < 5) {
+      return null
+    }
+        
+    hand = hand.sort(compareCardsByRank)
+    _.each(hand, function (card, index) {
+      test = NS.Hand.RANKS.indexOf(card.charAt(0))
+      if (test === rank - 1) {
+        straights[n].push(card)
+      } else {
+        if (straights[n].length < 5) {
+          straights[n] = []
+        }
+        straights[++n] = [card]
+      }   
+      rank = test
+    })
+    
+    straights = _.filter(straights, function (s) {
+      return s.length >= 5
+    })
+    
+    if (straights.length) {
+      straight = _.max(straights, function (s) {
+        return NS.Hand.RANKS.indexOf(s[0].charAt(0))
+      })      
+      others = _.difference(hand, straight).sort(compareCardsByRank)
+      return straight.concat(others)
     }
     
     return null
@@ -453,50 +501,7 @@
     return 0
   }
   
-  
-  
 
-  
-  
-  /**
-   * Find highest straight in @param hand.
-   */
-  function straight(hand) {
-    var straights = [[]],
-        n = 0,
-        rank = 0,
-        test,
-        combo,
-        others
-        
-    hand = hand.sort(compareCardsByRank)
-    _.each(hand, function (card, index) {
-      test = NS.Hand.RANKS.indexOf(card.charAt(0))
-      if (test === rank - 1) {
-        straights[n].push(card)
-      } else {
-        if (straights[n].length < 5) {
-          straights[n] = []
-        }
-        straights[++n] = [card]
-      }   
-      rank = test
-    })
-    
-    straights = _.filter(straights, function (s) {
-      return s.length >= 5
-    })
-    
-    if (straights.length) {
-      combo = _.max(straights, function (s) {
-        return NS.Hand.RANKS.indexOf(s[0].charAt(0))
-      })      
-      others = _.difference(hand, combo).sort(compareCardsByRank)
-      return combo.concat(others)
-    }
-    
-    return null
-  }
   
   
   /**

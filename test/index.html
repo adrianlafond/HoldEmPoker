@@ -18,7 +18,8 @@
 	<script src="../src/disbranded.poker.holdem.game.js"></script>
   <script>
   jQuery(function ($) {
-    var options = {
+    var P = DISBRANDED.poker,
+        options = {
       
         },
         game = DISBRANDED.poker.holdem.Game(options)    
@@ -31,21 +32,39 @@
 
     var $outputHand = $('ul.hand')
 
-    $outputHand.append("<li>Hand.isFlush(['KS', '4H', '5S', '9S', 'TS', '5C', '2S']) = "
-                       + DISBRANDED.poker.Hand.isFlush(['KS', '4H', '5S', '9S', 'TS', '5C', '2S'])
+    $outputHand.append("<li>Hand.isFlush(['KS','4H','5S','9S','TS','5C','2S']) = "
+                       + P.Hand.isFlush(['KS','4H','5S','9S','TS','5C','2S'])
                        + "</li>")
     //                  
-    $outputHand.append("<li>Hand.isFlush(['KS', '4H', '5S', '9H', 'TS', '5C', '2S']) = "
-                       + DISBRANDED.poker.Hand.isFlush(['KS', '4H', '5S', '9H', 'TS', '5C', '2S'])
+    $outputHand.append("<li>Hand.isFlush(['KS','4H','5S','9H','TS','5C','2S']) = "
+                       + P.Hand.isFlush(['KS','4H','5S','9H','TS','5C','2S'])
                        + "</li>")
     //
-    $outputHand.append("<li>Hand.isFlush(['KS', '4S', '5S', '9S', 'TS', 'AS', '2S']) = "
-                       + DISBRANDED.poker.Hand.isFlush(['KS', '4S', '5S', '9S', 'TS', 'AS', '2S'])
+    $outputHand.append("<li>Hand.isFlush(['KS','JS','9S','7S','5S','KH','JH','9H','7H','4H']) = "
+                       + P.Hand.isFlush(['KS','JS','9S','7S','5S','KH','JH','9H','7H','4H'])
                        + "</li>")
     //
-    $outputHand.append("<li>Hand.isFlush(['KS', '4S', '5S', '9S']) = "
-                       + DISBRANDED.poker.Hand.isFlush(['KS', '4S', '5S', '9S'])
+    $outputHand.append("<li>Hand.isFlush(['KS','4S','5S','9S']) = "
+                       + P.Hand.isFlush(['KS','4S','5S','9S'])
                        + "</li>")
+    //
+    $outputHand.append("<li>Hand.isStraight(['KS','4S','5S','9S','QH','TD','JD']) = "
+                       + P.Hand.isStraight(['KS','4S','5S','9S','QH','TD','JD'])
+                       + "</li>")
+    //
+    $outputHand.append("<li>Hand.isStraight(['KS','4S','5S','9S','QH','TD','7C']) = "
+                       + P.Hand.isStraight(['KS','4S','5S','9S','QH','TD','7C'])
+                       + "</li>")
+    //
+    $outputHand.append("<li>Hand.isStraight(['3H','4D','5C','7S','6H','KS','JH','QD','TC','9H']) = "
+                       + P.Hand.isStraight(['3H','4D','5C','7S','6H','KS','JH','QD','TC','9H'])
+                       + "</li>")
+    //
+    $outputHand.append("<li>Hand.isStraight(['TC','JC','QC','KC']) = "
+                       + P.Hand.isStraight(['TC','JC','QC','KC'])
+                       + "</li>")
+    //              
+    // 
     $.fn.output = output
   })
   </script>
@@ -54,9 +73,7 @@
 <body>
 
   <div class="test">
-    <ul class="hand">
-
-    </ul>
+    <ul class="hand"></ul>
   <div>
 
 </body>
