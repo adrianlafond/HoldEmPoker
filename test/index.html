@@ -30,57 +30,68 @@
       DISBRANED.poker[method].call(this, args)
     }
 
-    var $outputHand = $('ul.hand')
+    var $outputHand = $('ul.hand'),
+        startTime = (new Date).getTime(),
+        nowTime = startTime,
+
+        elapsed = function () {
+          var t = (new Date).getTime(),
+              str = ' : ' + ((t - nowTime) / 1000) + 's'
+          nowTime = t
+          return str
+        }
 
     $outputHand.append("<li>Hand.isFlush(['KS','4H','5S','9S','TS','5C','2S']) = "
                        + P.Hand.isFlush(['KS','4H','5S','9S','TS','5C','2S'])
-                       + "</li>")
+                       + elapsed() + "</li>")
     //                  
     $outputHand.append("<li>Hand.isFlush(['KS','4H','5S','9H','TS','5C','2S']) = "
                        + P.Hand.isFlush(['KS','4H','5S','9H','TS','5C','2S'])
-                       + "</li>")
+                       + elapsed() + "</li>")
     //
     $outputHand.append("<li>Hand.isFlush(['KS','JS','9S','7S','5S','KH','JH','9H','7H','4H']) = "
                        + P.Hand.isFlush(['KS','JS','9S','7S','5S','KH','JH','9H','7H','4H'])
-                       + "</li>")
+                       + elapsed() + "</li>")
     //
     $outputHand.append("<li>Hand.isFlush(['KS','4S','5S','9S']) = "
                        + P.Hand.isFlush(['KS','4S','5S','9S'])
-                       + "</li>")
+                       + elapsed() + "</li>")
     //
     $outputHand.append("<li>Hand.isStraight(['KS','4S','5S','9S','QH','TD','JD']) = "
                        + P.Hand.isStraight(['KS','4S','5S','9S','QH','TD','JD'])
-                       + "</li>")
+                       + elapsed() + "</li>")
     //
     $outputHand.append("<li>Hand.isStraight(['AS','8D','7S','9S','QH','TD','JD']) = "
                        + P.Hand.isStraight(['AS','8D','7S','9S','QH','TD','JD'])
-                       + "</li>")
+                       + elapsed() + "</li>")
     //
     $outputHand.append("<li>Hand.isStraight(['KS','4S','5S','9S','QH','TD','7C']) = "
                        + P.Hand.isStraight(['KS','4S','5S','9S','QH','TD','7C'])
-                       + "</li>")
+                       + elapsed() + "</li>")
     //
     $outputHand.append("<li>Hand.isStraight(['3H','4D','5C','7S','6H','KS','JH','QD','TC','9H']) = "
                        + P.Hand.isStraight(['3H','4D','5C','7S','6H','KS','JH','QD','TC','9H'])
-                       + "</li>")
+                       + elapsed() + "</li>")
     //
     $outputHand.append("<li>Hand.isStraight(['TC','JC','QC','KC']) = "
                        + P.Hand.isStraight(['TC','JC','QC','KC'])
-                       + "</li>")
+                       + elapsed() + "</li>")
     //
     $outputHand.append("<li>Hand.isStraightFlush(['KS','4S','5S','9S','QH','TD','JD']) = "
                        + P.Hand.isStraightFlush(['KS','4S','5S','9S','QH','TD','JD'])
-                       + "</li>")
+                       + elapsed() + "</li>")
     //  
     $outputHand.append("<li>Hand.isStraightFlush(['KD','4S','5S','9D','QD','TD','JD']) = "
                        + P.Hand.isStraightFlush(['KD','4S','5S','9D','QD','TD','JD'])
-                       + "</li>")
+                       + elapsed() + "</li>")
     //
     $outputHand.append("<li>Hand.isStraightFlush(['KD','4S','5S','9D','QD','TD','JD']) = "
                        + P.Hand.isStraightFlush(['AD','KH','8D','9D','QD','TD','JD'])
-                       + "</li>")
+                       + elapsed() + "</li>")
     //
-    // 
+    //
+    $outputHand.append("<li>TOTAL: " + (((new Date).getTime() - startTime) / 1000) + "s</li>")
+    
     $.fn.output = output
   })
   </script>
