@@ -404,12 +404,15 @@
   
   /**
    * Find highest straight in @param hand.
+   * @param {boolean} flush Whether to test for straight flush.
    */
-  NS.Hand.isStraight = function (hand) {
+  NS.Hand.isStraight = function (hand, flush) {
     var straights = [[]],
-        n = 0,
+        n = -1,
         rank = 0,
-        test,
+        suit,
+        testRank,
+        testSuit,
         straight,
         others
     
@@ -418,17 +421,20 @@
     }
         
     hand = hand.sort(compareCardsByRank)
+    flush = !!flush
+    
     _.each(hand, function (card, index) {
-      test = NS.Hand.RANKS.indexOf(card.charAt(0))
-      if (test === rank - 1) {
-        straights[n].push(card)
+      var testRank = NS.Hand.RANKS.indexOf(card.charAt(0)),
+          testSuit = flush ? card.charAt(1) : null
+      if (index > 0) {
+        if (testRank === rank - 1 && (flush ? (testSuit === suit) : true)) {
+          straights[n].push(card)
+        }        
       } else {
-        if (straights[n].length < 5) {
-          straights[n] = []
-        }
         straights[++n] = [card]
       }   
-      rank = test
+      rank = testRank
+      suit = testSuit
     })
     
     straights = _.filter(straights, function (s) {
@@ -438,12 +444,17 @@
     if (straights.length) {
       straight = _.max(straights, function (s) {
         return NS.Hand.RANKS.indexOf(s[0].charAt(0))
-      })      
+      }).slice(0, 5)
       others = _.difference(hand, straight).sort(compareCardsByRank)
       return straight.concat(others)
     }
     
     return null
+  }
+  
+  
+  NS.Hand.isStraightFlush = function (hand) {
+    return NS.Hand.isStraight(hand, true)
   }
   
 
