@@ -32,6 +32,5 @@
   
   
   NS.Game.extend(NS.holdem.Game)
-  console.log(NS.holdem.Game.prototype)
   
 }(this, _));
