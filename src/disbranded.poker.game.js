@@ -22,6 +22,7 @@
       this.options = options ? _.extend({}, options) : {}
       this._players = new NS.Players
       this._deck = new NS.Deck
+      this._pot = new NS.Pot
     },
     
     get: function (key) {
