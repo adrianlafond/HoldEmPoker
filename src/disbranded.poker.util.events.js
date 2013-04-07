@@ -30,9 +30,27 @@
    * 
    */
   function off(event, callback, context) {
-    var subs = this._subscribers
+    var subs = this._subscribers,
+        checkCallback = _.isFunction(callback),
+        checkContext = checkCallback && !(_.isUndefined(context) || _.isNull(context))
+        
     if (_.isString(event) && _.has(subs, event)) {
       
+      if (checkCallback) {
+        this._subscribers[event] = _.filter(this._subscribers[event], function (sub, index) {
+          if (sub.callback === callback) {
+            if (checkContext) {
+              return sub.context !== context
+            }
+            return false
+          }
+          return true
+        })
+        
+      } else {
+        // Remove all listeners of @param event, no matter the callback or function.
+        delete this._subscribers[event]
+      }
     }
   }
   
