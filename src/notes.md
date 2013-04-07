@@ -16,8 +16,6 @@ poker
     - Game (exends poker.Game)
 
 
-TO DO: integrate _.
-
 TO DO: Develop out Player.
 
 TO DO: Find lowball hands in poker.Hand.
