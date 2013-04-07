@@ -30,18 +30,21 @@
     // console.log(game.options.id)
     // console.log(game.set('name', 'poker').get('name'))
     // console.log(game._deck)
-    var fnA = function (e) {
-      console.log('a:', e)
-    },
-    fnB = function (e) {
-      console.log('b:', e)
-    }
-    
-    game.on('deal', fnA)
-    game.on('deal', fnB)
-    game.trigger('deal')
-    game.off('deal', fnB)
-    game.trigger('deal')
+    // var fnA = function (e) {
+    //   console.log('a:', e.type, e.defaultPrevented)
+    //   e.stopPropagation()
+    //   e.preventDefault()
+    // },
+    // fnB = function (e) {
+    //   console.log('b:', e.type, e.defaultPrevented)
+    // }
+    // game.on('deal', fnA, game)
+    // game.on('deal', fnB, game)
+    // game.on('deal', fnB, this)
+    // game.trigger('deal')
+    // game.off('deal', fnA)
+    // game.off('deal', fnB, this)
+    // game.trigger('deal')
     
     var output = $.fn.output
     $.fn.output = function (method, args, result) {

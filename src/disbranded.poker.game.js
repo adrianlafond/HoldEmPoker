@@ -25,8 +25,7 @@
       this._pot = new NS.Pot
     },
 
-    
-    
+
     
     get: function (key) {
       return _.has(this.options, key) ? this.options[key] : null
@@ -43,7 +42,10 @@
   }
   
   
+  // Mixin event publishing methods.
   NS.util.events.call(NS.Game.prototype)
+  
+  
   
   /**
    * Util to extend a specific game from this abstract game.

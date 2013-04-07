@@ -57,7 +57,8 @@
   
   function trigger(data) {
     var event,
-        type
+        type,
+        propagate = true
         
     if (_.isString(data)) {
       type = data
@@ -70,8 +71,18 @@
     }
     
     event.target = this
+    event.defaultPrevented = false
+    event.preventDefault = function () {
+      event.defaultPrevented = true
+    }
+    event.stopPropagation = function () {
+      propagate = false
+    }
+    
     _.each(this._subscribers[type], function (sub, index) {
-      sub.callback.call(sub.context, event)
+      if (propagate) {
+        sub.callback.call(sub.context, event)
+      }      
     })
   }
   
