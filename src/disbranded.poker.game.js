@@ -9,15 +9,19 @@
   var NS = root.DISBRANDED.poker
   
   /**
-   * TO DO: implement publish/subscribe functionality.
+   * TODO: implement publish/subscribe functionality.
+   * TODO: create new Pot
+   * TODO: create new Players
+   * TODO: create new Deck
    */
   NS.Game = function () {}
-  
   
   NS.Game.prototype = {
     
     _init: function (options) {
       this.options = options ? _.extend({}, options) : {}
+      this._players = new NS.Players
+      this._deck = new NS.Deck
     },
     
     get: function (key) {

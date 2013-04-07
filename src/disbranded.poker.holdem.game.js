@@ -25,8 +25,6 @@
     _init: function (options) {
       NS.Game.prototype._init.call(this, options)
       _.extend(NS.holdem.defaults(), this.options)
-      this._players = new NS.Players
-      this._deck = new NS.Deck
     }
     
   }
