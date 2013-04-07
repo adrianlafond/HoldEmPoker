@@ -10,6 +10,7 @@
 	
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
 	<script src="../src/disbranded.poker.js"></script>
+	<script src="../src/disbranded.poker.util.events.js"></script>
 	<script src="../src/disbranded.poker.deck.js"></script>
   <script src="../src/disbranded.poker.hand.js"></script>
   <script src="../src/disbranded.poker.string.js"></script>
@@ -26,9 +27,15 @@
         },
         game = DISBRANDED.poker.holdem.Game(options)   
          
-    console.log(game.options.id)
-    console.log(game.set('name', 'poker').get('name'))
-    console.log(game._deck)
+    // console.log(game.options.id)
+    // console.log(game.set('name', 'poker').get('name'))
+    // console.log(game._deck)
+    game.on('deal', function (e) {
+      console.log(e)
+    })
+    game.trigger('deal')
+    game.off('deal')
+    game.trigger('deal')
     
     var output = $.fn.output
     $.fn.output = function (method, args, result) {
