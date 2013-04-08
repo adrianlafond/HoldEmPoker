@@ -7,7 +7,7 @@
       defaults = {
         maxSeats: 22,
         minSeats: 2,
-        seats: 5,
+        seats: 9,
     
         type: NS.LIMIT,
     

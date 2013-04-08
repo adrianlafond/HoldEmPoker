@@ -15,9 +15,13 @@
     // sub namespaces
     holdem: {},
     
-    // contstants
-    LIMIT         : 'limit',
-    NO_LIMIT      : 'noLimit',
-    POT_LIMIT     : 'potLimit'
+    // constants
+    LIMIT             : 'limit',
+    NO_LIMIT          : 'noLimit',
+    POT_LIMIT         : 'potLimit',
+    
+    ERROR             : 'error',
+    TOO_MANY_PLAYERS  : 'tooManyPlayers',
+    TOO_FEW_PLAYERS   : 'tooFewPlayers'
   }
 }(this));

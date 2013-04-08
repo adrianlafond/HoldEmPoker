@@ -24,7 +24,7 @@
     
     _init: function (options) {
       NS.Game.prototype._init.call(this, options)
-      _.extend(NS.holdem.defaults(), this._options)
+      _.extend(this._options, NS.holdem.defaults())
     }
     
   }

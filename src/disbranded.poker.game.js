@@ -31,6 +31,63 @@
     _getPlayerAtSeat: function (seat) {
       return _.findWhere(this._players, { 'seat': seat }) || null
     },
+    
+    _removePlayers: function () {
+      var r = this._removed.length - 1,
+          p
+      for (; r >= 0; r--) {
+        p = this._players.length - 1
+        for (; p >= 0; p--) {
+          if (this._players[p].id === this._removed[r]) {
+            this._players.splice(p, 1)
+            break
+          }
+        }
+      }
+    },
+    
+    
+    _validatePlayers: function () {
+      var playerLen = this._players.length,
+          type,
+          code,
+          message
+      if (playerLen < this.get('minSeats')) {
+        type = 'error',
+        code = NS.TOO_FEW_PLAYERS
+        message = 'Not enough players. '+ this.get('minSeats')  +' required.'
+      } else if (playerLen > this.get('seats')) {
+        type = 'error',
+        code = NS.TOO_MANY_PLAYERS
+        message = 'Too many players. Maximum is '+ this.get('seats')  +'.'
+      }
+      if (type) {
+        this._trigger(type, code, { 'message': message })
+        return false
+      }
+      return true
+    },
+    
+    
+    _validate: function () {
+      var error = false
+      if (!this._validatePlayers()) {
+        error = true
+      }
+      return !error
+    },
+    
+    
+    _trigger: function (type, code, data) {
+      var evt = data || {}
+      evt.type = type
+      evt.code = code || null
+      this.trigger(evt)
+      if (evt.code) {
+        evt.type += '.' + evt.code
+        this.trigger(evt)
+      }
+    },
 
 
     /**
@@ -89,7 +146,7 @@
             seat = player ? (player.seat + 1) : 0
           }
           seat = Math.max(0, parseInt(seat, 10))
-          seat %= this.get('seats')
+          // seat %= this.get('seats')
           this.removePlayerAtSeat(seat)
           player = {
             'id': id,
@@ -159,10 +216,13 @@
     /**
      * Begin a new hand, if a hand is not already in progress.
      */
-    deal: function (options) {
+    deal: function (options) {      
       if (!this.playing()) {
         _.extend(this._options, options)
-        this._players.unshift(this._players.pop())
+        if (this._validate()) {
+          this._players.unshift(this._players.pop())
+          this._trigger('change', 'button', { player: this._players[this._players.length - 1].id })
+        }        
       }
       return this
     }
