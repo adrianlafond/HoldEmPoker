@@ -16,8 +16,6 @@ poker
     - Game (exends poker.Game)
 
 
-TO DO: Develop out Player.
-
 TO DO: Find lowball hands in poker.Hand.
 
 TO DO: Create an abstract poker.Game which specific games will extend.

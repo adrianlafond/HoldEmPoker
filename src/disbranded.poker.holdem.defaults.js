@@ -1,5 +1,5 @@
 
-;(function (root) {
+;(function (root, _) {
   'use strict'
 
   var NS = root.DISBRANDED.poker,
@@ -37,14 +37,7 @@
    * Original defaults stay intact.
    */
   NS.holdem.defaults = function () {
-    var key,
-        obj = {}
-    for (key in defaults) {
-      if (defaults.hasOwnProperty(key)) {
-        obj[key] = defaults[key]
-      }
-    }
-    return obj
+    return _.extend({}, defaults)
   }
   
-}(this));
+}(this, _));
