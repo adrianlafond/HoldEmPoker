@@ -80,7 +80,7 @@
         
         _.each(this._live, function (player) {
           var bet = Math.min(player.bet, minBet)
-          pot.add(player, bet)
+          pot.add(player.id, bet)
           player.bet -= bet
           amount -= bet
         })
