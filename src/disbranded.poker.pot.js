@@ -18,7 +18,7 @@
      */
     reset: function () {
       this._live = {}
-      this._pots = null
+      this._pots = [new NS.Pot.SidePot]
       return this
     },
     
@@ -28,7 +28,7 @@
      */
     bet: function (player, amount) {
       if (!_.has(this._live, player)) {
-        this._live[player] = { live: false, bet: 0 }
+        this._live[player] = { id: player, live: true, bet: 0 }
       }
       if (this._live[player].live) {
         this._live[player].bet += amount
@@ -53,10 +53,46 @@
      * @returns array of amounts in all pots.
      */
     end: function () {
+      var amount = 0,
+          live,
+          minBet,
+          pot
       
-      
+      _.each(this._live, function (player) {
+        amount += player.bet
+      })
+
+      while (amount > 0) {
+        if (pot) {
+          pot = new NS.Pot.SidePot
+          this._pots.push(pot)
+        } else {
+          pot = this._pots[this.length() - 1]
+        }
+        
+        live = _.filter(this._live, function (player) {
+          return player.live
+        })
+        
+        minBet = _.min(live, function (player) {
+          return player.bet
+        }).bet
+        
+        _.each(this._live, function (player) {
+          var bet = Math.min(player.bet, minBet)
+          pot.add(player, bet)
+          player.bet -= bet
+          amount -= bet
+        })
+
+        this._live = _.filter(this._live, function (player) {
+          return player.bet > 0
+        })
+      }
+
+      // Make ready for next round of betting:
       this._live = {}
-      return this
+      return this._pots
     },
 
 
@@ -72,7 +108,7 @@
      * @returns pot at @param index or null if no such pot exists.
      */
     getPot: function (index) {
-      return this._pots ? this._pots[index] : null
+      return this._pots[index] || null
     },
 
     
@@ -80,7 +116,7 @@
      * @returns number of pots.
      */
     length: function () {
-      return this._pots ? this._pots.length : 0
+      return this._pots.length
     }
   }
   
@@ -105,8 +141,8 @@
     add: function (id, bet) {
       if (_.indexOf(this._players, id) === -1) {
         this._players.push(id)
-        this._total += bet
       }
+      this._total += bet
       return this
     },
     
@@ -117,7 +153,7 @@
     
     
     total: function () {
-      return this._amount
+      return this._total
     }
   }
   
