@@ -20,8 +20,14 @@
     NO_LIMIT          : 'noLimit',
     POT_LIMIT         : 'potLimit',
     
+    CHANGE            : 'change',
+    BUTTON            : 'button',
+    HAND_BEGIN        : 'handBegin',
+    HAND_END          : 'handEnd',
+    
     ERROR             : 'error',
     TOO_MANY_PLAYERS  : 'tooManyPlayers',
-    TOO_FEW_PLAYERS   : 'tooFewPlayers'
+    TOO_FEW_PLAYERS   : 'tooFewPlayers',
+    NO_NEXT_PLAYER    : 'noNextPlayer'
   }
 }(this));
