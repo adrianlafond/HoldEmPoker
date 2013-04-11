@@ -7,15 +7,10 @@
   var NS = root.DISBRANDED.poker
   
   NS.Players = function (game) {
+    this._game = game
     this._players = []
     this._removed = []
     this._index = 0
-    game.on('change.handBegin', function () {
-      this._playing = true
-    }, this)
-    game.on('change.handEnd', function () {
-      this._playing = false
-    }, this)
   }
   
   NS.Players.prototype = {
@@ -28,9 +23,11 @@
           player
       while (++n < len) {
         player = this._players[index]
-        if (player.folded || player.allin) {
-          ++index
-        } else {
+        ++index
+        if (index >= len) {
+          index = 0
+        }
+        if (!player.folded && !player.allin) {
           this._index = index
           return player
         }
@@ -54,7 +51,7 @@
 
     add: function (id, chips, seat) {
       var player
-      if (!this._playing) {
+      if (!this._game.playing()) {
         player = this.get(id)
         if (!player) {
           if (!seat && seat !== 0) {
@@ -68,7 +65,8 @@
             'chips': chips,
             'seat': seat,
             'folded': false,
-            'allin': false
+            'allin': false,
+            'hand': new NS.Hand(id)
           }
           this._players.push(player)
           this._players.sort(function (a, b) {
@@ -101,7 +99,7 @@
       if (player) {
         
         // If hand in progress, fold now and remove later.
-        if (this._playing) {
+        if (this._game.playing()) {
           player.folded = true
           this._removed.push(id)
         
@@ -143,18 +141,18 @@
       return error
     },
     
-
-    prepareForHand: function () {
-      var obj
-      if (!this._playing) {
-        this.removePlayers()
-        this._players.unshift(this._players.pop())
-        obj = {
-          button: _.last(this._players).id
-        }
-      }
-      return obj
+    
+    handEnded: function () {
+      this.removePlayers()
     },
+    
+    handStarted: function () {
+      this._players.unshift(this._players.pop())
+      return {
+        button: _.last(this._players).id
+      }
+    },
+    
     
     /**
      * Called after a hand is complete, if any players were removed

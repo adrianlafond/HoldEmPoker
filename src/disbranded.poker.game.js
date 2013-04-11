@@ -76,15 +76,24 @@
       }
       return this
     },
-
+    
+    
     
     /**
-     * @returns players model.
+     * @returns the players model.
      */
     players: function () {
       return this._players
     },
-
+    
+    
+    
+    endHand: function () {
+      this._playing = false
+      this._players.handEnded()
+      this._deck.reset()
+    },
+    
     
     
     /**
@@ -92,21 +101,12 @@
      */
     deal: function (options) {      
       var obj
-      
-      if (!this.playing()) {
-        _.extend(this._options, options)
-        if (this._validate()) {
-          obj = this.players().prepareForHand()
-          
-          this._trigger('change', NS.BUTTON, { player: obj.button })
-          this._trigger('change', NS.HAND_BEGIN)
-          
-          try {
-            this.players().next()
-          } catch (e) {
-            this._trigger('error', e.code, { message: e.message })
-          }
-        }        
+      _.extend(this._options, options)
+      if (this._validate()) {
+        obj = this.players().handStarted()        
+        this._trigger('change', NS.BUTTON, { player: obj.button })
+        this._trigger('change', NS.HAND_BEGIN)
+        this._deck.shuffle()
       }
       return this
     }
