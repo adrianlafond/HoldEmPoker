@@ -48,6 +48,12 @@
         this.trigger(evt)
       }
     },
+    
+    
+    _burn: function () {
+      var card = this._deck.deal()
+      this._trigger(NS.DEAL, NS.BURN, { 'card': card, face: NS.FACE_DOWN })
+    },
 
 
     /**

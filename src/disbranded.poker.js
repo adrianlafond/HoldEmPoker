@@ -15,19 +15,31 @@
     // sub namespaces
     holdem: {},
     
-    // constants
-    LIMIT             : 'limit',
-    NO_LIMIT          : 'noLimit',
-    POT_LIMIT         : 'potLimit',
+    /**
+     * @constants
+     */
+    //
+    // events
+    CHANGE              : 'change',
+      BUTTON            : 'button',
+      HAND_BEGIN        : 'handBegin',
+      HAND_END          : 'handEnd',
     
-    CHANGE            : 'change',
-    BUTTON            : 'button',
-    HAND_BEGIN        : 'handBegin',
-    HAND_END          : 'handEnd',
+    DEAL                : 'deal',
+      BURN              : 'burn',
+
+    ERROR               : 'error',
+      TOO_MANY_PLAYERS  : 'tooManyPlayers',
+      TOO_FEW_PLAYERS   : 'tooFewPlayers',
+      NO_NEXT_PLAYER    : 'noNextPlayer',
+      
+    // pots
+    LIMIT               : 'limit',
+    NO_LIMIT            : 'noLimit',
+    POT_LIMIT           : 'potLimit',  
     
-    ERROR             : 'error',
-    TOO_MANY_PLAYERS  : 'tooManyPlayers',
-    TOO_FEW_PLAYERS   : 'tooFewPlayers',
-    NO_NEXT_PLAYER    : 'noNextPlayer'
+    FACE_UP             : 'faceUp',
+    FACE_DOWN           : 'faceDown'
+
   }
 }(this));

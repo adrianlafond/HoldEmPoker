@@ -40,6 +40,9 @@
     game.on('change.button', function (e) {
       console.log(e.type +': '+ e.player)
     })
+    game.on('deal', function (e) {
+      console.log(e.type, e.code, e.card)
+    })
     
     game.players().add('a', 500, 3)
     game.players().add('b', 100, 1)
