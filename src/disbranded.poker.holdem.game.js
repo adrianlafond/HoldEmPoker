@@ -41,7 +41,7 @@
           this._trigger(NS.ERROR, e.code, { message: e.message })
         }
         card = this._deck.deal()
-        this._trigger(NS.DEAL, 'player-' + player.id, { 'card': card, face: NS.FACE_DOWN })
+        this._trigger(NS.DEAL, player.id, { 'card': card, face: NS.FACE_DOWN })
         player.hand.add(this._deck.deal())
       }
     },
