@@ -18,7 +18,6 @@
     /**
      * @constants
      */
-    //
     // events
     CHANGE              : 'change',
       BUTTON            : 'button',
