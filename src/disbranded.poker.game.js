@@ -28,7 +28,7 @@
       var error = false,
           result
           
-      result = this.players().validate(this.get('minSeats'), this.get('seats'))
+      result = this._players.validate(this.get('minSeats'), this.get('seats'))
       if (result.invalid) {
         this._trigger(result.type, result.code, { message: result.message })
         error = true
@@ -50,6 +50,13 @@
     },
     
     
+    _endHand: function () {
+      this._playing = false
+      this._players.handEnded()
+      this._deck.reset()
+    },
+    
+    
     _burn: function () {
       var card = this._deck.deal()
       this._trigger(NS.DEAL, NS.BURN, { 'card': card, face: NS.FACE_DOWN })
@@ -61,6 +68,13 @@
      */
     playing: function () {
       return this._playing
+    },
+    
+    /**
+     * @returns {boolean} FALSE is hand is in progress.
+     */
+    notPlaying: function () {
+      return !this._playing
     },
     
     
@@ -77,27 +91,65 @@
      * Options can be changed only when a hand is not progress.
      */
     set: function (key, value) {
-      if (!this.playing()) {
+      if (this.notPlaying()) {
         this._options[key] = value
       }
       return this
     },
     
-    
+
+    /**
+     * If hand is not in progress, add a new player.
+     * @param seat is optional.
+     */
+    addPlayer: function (id, chips, seat) {
+      if (this.notPlaying()) {
+        this._players.add(id, chips, seat)
+      }
+      return this
+    },
     
     /**
-     * @returns the players model.
+     * Give @param chips to player with @param id.
      */
-    players: function () {
-      return this._players
+    addChipsForPlayer: function (id, chips) {
+      this._players.addChips(id, chips)
+      return this
     },
     
     
+    /**
+     * @param idOrSeat {string|number}
+     */
+    removePlayer: function (idOrSeat) {
+      if (_.isString(idOrSeat)) {
+        this._players.remove(idOrSeat)
+      } else if (_.isNumber(idOrSeat)) {
+        this._players.removeAtSeat(idOrSeat)
+      }
+      return this
+    },
     
-    endHand: function () {
-      this._playing = false
-      this._players.handEnded()
-      this._deck.reset()
+    
+    /**
+     * @returns {number} of players.
+     */
+    playersTotal: function () {
+      return this._players.total()
+    },
+    
+    /**
+     * @returns {object} of player with @param id.
+     */
+    getPlayer: function (id) {
+      return _.clone(this._players.get(id))
+    },
+    
+    /**
+     * @returns {object} of player at @param seat.
+     */
+    getPlayerAtSeat: function (seat) {
+      return _.clone(this._players.atSeat(seat))
     },
     
     
@@ -105,11 +157,11 @@
     /**
      * Begin a new hand, if a hand is not already in progress.
      */
-    deal: function (options) {      
+    deal: function (options) {
       var obj
       _.extend(this._options, options)
       if (this._validate()) {
-        obj = this.players().handStarted()        
+        obj = this._players.handStarted()        
         this._trigger('change', NS.BUTTON, { player: obj.button })
         this._trigger('change', NS.HAND_BEGIN)
         this._deck.shuffle()

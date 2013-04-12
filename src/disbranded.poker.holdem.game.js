@@ -30,13 +30,13 @@
     
     _dealHoleCards: function () {
       var n = 0,
-          len = this.players().total() * 2,
+          len = this._players.total() * 2,
           player,
           card
 
       while (n++ < len) {
         try {
-          player = this.players().next()
+          player = this._players.next()
         } catch (e) {
           this._trigger(NS.ERROR, e.code, { message: e.message })
         }
