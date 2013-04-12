@@ -6,8 +6,8 @@
 
   var NS = root.DISBRANDED.poker
   
-  NS.Players = function (game) {
-    this._game = game
+  NS.Players = function (trigger) {
+    this.trigger = trigger
     this._players = []
     this._removed = []
     this._index = 0
@@ -51,28 +51,25 @@
 
     add: function (id, chips, seat) {
       var player
-      if (!this._game.playing()) {
-        player = this.get(id)
-        if (!player) {
-          if (!seat && seat !== 0) {
-            player = _.last(this._players)
-            seat = player ? (player.seat + 1) : 0
-          }
-          seat = Math.max(0, parseInt(seat, 10))
-          this.removeAtSeat(seat)
-          player = {
-            'id': id,
-            'chips': chips,
-            'seat': seat,
-            'folded': false,
-            'allin': false,
-            'hand': new NS.Hand(id)
-          }
-          this._players.push(player)
-          this._players.sort(function (a, b) {
-            return a.seat - b.seat
-          })
+      if (this.get(id) === null) {
+        if (!seat && seat !== 0) {
+          player = _.last(this._players)
+          seat = player ? (player.seat + 1) : 0
         }
+        seat = Math.max(0, parseInt(seat, 10))
+        this.removeAtSeat(seat)
+        player = {
+          'id': id,
+          'chips': chips,
+          'seat': seat,
+          'folded': false,
+          'allin': false,
+          'hand': new NS.Hand(id)
+        }
+        this._players.push(player)
+        this._players.sort(function (a, b) {
+          return a.seat - b.seat
+        })
       }
       return this
     },
@@ -92,14 +89,14 @@
     },
     
     
-    remove: function (id) {
+    remove: function (id, playing) {
       var i,
           player = this.get(id)
           
       if (player) {
         
         // If hand in progress, fold now and remove later.
-        if (this._game.playing()) {
+        if (playing) {
           player.folded = true
           this._removed.push(id)
         
@@ -117,10 +114,10 @@
     },
     
     
-    removeAtSeat: function (seat) {
+    removeAtSeat: function (seat, playing) {
       var player = this.atSeat(seat)
       if (player) {
-        this.remove(player.id)
+        this.remove(player.id, playing)
       }
       return this
     },

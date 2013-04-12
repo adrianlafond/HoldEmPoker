@@ -123,9 +123,9 @@
      */
     removePlayer: function (idOrSeat) {
       if (_.isString(idOrSeat)) {
-        this._players.remove(idOrSeat)
+        this._players.remove(idOrSeat, this.playing())
       } else if (_.isNumber(idOrSeat)) {
-        this._players.removeAtSeat(idOrSeat)
+        this._players.removeAtSeat(idOrSeat, this.playing())
       }
       return this
     },
