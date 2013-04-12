@@ -33,6 +33,11 @@
       TOO_FEW_PLAYERS   : 'tooFewPlayers',
       NO_NEXT_PLAYER    : 'noNextPlayer',
       
+    ADDED               : 'add',
+    REMOVED             : 'remove',
+      PLAYER            : 'player',
+      CHIPS             : 'chips',
+      
     // pots
     LIMIT               : 'limit',
     NO_LIMIT            : 'noLimit',

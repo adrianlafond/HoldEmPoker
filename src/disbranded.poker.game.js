@@ -20,7 +20,7 @@
       this._playing = false
       this._deck = new NS.Deck
       this._pot = new NS.Pot
-      this._players = new NS.Players(this)
+      this._players = new NS.Players(_.bind(this._trigger, this))
     },
     
     

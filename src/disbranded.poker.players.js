@@ -35,6 +35,7 @@
       throw { code: NS.NO_NEXT_PLAYER, message: 'Next player could not be discovered.'}
     },
 
+
     get: function (id) {
       return _.findWhere(this._players, { 'id': id }) || null
     },
@@ -70,6 +71,7 @@
         this._players.sort(function (a, b) {
           return a.seat - b.seat
         })
+        this.trigger(NS.ADDED, NS.PLAYER, _.clone(player))
       }
       return this
     },
@@ -84,6 +86,7 @@
       var player = this.get(id)
       if (player) {
         player.chips += amount
+        this.trigger(NS.ADDED, NS.CHIPS, _.clone(player))
       }
       return this
     },
@@ -105,6 +108,7 @@
           for (i = this._players.length - 1; i >= 0; i--) {
             if (this._players[i].id === id) {
               this._players.splice(i, 1)
+              this.trigger(NS.REMOVED, NS.PLAYER, _.clone(player))
               break
             }
           }
@@ -157,12 +161,15 @@
      */
     removePlayers: function () {
       var r = this._removed.length - 1,
-          p
+          p,
+          player
       for (; r >= 0; r--) {
         p = this._players.length - 1
         for (; p >= 0; p--) {
           if (this._players[p].id === this._removed[r]) {
+            player = _.clone(this._players[p])
             this._players.splice(p, 1)
+            this.trigger(NS.REMOVED, NS.PLAYER, player)
             break
           }
         }
