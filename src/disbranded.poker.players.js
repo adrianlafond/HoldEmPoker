@@ -34,6 +34,20 @@
       }
       throw { code: NS.NO_NEXT_PLAYER, message: 'Next player could not be discovered.'}
     },
+    
+    
+    /**
+     * Do not call if player is folded or allin.
+     */
+    bet: function (id, chips) {
+      var player = this.get(id),
+          betChips = Math.min(player.chips, chips)
+      player.chips = Math.max(0, player.chips - betChips)
+      if (player.chips === 0) {
+        player.allin = true
+      }
+      return betChips
+    },
 
 
     get: function (id) {

@@ -39,18 +39,22 @@
   function startGame() {
     game = new poker.holdem.Game
     
+    game.on(poker.BEGIN, function (e) {
+      console.log('BEGIN')
+    })
+    game.on(poker.BUTTON, function (e) {
+      console.log('BUTTON', e.player)
+    })    
     game.on(poker.ADDED, function (e) {
       console.log('ADDED: ' + e.id +', $' + e.chips +', seat ' + e.seat)
-    })
-    
+    })    
     game.on(poker.ERROR, function (e) {
       console.log('ERROR:', e.message)
     })
-    game.on(poker.CHANGE, function (e) {
-      console.log('CHANGE:', e.code, e)
-    })
-    game.on(poker.POST, function (e) {
-      console.log('POST', e.code.toUpperCase(), e.id, '$' + e.chips)
+    
+
+    game.on(poker.ANTE, function (e) {
+      console.log('ANTE', e.code, '$' + e.chips)
     })
     game.on(poker.DEAL, function (e) {
       console.log(e.type, e.code, e.card)
@@ -62,7 +66,8 @@
     })
     
     console.log('Access game through variable "game".')
-    console.log('"addPlayers()" = shortcut to add 4 players.')
+    addPlayers()
+    game.deal()
   }
   
   jQuery(function ($) {

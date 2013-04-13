@@ -16,10 +16,9 @@
      * @constants
      */
     // events
-    CHANGE              : 'change',
-      BUTTON            : 'button',
-      HAND_BEGIN        : 'handBegin',
-      HAND_END          : 'handEnd',
+    BUTTON              : 'button',
+    BEGIN               : 'begin',
+    END                 : 'end',
     
     DEAL                : 'deal',
       BURN              : 'burn',
@@ -35,12 +34,12 @@
       PLAYER            : 'player',
       CHIPS             : 'chips',
     
-    POST                : 'post',
-      ANTE              : 'ante', 
-      SMALL_BLIND       : 'smallBlind',
-      BIG_BLIND         : 'bigBlind',
+    ANTE                : 'ante', 
+    SMALL_BLIND         : 'smallBlind',
+    BIG_BLIND           : 'bigBlind',
     
-    ACTION_NEEDED       : 'actionNeeded',
+    ACTION_TODO         : 'actionTodo',
+    ACTION_DONE         : 'actionDone',
       CHECK             : 'check',
       CALL              : 'call',
       RAISE             : 'raise',

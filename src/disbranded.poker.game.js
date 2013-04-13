@@ -164,8 +164,8 @@
         _.extend(this._options, options)
         if (this._validate()) {
           obj = this._players.handStarted()        
-          this._trigger('change', NS.BUTTON, { player: obj.button })
-          this._trigger('change', NS.HAND_BEGIN)
+          this._trigger(NS.BUTTON, obj.button, { player: obj.button })
+          this.trigger(NS.BEGIN)
           this._deck.shuffle()
         }
       }

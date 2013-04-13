@@ -72,16 +72,17 @@
     
     
     _ante: function () {
-      var id, startId
+      var id, player, bet
       if (this._options.ante > 0) {
         while (true) {
-          id = this._nextPlayer().id
-          this._trigger(NS.POST, NS.ANTE, { id: id, chips: this._options.ante })
-          if (!startId) {
-            startId = id
-          } else if (id === startId) {
+          player = this._nextPlayer()
+          if (!id) {
+            id = player.id
+          } else if (player.id === id) {
             break
           }
+          bet = this._players.bet(player.id, this._options.ante)
+          this._trigger(NS.ANTE, player.id, { player: player.id, chips: bet })
         }
       }
       this._nextState()
