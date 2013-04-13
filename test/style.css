@@ -16,3 +16,8 @@ div.test ul {
   list-style-type: none;
   padding: 0;
 }
+
+
+div.game {
+  margin: 20px;
+}

@@ -28,6 +28,17 @@
     },
     
     
+    _nextPlayer: function () {
+      var player
+      try {
+        player = this._players.next()
+      } catch (e) {
+        this._trigger(NS.ERROR, e.code, { message: e.message })
+      }
+      return player
+    },
+    
+    
     _dealHoleCards: function () {
       var n = 0,
           len = this._players.total() * 2,
@@ -35,17 +46,34 @@
           card
 
       while (n++ < len) {
-        try {
-          player = this._players.next()
-        } catch (e) {
-          this._trigger(NS.ERROR, e.code, { message: e.message })
-        }
+        player = this._nextPlayer()
         card = this._deck.deal()
         this._trigger(NS.DEAL, player.id, { 'card': card, face: NS.FACE_DOWN })
         player.hand.add(this._deck.deal())
       }
     },
 
+
+    _smallBlind: function () {
+      var player = this._nextPlayer(),
+          opt = this._options
+      this._trigger(NS.ACTION_NEEDED,
+                    player.id, {
+                      'smallBlind': opt.smallBlindPerc * opt.minBet,
+                      'player': player.id
+                    })
+    },
+
+
+    _bettingRound: function () {
+      this._raises = 0
+      this._bet = 0
+      this._startPlayer = this._player = null
+      // player = startPlayer = this._nextPlayer()
+      if (this._preFlop) {
+        this._smallBlind()
+      }
+    },
     
     
     deal: function (options) {
@@ -53,10 +81,20 @@
         this._playing = true
         NS.Game.prototype.deal.call(this, options)
         this._dealHoleCards()
-        this._burn()
+        this._preFlop = true
+        this._bettingRound()
+        // this._burn()
       }
       return this
-    } 
+    },
+    
+    
+    /**
+     * 
+     */
+    play: function (id, action, chips) {
+      console.log(id, action)
+    }
   }
   
   

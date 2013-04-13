@@ -26,6 +26,7 @@
     
     DEAL                : 'deal',
       BURN              : 'burn',
+      COMMUNITY         : 'community',
 
     ERROR               : 'error',
       TOO_MANY_PLAYERS  : 'tooManyPlayers',
@@ -36,6 +37,15 @@
     REMOVED             : 'remove',
       PLAYER            : 'player',
       CHIPS             : 'chips',
+      
+    ACTION_NEEDED       : 'actionNeeded',
+    ACTION_TAKEN        : 'actionTaken',
+      SMALL_BLIND       : 'smallBlind',
+      BIG_BLIND         : 'bigBlind',
+      ANTE              : 'ante',
+      CHECK             : 'check',
+      CALL              : 'call',
+      RAISE             : 'raise',
       
     // pots
     LIMIT               : 'limit',
