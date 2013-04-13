@@ -25,31 +25,11 @@
     _init: function (options) {
       NS.Game.prototype._init.call(this, options)
       _.extend(this._options, NS.holdem.defaults())
+      this.gameState = NS.holdem.state
     },
     
     
-    _nextPlayer: function () {
-      var player
-      try {
-        player = this._players.next()
-      } catch (e) {
-        this._trigger(NS.ERROR, e.code, { message: e.message })
-      }
-      return player
-    },
 
-
-    /**
-     * Advances the state.
-     */
-    _nextState: function () {
-      this._state += 1
-      if (this._state < NS.holdem.state.length) {
-        this._playState
-      } else {
-        this._endHand()
-      }
-    },
     
     
     /**
@@ -70,23 +50,6 @@
       }
     },
     
-    
-    _ante: function () {
-      var id, player, bet
-      if (this._options.ante > 0) {
-        while (true) {
-          player = this._nextPlayer()
-          if (!id) {
-            id = player.id
-          } else if (player.id === id) {
-            break
-          }
-          bet = this._players.bet(player.id, this._options.ante)
-          this._trigger(NS.ANTE, player.id, { player: player.id, chips: bet })
-        }
-      }
-      this._nextState()
-    },
     
     
     _dealHoleCards: function () {
