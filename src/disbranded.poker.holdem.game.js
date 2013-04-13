@@ -2,7 +2,23 @@
 ;(function (root, _) {
   'use strict'
 
-  var NS = root.DISBRANDED.poker
+  var NS = root.DISBRANDED.poker,
+  
+      state = [
+        null,
+        'ante',
+        'smallblind',
+        'bigblind',
+        'deal-hole-1',
+        'deal-hole-2',
+        'bet-preflop',
+        'flop',
+        'bet-flop',
+        'turn',
+        'bet-turn',
+        'river',
+        'bet-river'
+      ]
 
 
   /**
@@ -77,8 +93,8 @@
     
     
     deal: function (options) {
-      if (!this.playing()) {
-        this._playing = true
+      NS.Game.prototype.deal.call(this, options)
+      if (this.playing()) {
         NS.Game.prototype.deal.call(this, options)
         this._dealHoleCards()
         this._preFlop = true

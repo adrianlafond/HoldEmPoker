@@ -17,7 +17,7 @@
     
     _init: function (options) {
       this._options = options ? _.extend(NS.defaults(), options) : NS.defaults()
-      this._playing = false
+      this._stateIndex = 0
       this._deck = new NS.Deck
       this._pot = new NS.Pot
       this._players = new NS.Players(_.bind(this._trigger, this))
@@ -25,16 +25,16 @@
     
     
     _validate: function () {
-      var error = false,
-          result
-          
+      var result
+      this._stateIndex = 1
+      
       result = this._players.validate(this.get('minSeats'), this.get('seats'))
       if (result.invalid) {
         this._trigger(result.type, result.code, { message: result.message })
-        error = true
+        this._stateIndex = 0
       }
-      
-      return !error
+
+      return this._stateIndex !== 0
     },
     
     
@@ -67,14 +67,14 @@
      * @returns {boolean} TRUE if a hand is in progress.
      */
     playing: function () {
-      return this._playing
+      return this._stateIndex !== 0
     },
     
     /**
      * @returns {boolean} FALSE is hand is in progress.
      */
     notPlaying: function () {
-      return !this._playing
+      return this._stateIndex === 0
     },
     
     
@@ -159,12 +159,14 @@
      */
     deal: function (options) {
       var obj
-      _.extend(this._options, options)
-      if (this._validate()) {
-        obj = this._players.handStarted()        
-        this._trigger('change', NS.BUTTON, { player: obj.button })
-        this._trigger('change', NS.HAND_BEGIN)
-        this._deck.shuffle()
+      if (this.notPlaying()) {
+        _.extend(this._options, options)
+        if (this._validate()) {
+          obj = this._players.handStarted()        
+          this._trigger('change', NS.BUTTON, { player: obj.button })
+          this._trigger('change', NS.HAND_BEGIN)
+          this._deck.shuffle()
+        }
       }
       return this
     }
