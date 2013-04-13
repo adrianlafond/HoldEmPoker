@@ -69,7 +69,7 @@
     _nextState: function () {
       this._state += 1
       if (this._state < this.gameState.length) {
-        this._playState
+        this._playState()
       } else {
         this._endHand()
       }

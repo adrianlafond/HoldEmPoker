@@ -34,10 +34,7 @@
       PLAYER            : 'player',
       CHIPS             : 'chips',
     
-    ANTE                : 'ante', 
-    SMALL_BLIND         : 'smallBlind',
-    BIG_BLIND           : 'bigBlind',
-    
+    ANTE                : 'ante',    
     ACTION_TODO         : 'actionTodo',
     ACTION_DONE         : 'actionDone',
       CHECK             : 'check',

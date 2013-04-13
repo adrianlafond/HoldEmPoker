@@ -51,11 +51,16 @@
     game.on(poker.ERROR, function (e) {
       console.log('ERROR:', e.message)
     })
-    
-
     game.on(poker.ANTE, function (e) {
       console.log('ANTE', e.code, '$' + e.chips)
     })
+    game.on(poker.holdem.SMALL_BLIND, function (e) {
+      console.log('SMALL_BLIND', e.code, '$' + e.chips)
+    })
+    game.on(poker.holdem.BIG_BLIND, function (e) {
+      console.log('BIG_BLIND', e.code, '$' + e.chips)
+    })
+    
     game.on(poker.DEAL, function (e) {
       console.log(e.type, e.code, e.card)
     })

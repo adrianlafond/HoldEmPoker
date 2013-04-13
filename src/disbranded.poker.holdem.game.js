@@ -45,10 +45,32 @@
         case h.SMALL_BLIND:
           this._smallBlind()
           break
+        case h.BIG_BLIND:
+          this._bigBlind()
+          break
         default:
+          console.log('   next:', h.state[state])
           break
       }
     },
+    
+    
+    _smallBlind: function () {
+      var player = this._nextPlayer(),
+          opt = this._options,
+          bet = this._players.bet(player.id, opt.smallBlindPerc * opt.minBet)
+      this._trigger(NS.holdem.SMALL_BLIND, player.id, { player: player.id, chips: bet })
+      this._nextState()
+    },
+    
+    _bigBlind: function () {
+      var player = this._nextPlayer(),
+          opt = this._options,
+          bet = this._players.bet(player.id, opt.bigBlindPerc * opt.minBet)
+      this._trigger(NS.holdem.BIG_BLIND, player.id, { player: player.id, chips: bet })
+      this._nextState()
+    },
+    
     
     
     
@@ -65,18 +87,6 @@
         player.hand.add(this._deck.deal())
       }
     },
-
-
-    _smallBlind: function () {
-      var player = this._nextPlayer(),
-          opt = this._options
-      this._trigger(NS.ACTION_NEEDED,
-                    player.id, {
-                      'smallBlind': opt.smallBlindPerc * opt.minBet,
-                      'player': player.id
-                    })
-    },
-
 
     _bettingRound: function () {
       this._raises = 0
