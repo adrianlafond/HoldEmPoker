@@ -75,11 +75,7 @@
       }
       return this
     },
-    
 
-    addAtSeat: function (id, chips, seat) {
-      return this.add(id, chips, seat)
-    },
     
 
     addChips: function (id, amount) {

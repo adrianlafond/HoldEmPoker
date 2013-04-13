@@ -17,7 +17,7 @@
     
     _init: function (options) {
       this._options = options ? _.extend(NS.defaults(), options) : NS.defaults()
-      this._stateIndex = 0
+      this._state = 0
       this._deck = new NS.Deck
       this._pot = new NS.Pot
       this._players = new NS.Players(_.bind(this._trigger, this))
@@ -26,15 +26,15 @@
     
     _validate: function () {
       var result
-      this._stateIndex = 1
+      this._state = 1
       
       result = this._players.validate(this.get('minSeats'), this.get('seats'))
       if (result.invalid) {
         this._trigger(result.type, result.code, { message: result.message })
-        this._stateIndex = 0
+        this._state = 0
       }
 
-      return this._stateIndex !== 0
+      return this._state !== 0
     },
     
     
@@ -51,9 +51,10 @@
     
     
     _endHand: function () {
-      this._playing = false
+      this._state = 0
       this._players.handEnded()
       this._deck.reset()
+      this._pot.reset()
     },
     
     
@@ -67,14 +68,14 @@
      * @returns {boolean} TRUE if a hand is in progress.
      */
     playing: function () {
-      return this._stateIndex !== 0
+      return this._state !== 0
     },
     
     /**
      * @returns {boolean} FALSE is hand is in progress.
      */
     notPlaying: function () {
-      return this._stateIndex === 0
+      return this._state === 0
     },
     
     

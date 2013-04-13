@@ -18,21 +18,39 @@
   <script src="../src/disbranded.poker.players.js"></script>
   <script src="../src/disbranded.poker.pot.js"></script>
   <script src="../src/disbranded.poker.game.js"></script>
+  <script src="../src/disbranded.poker.holdem.js"></script>
   <script src="../src/disbranded.poker.holdem.defaults.js"></script>
 	<script src="../src/disbranded.poker.holdem.game.js"></script>
 	
   <script>
   var poker = DISBRANDED.poker,
+      holdem = poker.holdem,
       game
+      
+      
+  function addPlayers() {
+    game.addPlayer('falstaff', 500, 1)
+    game.addPlayer('hal', 100, 2)
+    game.addPlayer('bill', 250, 3)
+    game.addPlayer('bebop', 300, 4)
+  }
+  
   
   function startGame() {
     game = new poker.holdem.Game
-        
-    game.on(poker.ERROR, function (e) {
-      console.log(e.type +': '+ e.message)
+    
+    game.on(poker.ADDED, function (e) {
+      console.log('ADDED: ' + e.id +', $' + e.chips +', seat ' + e.seat)
     })
-    game.on(poker.CHANGE +'.'+ poker.BUTTON, function (e) {
-      console.log(e.type +': '+ e.player)
+    
+    game.on(poker.ERROR, function (e) {
+      console.log('ERROR:', e.message)
+    })
+    game.on(poker.CHANGE, function (e) {
+      console.log('CHANGE:', e.code, e)
+    })
+    game.on(poker.POST, function (e) {
+      console.log('POST', e.code.toUpperCase(), e.id, '$' + e.chips)
     })
     game.on(poker.DEAL, function (e) {
       console.log(e.type, e.code, e.card)
@@ -44,16 +62,7 @@
     })
     
     console.log('Access game through variable "game".')
-    // game.addPlayer('a', 500, 3)
-    // game.addPlayer('b', 100, 1)
-    // game.addPlayer('c', 250, 8)
-    // game.addPlayer('d', 300, 5)
-    // game.addPlayer('e', 1250, 6)
-    // game.addPlayer('f', 1000, 0)
-    // game.addPlayer('g', 1500, 2)
-    // game.addPlayer('h', 800, 4)
-    // game.addPlayer('i', 100, 7)
-    // game.deal()
+    console.log('"addPlayers()" = shortcut to add 4 players.')
   }
   
   jQuery(function ($) {

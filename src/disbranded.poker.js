@@ -12,9 +12,6 @@
     
     debug: false,
     
-    // sub namespaces
-    holdem: {},
-    
     /**
      * @constants
      */
@@ -37,12 +34,13 @@
     REMOVED             : 'remove',
       PLAYER            : 'player',
       CHIPS             : 'chips',
-      
-    ACTION_NEEDED       : 'actionNeeded',
-    ACTION_TAKEN        : 'actionTaken',
+    
+    POST                : 'post',
+      ANTE              : 'ante', 
       SMALL_BLIND       : 'smallBlind',
       BIG_BLIND         : 'bigBlind',
-      ANTE              : 'ante',
+    
+    ACTION_NEEDED       : 'actionNeeded',
       CHECK             : 'check',
       CALL              : 'call',
       RAISE             : 'raise',

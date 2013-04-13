@@ -2,23 +2,7 @@
 ;(function (root, _) {
   'use strict'
 
-  var NS = root.DISBRANDED.poker,
-  
-      state = [
-        null,
-        'ante',
-        'smallblind',
-        'bigblind',
-        'deal-hole-1',
-        'deal-hole-2',
-        'bet-preflop',
-        'flop',
-        'bet-flop',
-        'turn',
-        'bet-turn',
-        'river',
-        'bet-river'
-      ]
+  var NS = root.DISBRANDED.poker
 
 
   /**
@@ -52,6 +36,55 @@
         this._trigger(NS.ERROR, e.code, { message: e.message })
       }
       return player
+    },
+
+
+    /**
+     * Advances the state.
+     */
+    _nextState: function () {
+      this._state += 1
+      if (this._state < NS.holdem.state.length) {
+        this._playState
+      } else {
+        this._endHand()
+      }
+    },
+    
+    
+    /**
+     * Plays the current states.
+     */
+    _playState: function (state) {
+      var h = NS.holdem
+      state = (_.isUndefined(state)) ? this._state : state 
+      switch (h.state[state]) {
+        case h.ANTE:
+          this._ante()
+          break
+        case h.SMALL_BLIND:
+          this._smallBlind()
+          break
+        default:
+          break
+      }
+    },
+    
+    
+    _ante: function () {
+      var id, startId
+      if (this._options.ante > 0) {
+        while (true) {
+          id = this._nextPlayer().id
+          this._trigger(NS.POST, NS.ANTE, { id: id, chips: this._options.ante })
+          if (!startId) {
+            startId = id
+          } else if (id === startId) {
+            break
+          }
+        }
+      }
+      this._nextState()
     },
     
     
@@ -95,11 +128,7 @@
     deal: function (options) {
       NS.Game.prototype.deal.call(this, options)
       if (this.playing()) {
-        NS.Game.prototype.deal.call(this, options)
-        this._dealHoleCards()
-        this._preFlop = true
-        this._bettingRound()
-        // this._burn()
+        this._playState()
       }
       return this
     },

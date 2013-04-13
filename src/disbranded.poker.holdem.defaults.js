@@ -11,7 +11,7 @@
     
         type: NS.LIMIT,
     
-        ante: 0,
+        ante: 2,
     
         // 0 for no limit:
         minBet: 10,
