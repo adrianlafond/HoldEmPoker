@@ -48,6 +48,13 @@
         case h.BIG_BLIND:
           this._bigBlind()
           break
+        case h.DEAL_HOLE_1:
+        case h.DEAL_HOLE_2:
+          this._dealPlayerCard(NS.FACE_DOWN)
+          break
+        case h.BET_PRE_FLOP:
+          this._betPreFlop()
+          break
         default:
           console.log('   next:', h.state[state])
           break
@@ -56,7 +63,7 @@
     
     
     _smallBlind: function () {
-      var player = this._nextPlayer(),
+      var player = this._players.atIndex(0),
           opt = this._options,
           bet = this._players.bet(player.id, opt.smallBlindPerc * opt.minBet)
       this._trigger(NS.holdem.SMALL_BLIND, player.id, { player: player.id, chips: bet })
@@ -64,13 +71,16 @@
     },
     
     _bigBlind: function () {
-      var player = this._nextPlayer(),
+      var player = this._players.atIndex(1),
           opt = this._options,
           bet = this._players.bet(player.id, opt.bigBlindPerc * opt.minBet)
       this._trigger(NS.holdem.BIG_BLIND, player.id, { player: player.id, chips: bet })
       this._nextState()
     },
     
+    _betPreFlop: function () {
+      this._bettingRound(2)
+    },
     
     
     
@@ -85,16 +95,6 @@
         card = this._deck.deal()
         this._trigger(NS.DEAL, player.id, { 'card': card, face: NS.FACE_DOWN })
         player.hand.add(this._deck.deal())
-      }
-    },
-
-    _bettingRound: function () {
-      this._raises = 0
-      this._bet = 0
-      this._startPlayer = this._player = null
-      // player = startPlayer = this._nextPlayer()
-      if (this._preFlop) {
-        this._smallBlind()
       }
     },
     

@@ -11,6 +11,7 @@
     this._players = []
     this._removed = []
     this._index = 0
+    this._button = null
   }
   
   NS.Players.prototype = {
@@ -36,6 +37,11 @@
     },
     
     
+    button: function () {
+      return this._button
+    },
+    
+    
     /**
      * Do not call if player is folded or allin.
      */
@@ -52,6 +58,10 @@
 
     get: function (id) {
       return _.findWhere(this._players, { 'id': id }) || null
+    },
+    
+    atIndex: function (index) {
+      return (index in this._players) ? this._players[index] : null
     },
     
     atSeat: function (seat) {
@@ -159,8 +169,9 @@
     
     handStarted: function () {
       this._players.unshift(this._players.pop())
+      this._button = _.last(this._players).id
       return {
-        button: _.last(this._players).id
+        button: this._button
       }
     },
     

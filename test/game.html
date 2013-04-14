@@ -62,7 +62,7 @@
     })
     
     game.on(poker.DEAL, function (e) {
-      console.log(e.type, e.code, e.card)
+      console.log('DEAL', e.code, e.card, e.face)
     })
     game.on(poker.ACTION_NEEDED, function (e) {
       if (e.hasOwnProperty('smallBlind')) {

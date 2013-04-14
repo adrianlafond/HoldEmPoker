@@ -94,18 +94,57 @@
     },
     
     
+    _dealPlayerCard: function (face) {
+      var startId = null,
+          player,
+          card
+      while (true) {
+        player = this._nextPlayer()
+        card = this._deck.deal()
+        player.hand.add(card)
+        this._trigger(NS.DEAL, player.id, { 'card': card, 'face': face })
+        if (player.id === this._players.button()) {
+          break
+        }
+      }
+      this._nextState()
+    },
+    
+    
+    _bettingRound: function (startIndex) {
+      var player,
+          n = 0
+
+      // Optionally start with a player other than the first player,
+      // eg, after blinds.
+      startIndex = _.isUndefined(startIndex) ? 0 : startIndex
+      while (n++ < startIndex) {
+        player = this._nextPlayer()
+      }
+      
+      player = this._nextPlayer()
+      this._trigger(NS.ACTION_TODO, player.id, {
+        check: true,// true/false if check is an option
+        call: 0,//call 0 = check; or # to call
+        minRaise: 0,//0 if raises not possible
+        maxRaise: 0//0 if raises not possible
+      })
+    },
+    
+    
+    _burn: function () {
+      var card = this._deck.deal()
+      this._trigger(NS.DEAL, NS.BURN, { card: card, face: NS.FACE_DOWN })
+    },
+    
+    
     _endHand: function () {
       this._state = 0
       this._players.handEnded()
       this._deck.reset()
       this._pot.reset()
     },
-    
-    
-    _burn: function () {
-      var card = this._deck.deal()
-      this._trigger(NS.DEAL, NS.BURN, { 'card': card, face: NS.FACE_DOWN })
-    },
+
 
 
     /**
