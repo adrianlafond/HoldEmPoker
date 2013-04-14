@@ -17,6 +17,11 @@
   NS.Players.prototype = {
     
     
+    /**
+     * TODO: return instead a array of non-folded, non-allin players
+     *       and the game itself will keep track of index. That' because
+     *       the problem the next() method is that it lacks context.
+     */
     next: function () {
       var n = 0,
           index = this._index,

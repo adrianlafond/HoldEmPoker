@@ -111,12 +111,16 @@
     },
     
     
+    /**
+     * TODO: "pause" betting round; eg, collect blinds, then deal cards, then continue.
+     *       Do in conjunction with update to _players.next().
+     */
     _bettingRound: function (startIndex) {
       var player,
           n = 0
 
       // Optionally start with a player other than the first player,
-      // eg, after blinds.
+      // eg, after blinds. Code below skips players before the index.
       startIndex = _.isUndefined(startIndex) ? 0 : startIndex
       while (n++ < startIndex) {
         player = this._nextPlayer()
