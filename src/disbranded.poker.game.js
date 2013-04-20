@@ -21,6 +21,9 @@
       this._deck = new NS.Deck
       this._pot = new NS.Pot
       this._players = new NS.Players(_.bind(this._trigger, this))
+      this._playersRound = null
+      this._playersIndex = 0
+      this._raises = 0
     },
     
     
@@ -147,6 +150,54 @@
     _dealCommunity: function () {
       var card = this._deck.deal()
       this._trigger(NS.DEAL, NS.COMMUNITY, { card: card, face: NS.FACE_UP })
+    },
+    
+    
+    _betLimit: function () {
+      return this._options.minBet
+    },
+    
+    
+    _turn: function () {
+      var player = this._players.atIndex(this._playersIndex),
+          bet = this._pot.getLiveBet(),
+          raise = 0
+          
+      if (this.raiseAllowed()) {
+        raise = Math.min(this.maxBet(), player.chips)
+      }
+
+      this._trigger(NS.TURN, player.id, {
+        'player': player.id,
+        'check': bet === 0,
+        'call': bet - this._pot.getLive(player.id),
+        'raise': raise
+      }, this)
+    },
+    
+    
+    
+    raiseAllowed: function () {
+      if (this._players.headsup() && !this._options.unlimitedHeadsUpRaises) {
+        raiseOK = false
+      }
+      if (this._options.maxRaises > 0 && this._raises >= this._options.maxRaises) {
+        raiseOK = false
+      }
+      return true
+    },
+
+
+    maxBet: function () {
+      switch (this._options.type) {
+        case NS.NO_LIMIT:
+          return Number.MAX_VALUE
+        case NS.POT_LIMIT:
+          return 0
+        case NS.LIMIT:
+          return this._betLimit()
+      }
+      return 0
     },
     
     

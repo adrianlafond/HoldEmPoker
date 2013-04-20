@@ -32,7 +32,7 @@
       }
       if (this._live[player].live) {
         this._live[player].bet += amount
-      }      
+      }
       return this
     },
     
@@ -101,6 +101,19 @@
      */
     getLive: function (id) {
       return (_.has(this._live, id)) ? this._live[id].bet : 0
+    },
+    
+    
+    /**
+     * @returns the current max bet amount (for calling).
+     */
+    getLiveBet: function () {
+      if (_.size(this._live) > 0) {
+        return _.max(this._live, function (player) {
+          return player.bet
+        }, this).bet
+      }
+      return 0
     },
 
     

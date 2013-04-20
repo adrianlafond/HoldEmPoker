@@ -88,6 +88,10 @@
     total: function () {
       return this._players.length
     },
+    
+    headsup: function () {
+      return this.total() === 2
+    },
 
 
     add: function (id, chips, seat) {

@@ -64,10 +64,11 @@
     game.on(poker.DEAL, function (e) {
       console.log('DEAL', e.code, e.card, e.face)
     })
-    game.on(poker.ACTION_NEEDED, function (e) {
-      if (e.hasOwnProperty('smallBlind')) {
-        console.log('smallBlind: ' + e.player +' $'+ e.smallBlind)
-      }
+    game.on(poker.TURN, function (e) {
+      console.log('TURN', e.code)
+      console.log('  check: ' + e.check)
+      console.log('  call: ' + e.call)
+      console.log('  raise: ' + e.raise)
     })
     
     console.log('Access game through variable "game".')

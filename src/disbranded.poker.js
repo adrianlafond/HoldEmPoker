@@ -35,11 +35,12 @@
       CHIPS             : 'chips',
     
     ANTE                : 'ante',    
-    ACTION_TODO         : 'actionTodo',
-    ACTION_DONE         : 'actionDone',
+    TURN                : 'turn',
+    ACTION              : 'action',
       CHECK             : 'check',
       CALL              : 'call',
       RAISE             : 'raise',
+      FOLD              : 'fold',
       
     // pots
     LIMIT               : 'limit',
