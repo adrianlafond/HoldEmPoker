@@ -53,21 +53,28 @@
           this._dealPlayerCards(NS.FACE_DOWN)
           break
         case h.BET_PRE_FLOP:
-          this._betPreFlop()
+          this._bettingRound(2)
           break
         case h.FLOP:
+          this._dealFlop()
           break
         case h.BET_FLOP:
+          this._bettingRound()
           break
         case h.TURN:
+          this._dealTurn()
           break
         case h.BET_TURN:
+          this._bettingRound()
           break
         case h.RIVER:
+          this._dealRiver()
           break
         case h.BET_RIVER:
+          this._bettingRound()
           break
         case h.SHOWDOWN:
+          this._showdown()
           break
       }
     },
@@ -88,11 +95,27 @@
       this._trigger(NS.holdem.BIG_BLIND, player.id, { player: player.id, chips: bet })
       this._nextState()
     },
+
     
-    _betPreFlop: function () {
-      this._bettingRound(2)
+    _dealFlop: function () {
+      this._burn()
+      this._dealCommunity()
+      this._dealCommunity()
+      this._dealCommunity()
+      this._nextState()
     },
     
+    _dealTurn: function () {
+      this._burn()
+      this._dealCommunity()
+      this._nextState()
+    },
+    
+    _dealRiver: function () {
+      this._burn()
+      this._dealCommunity()
+      this._nextState()
+    },
 
     
     

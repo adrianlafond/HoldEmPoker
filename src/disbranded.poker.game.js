@@ -111,6 +111,10 @@
     _bettingRound: function (startIndex) {
       var player,
           n = 0
+      
+      console.log('_bettingRound()')
+      this._nextState()
+      return
 
       // Optionally start with a player other than the first player,
       // eg, after blinds. Code below skips players before the index.
@@ -129,9 +133,20 @@
     },
     
     
+    _showdown: function () {
+      console.log('_showdown()')
+      this._nextState()
+    },
+    
+    
     _burn: function () {
       var card = this._deck.deal()
       this._trigger(NS.DEAL, NS.BURN, { card: card, face: NS.FACE_DOWN })
+    },
+    
+    _dealCommunity: function () {
+      var card = this._deck.deal()
+      this._trigger(NS.DEAL, NS.COMMUNITY, { card: card, face: NS.FACE_UP })
     },
     
     
