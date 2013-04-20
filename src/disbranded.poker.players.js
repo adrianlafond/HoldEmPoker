@@ -42,6 +42,17 @@
     },
     
     
+    
+    /**
+     * @returns {array} of players who have no folded.
+     */
+    live: function () {
+      return _.filter(this._players, function (player) {
+        return !player.folded
+      })
+    },
+    
+    
     button: function () {
       return this._button
     },

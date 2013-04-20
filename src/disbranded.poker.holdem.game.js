@@ -50,13 +50,24 @@
           break
         case h.DEAL_HOLE_1:
         case h.DEAL_HOLE_2:
-          this._dealPlayerCard(NS.FACE_DOWN)
+          this._dealPlayerCards(NS.FACE_DOWN)
           break
         case h.BET_PRE_FLOP:
           this._betPreFlop()
           break
-        default:
-          console.log('   next:', h.state[state])
+        case h.FLOP:
+          break
+        case h.BET_FLOP:
+          break
+        case h.TURN:
+          break
+        case h.BET_TURN:
+          break
+        case h.RIVER:
+          break
+        case h.BET_RIVER:
+          break
+        case h.SHOWDOWN:
           break
       }
     },
@@ -82,21 +93,7 @@
       this._bettingRound(2)
     },
     
-    
-    
-    _dealHoleCards: function () {
-      var n = 0,
-          len = this._players.total() * 2,
-          player,
-          card
 
-      while (n++ < len) {
-        player = this._nextPlayer()
-        card = this._deck.deal()
-        this._trigger(NS.DEAL, player.id, { 'card': card, face: NS.FACE_DOWN })
-        player.hand.add(this._deck.deal())
-      }
-    },
     
     
     deal: function (options) {

@@ -94,19 +94,12 @@
     },
     
     
-    _dealPlayerCard: function (face) {
-      var startId = null,
-          player,
-          card
-      while (true) {
-        player = this._nextPlayer()
-        card = this._deck.deal()
+    _dealPlayerCards: function (face) {
+      _.each(this._players.live(), function (player, index) {
+        var card = this._deck.deal()
         player.hand.add(card)
         this._trigger(NS.DEAL, player.id, { 'card': card, 'face': face })
-        if (player.id === this._players.button()) {
-          break
-        }
-      }
+      }, this)
       this._nextState()
     },
     
