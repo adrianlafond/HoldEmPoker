@@ -43,17 +43,17 @@
           this._ante()
           break
         case h.SMALL_BLIND:
-          this._smallBlind()
+          this._bettingRound()
           break
         case h.BIG_BLIND:
-          this._bigBlind()
+          this._turn()
           break
         case h.DEAL_HOLE_1:
         case h.DEAL_HOLE_2:
           this._dealPlayerCards(NS.FACE_DOWN)
           break
         case h.BET_PRE_FLOP:
-          this._betPreFlop()
+          this._turn()
           break
         case h.FLOP:
           this._dealFlop()
@@ -80,37 +80,40 @@
     },
     
     
-    _smallBlind: function () {
-      var player = this._players.headsup() ? this._players.atIndex(1) : this._players.atIndex(0),
-          opt = this._options,
-          bet = this._players.bet(player.id, opt.smallBlindPerc * opt.minBet)
+    _blind: function (type) {
+      var opt = this._options,
+          player,
+          bet
+      if (this._players.headsup() && type === NS.holdem.SMALL_BLIND) {
+        this._live.index = 1
+      }
+      player = this._live.players[this._live.index]
+      bet = opt.minBet * ((type === NS.holdem.SMALL_BLIND) ? opt.smallBlindPerc : opt.bigBlindPerc)
+      bet = this._players.bet(player.id, bet)
       this._pot.bet(player.id, bet)
-      this._trigger(NS.holdem.SMALL_BLIND, player.id, { player: player.id, chips: bet })
-      this._nextState()
-    },
-    
-    _bigBlind: function () {
-      var player = this._players.headsup() ? this._players.atIndex(0) : this._players.atIndex(1),
-          opt = this._options,
-          bet = this._players.bet(player.id, opt.bigBlindPerc * opt.minBet)
-      this._pot.bet(player.id, bet)
-      this._trigger(NS.holdem.BIG_BLIND, player.id, { player: player.id, chips: bet })
+      this._trigger(type, player.id, { player: player.id, chips: bet })
+      this._live.index++
       this._nextState()
     },
     
     
     /**
      * @see http://www.holdemreview.com/texas-holdem-heads-up-rules/
+     * @overrides poker.game._turn()
      */
-    _betPreFlop: function () {
-      this._playersRound = this._players.live()
-      this._playersIndex = this._players.headsup() ? 1 : 2
-      this._raises = 0
-      this._turn()
-      // this._nextState()
-    },
+    _turn: function () {
+      var state = NS.holdem.state[this._state]
+      if (state === NS.holdem.SMALL_BLIND || state === NS.holdem.BIG_BLIND) {
+        this._blind(state)
+      } else {
+        NS.Game.prototype._turn.call(this)
+      }      
+    },   
     
     
+    /**
+     * @overrides poker.game._betLimit()
+     */
     _betLimit: function () {
       return (this._state < NS.holdem.TURN) ? this._options.minBet : (this._options.minBet * 2)
     },

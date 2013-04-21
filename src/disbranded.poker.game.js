@@ -17,13 +17,10 @@
     
     _init: function (options) {
       this._options = options ? _.extend(NS.defaults(), options) : NS.defaults()
-      this._state = 0
       this._deck = new NS.Deck
       this._pot = new NS.Pot
       this._players = new NS.Players(_.bind(this._trigger, this))
-      this._playersRound = null
-      this._playersIndex = 0
-      this._raises = 0
+      this._reset()
     },
     
     
@@ -107,32 +104,22 @@
     },
     
     
-    /**
-     * TODO: "pause" betting round; eg, collect blinds, then deal cards, then continue.
-     *       Do in conjunction with update to _players.next().
-     */
-    _bettingRound: function (startIndex) {
-      var player,
-          n = 0
-      
-      console.log('_bettingRound()')
-      this._nextState()
-      return
-
-      // Optionally start with a player other than the first player,
-      // eg, after blinds. Code below skips players before the index.
-      startIndex = _.isUndefined(startIndex) ? 0 : startIndex
-      while (n++ < startIndex) {
-        player = this._nextPlayer()
+    _setupBettingRound: function () {
+      this._live = {
+        players: this._players.live(),
+        index: 0,
+        raises: 0
       }
-      
-      player = this._nextPlayer()
-      this._trigger(NS.ACTION_TODO, player.id, {
-        check: true,// true/false if check is an option
-        call: 0,//call 0 = check; or # to call
-        minRaise: 0,//0 if raises not possible
-        maxRaise: 0//0 if raises not possible
-      })
+    },
+    
+    
+    /**
+     * 
+     */
+    _bettingRound: function () {
+      this._setupBettingRound()
+      this._turn()
+      return
     },
     
     
@@ -159,10 +146,10 @@
     
     
     _turn: function () {
-      var player = this._players.atIndex(this._playersIndex),
+      var player = this._live.players[this._live.index],
           bet = this._pot.getLiveBet(),
           raise = 0
-          
+      
       if (this.raiseAllowed()) {
         raise = Math.min(this.maxBet(), player.chips)
       }
@@ -174,6 +161,22 @@
         'raise': raise
       }, this)
     },
+    
+    
+    
+    _reset: function () {
+      this._state = 0
+      this._deck.reset()
+      this._pot.reset()
+      this._live = null
+    },
+    
+    
+    _endHand: function () {
+      this._players.handEnded()
+      this._reset()
+    },
+    
     
     
     
@@ -200,14 +203,16 @@
       return 0
     },
     
-    
-    _endHand: function () {
-      this._state = 0
-      this._players.handEnded()
-      this._deck.reset()
-      this._pot.reset()
-    },
 
+    action: function (id, action, chips) {
+      var player
+      if (this._live) {
+        player = this._live.players[this._live.index]
+        if (id === player.id) {
+          console.log(id, action, chips)
+        }
+      }
+    },
 
 
     /**
