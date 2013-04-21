@@ -108,7 +108,10 @@
       this._live = {
         players: this._players.live(),
         index: 0,
-        raises: 0
+        raises: 0,
+        check: true,
+        call: 0,
+        raise: 0
       }
     },
     
@@ -153,12 +156,15 @@
       if (this.raiseAllowed()) {
         raise = Math.min(this.maxBet(), player.chips)
       }
+      this._live.check = bet === 0
+      this._live.call = bet - this._pot.getLive(player.id),
+      this._live.raise = raise
 
       this._trigger(NS.TURN, player.id, {
         'player': player.id,
-        'check': bet === 0,
-        'call': bet - this._pot.getLive(player.id),
-        'raise': raise
+        'check': this._live.check,
+        'call': this._live.call,
+        'raise': this._live.raise
       }, this)
     },
     
@@ -182,10 +188,10 @@
     
     raiseAllowed: function () {
       if (this._players.headsup() && !this._options.unlimitedHeadsUpRaises) {
-        raiseOK = false
+        return false
       }
-      if (this._options.maxRaises > 0 && this._raises >= this._options.maxRaises) {
-        raiseOK = false
+      if (this._options.maxRaises > 0 && this._live.raises >= this._options.maxRaises) {
+        return false
       }
       return true
     },
