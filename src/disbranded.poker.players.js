@@ -44,7 +44,7 @@
     
     
     /**
-     * @returns {array} of players who have no folded.
+     * @returns {array} of players who have not folded.
      */
     live: function () {
       return _.filter(this._players, function (player) {

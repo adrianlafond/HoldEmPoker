@@ -211,11 +211,46 @@
     
 
     action: function (id, action, chips) {
-      var player
+      var player,
+          actionOK = false
+          
       if (this._live) {
         player = this._live.players[this._live.index]
         if (id === player.id) {
-          console.log(id, action, chips)
+          switch (action) {
+            case 'fold':
+              this._pot.fold(player.id)
+              actionOK = true
+              break
+            case 'check':
+              if (this._live.check) {
+                actionOK = true
+              }
+              break
+            case 'call':
+              if (chips === this._live.call) {
+                this._players.bet(player.id, chips)
+                this._pot.bet(player.id, chips)
+                actionOK = true
+              }
+              break
+            case 'raise':
+              if (chips >= this._live.raise) {
+                chips = Math.min(chips, this.maxBet()
+                this._live.raises++
+                this._players.bet(player.id, chips)
+                this._pot.bet(player.id, chips)
+                actionOK = true
+              }
+              break
+          }
+          
+          if (actionOK) {
+            this._live.index++
+            // this._nextState()
+            // or
+            // this._turn()            
+          }
         }
       }
     },
