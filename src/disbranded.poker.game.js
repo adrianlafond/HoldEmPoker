@@ -170,6 +170,31 @@
     
     
     
+    /**
+     * Called after a successful action(). Determines if a
+     * betting round is complete (call _nextState()) or not
+     * (call _turn()).
+     */
+    _nextTurn: function () {
+      var player,
+          liveBet = this._pot.getLiveBet()
+      
+      if (this._live.index++ >= this._live.players.length) {
+        this._live.index = 0
+      }
+      player = this._live.players[this._live.index]
+      
+      console.log(player.id, 'folded:'+ player.folded, 'allin:' + player.allin)
+      console.log(this._pot.getLive(player.id))
+      console.log(this._pot.getLiveBet())
+      // if betting round complete? _nextState()
+      // else _turn()
+      
+      
+    },
+    
+    
+    
     _reset: function () {
       this._state = 0
       this._deck.reset()
@@ -211,8 +236,7 @@
     
 
     action: function (id, action, chips) {
-      var player,
-          actionOK = false
+      var player
           
       if (this._live) {
         player = this._live.players[this._live.index]
@@ -220,36 +244,33 @@
           switch (action) {
             case 'fold':
               this._pot.fold(player.id)
-              actionOK = true
+              this._trigger(NS.ACTION, NS.FOLD, { player: player.id })
+              this._nextTurn() 
               break
             case 'check':
               if (this._live.check) {
-                actionOK = true
+                this._trigger(NS.ACTION, NS.CHECK, { player: player.id })
+                this._nextTurn() 
               }
               break
             case 'call':
               if (chips === this._live.call) {
                 this._players.bet(player.id, chips)
                 this._pot.bet(player.id, chips)
-                actionOK = true
+                this._trigger(NS.ACTION, NS.CALL, { player: player.id, chips: chips })
+                this._nextTurn() 
               }
               break
             case 'raise':
               if (chips >= this._live.raise) {
-                chips = Math.min(chips, this.maxBet()
+                chips = Math.min(chips, this.maxBet())
                 this._live.raises++
                 this._players.bet(player.id, chips)
                 this._pot.bet(player.id, chips)
-                actionOK = true
+                this._trigger(NS.ACTION, NS.RAISE, { player: player.id, chips: chips })
+                this._nextTurn()
               }
               break
-          }
-          
-          if (actionOK) {
-            this._live.index++
-            // this._nextState()
-            // or
-            // this._turn()            
           }
         }
       }
