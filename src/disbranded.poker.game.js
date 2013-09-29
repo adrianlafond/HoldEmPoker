@@ -188,9 +188,7 @@
       console.log(this._pot.getLive(player.id))
       console.log(this._pot.getLiveBet())
       // if betting round complete? _nextState()
-      // else _turn()
-      
-      
+      // else _turn()      
     },
     
     
