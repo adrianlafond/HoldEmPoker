@@ -17,6 +17,7 @@
     root.DISBRANDED.poker = factory(root._);
   }
 }(this, function (_) {
+  'use strict'
 
 
 

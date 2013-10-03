@@ -1,8 +1,3 @@
-/*
- * poker-game-engine v0.0.1
- * by Adrian Lafond / adrian [at] disbranded.com
- * last updated 2013-10-03
-**/
 
 ;(function (root, factory) {
   /**
@@ -22,6 +17,7 @@
     root.DISBRANDED.poker = factory(root._);
   }
 }(this, function (_) {
+  'use strict'
 
 
 
