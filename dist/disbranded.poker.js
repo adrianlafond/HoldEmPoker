@@ -1,3 +1,8 @@
+/*
+ * poker-game-engine v0.0.1
+ * by Adrian Lafond / adrian [at] disbranded.com
+ * last updated 2013-10-03
+**/
 
 ;(function (root, factory) {
   /**
@@ -14,7 +19,7 @@
   } else {
     // Browser globals (root is window)
     root.DISBRANDED = root.DISBRANDED || {}
-    root.DISBRANDED.poker = factory(root._);
+    root.DISBRANDED.Poker = factory(root._);
   }
 }(this, function (_) {
   'use strict'
@@ -22,12 +27,32 @@
 
 
 
+/**
+ * Variables scoped to entire Poker module.
+ */
+var Poker
 
 
 
-    // Just return a value to define the module export.
-    // This example returns an object, but the module
-    // can return a function as the exported value.
-    return {};
+
+/**
+ * The main Poker class and the returned API.
+ */
+Poker = function () {
+  this.name = 'Poker'
+}
+
+
+Poker.prototype = {
+  
+}
+
+
+
+
+
+
+
+  return Poker
 }));
 

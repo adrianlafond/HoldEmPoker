@@ -14,7 +14,7 @@
   } else {
     // Browser globals (root is window)
     root.DISBRANDED = root.DISBRANDED || {}
-    root.DISBRANDED.poker = factory(root._);
+    root.DISBRANDED.Poker = factory(root._);
   }
 }(this, function (_) {
   'use strict'
