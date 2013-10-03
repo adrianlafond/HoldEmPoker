@@ -1,7 +1,11 @@
 {
   "name": "poker-game-engine",
   "version": "0.0.1",
-  "author": "Adrian Lafond",
+  "author": {
+    "name": "Adrian Lafond",
+    "email": "adrian [at] disbranded.com",
+    "url": "http://www.disbranded.com"
+  },
   "description": "A poker game engine.",
   "keywords": [],
   "homepage": "",
@@ -15,6 +19,8 @@
     "grunt-contrib-jasmine": "~0.5.2",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-uglify": "~0.2.4",
-    "grunt-contrib-watch": "~0.5.3"
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-asciify": "~0.2.1",
+    "grunt-banner": "~0.2.0"
   }
 }
