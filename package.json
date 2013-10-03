@@ -9,7 +9,10 @@
   "description": "A poker game engine.",
   "keywords": [],
   "homepage": "",
-  "license": "",
+  "license": {
+    "type": "MIT",
+    "url": "https://github.com/disbranded/HoldEmPoker/blob/reboot/LICENSE.txt"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/disbranded/HoldEmPoker.git"
