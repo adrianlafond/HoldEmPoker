@@ -1,6 +1,8 @@
 
-// https://github.com/umdjs/umd/blob/master/returnExports.js
 ;(function (root, factory) {
+  /**
+   * Module pattern from https://github.com/umdjs/umd/blob/master/returnExports.js
+   */
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define(['underscore'], factory);
@@ -11,7 +13,8 @@
     module.exports = factory(require('underscore'));
   } else {
     // Browser globals (root is window)
-    root.POKER = factory(root._);
+    root.DISBRANDED = root.DISBRANDED || {}
+    root.DISBRANDED.poker = factory(root._);
   }
 }(this, function (_) {
 
