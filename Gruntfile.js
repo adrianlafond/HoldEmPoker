@@ -51,7 +51,7 @@ module.exports = function (grunt) {
     watch: {
       test: {
         files: ['src/*.js'],
-        tasks: ['concat']
+        tasks: ['default']
       }
     }
   })
@@ -62,6 +62,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jasmine')
   grunt.loadNpmTasks('grunt-contrib-watch')
   
-  grunt.registerTask('default', ['concat', 'uglify', 'jasmine', 'usebanner'])
+  grunt.registerTask('default', ['concat', 'uglify', 'usebanner'])
   grunt.registerTask('test', ['jasmine'])
 };
