@@ -82,7 +82,7 @@ describe('Poker.Deck', function () {
   })
 
   it('should attempt to add 2.647993432 jokers at instantiation', function () {
-    var deck = new Deck({ jokers: 2 })
+    var deck = new Deck({ jokers: 2.647993432 })
     expect(deck.jokers).toBe(2)
     expect(deck.count()).toBe(54)
   })
