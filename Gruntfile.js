@@ -1,8 +1,8 @@
 module.exports = function (grunt) {
-  
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    
+
     concat: {
       dist: {
         src: [
@@ -16,7 +16,7 @@ module.exports = function (grunt) {
         dest: 'dist/disbranded.poker.js'
       }
     },
-    
+
     jasmine: {
       src: 'dist/disbranded.poker.js',
       options: {
@@ -24,7 +24,7 @@ module.exports = function (grunt) {
         helpers: 'lib/*.js'
       }
     },
-    
+
     uglify: {
       min: {
         options: {},
@@ -33,12 +33,12 @@ module.exports = function (grunt) {
         }
       }
     },
-    
+
     usebanner: {
       dist: {
         options: {
           position: 'top',
-          banner: '/*\n' + 
+          banner: '/*\n' +
                   ' * <%= pkg.name %> v<%= pkg.version %>\n' +
                   ' * by <%= pkg.author.name %> / <%= pkg.author.email %>\n' +
                   ' * last updated <%= grunt.template.today("yyyy-mm-dd") %>\n' +
@@ -50,21 +50,25 @@ module.exports = function (grunt) {
         }
       }
     },
-    
+
     watch: {
-      test: {
+      build: {
         files: ['src/*.js'],
         tasks: ['default']
+      },
+      test: {
+        files: ['spec/*.js'],
+        tasks: ['test']
       }
     }
   })
-  
+
   grunt.loadNpmTasks('grunt-banner')
   grunt.loadNpmTasks('grunt-contrib-concat')
   grunt.loadNpmTasks('grunt-contrib-uglify')
   grunt.loadNpmTasks('grunt-contrib-jasmine')
   grunt.loadNpmTasks('grunt-contrib-watch')
-  
+
   grunt.registerTask('default', ['concat', 'uglify', 'usebanner'])
   grunt.registerTask('test', ['jasmine'])
 };

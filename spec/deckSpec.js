@@ -4,6 +4,7 @@
 describe('Poker.Deck', function () {
   var Deck = DISBRANDED.Poker.Deck
 
+  // no jokers
   it('should be a proper deck', function () {
     var deck = new Deck
     expect(deck.count()).toBe(52)
@@ -36,6 +37,7 @@ describe('Poker.Deck', function () {
     expect(deck.isNew).toBe(false)
   })
 
+  // jokers
   it('should add and remove jokers correctly', function () {
     var deck = new Deck
     deck.shuffle()
@@ -86,5 +88,4 @@ describe('Poker.Deck', function () {
     expect(deck.jokers).toBe(2)
     expect(deck.count()).toBe(54)
   })
-
 })

@@ -1,7 +1,7 @@
 /*
  * poker-game-engine v0.0.1
  * by Adrian Lafond / adrian [at] disbranded.com
- * last updated 2013-10-03
+ * last updated 2013-10-04
 **/
 
 ;(function (root, factory) {
