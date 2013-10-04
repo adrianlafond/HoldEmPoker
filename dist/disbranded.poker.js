@@ -87,11 +87,7 @@ var Poker,
     }
     
     if (typeof options === 'object') {
-      deck.jokers = parseInt(options.hasOwnProperty('jokers') ? options.jokers : 0, 10)
-      deck.jokers = Math.max(MIN_JOKERS, Math.min(MAX_JOKERS, jokers))
-      _.times(deck.jokers, function (n) {
-        deck.cards[n + SIZE] = 'W' + (n + 1)
-      })
+      this.addJokers(parseInt(options.hasOwnProperty('jokers') ? options.jokers : 0, 10))
     }
     this.reset()
   }
@@ -144,12 +140,15 @@ var Poker,
      * @param {number} num Number of jokers to add.
      */
     addJokers: function (num) {
-      num = Math.min(num, MAX_JOKERS - decks[this.key].jokers)
-      _.times(num, function (n) {
-        decks[this.key].cards.push('W' + (n + 1))
-      }, this)
-      decks[this.key].jokers += num
-      this.reset()
+      num = parseInt(num, 10)
+      if (!isNaN(num)) {
+        num = Math.max(MIN_JOKERS, Math.min(num, MAX_JOKERS - decks[this.key].jokers))
+        _.times(num, function (n) {
+          decks[this.key].cards.push('W' + (n + 1))
+        }, this)
+        decks[this.key].jokers += num
+        this.reset()
+      }
       return this
     },
     
