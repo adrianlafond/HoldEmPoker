@@ -7,7 +7,10 @@ describe('Poker.Deck', function () {
   it('should be a proper deck', function () {
     var deck = new Deck
     expect(deck.count()).toBe(52)
+    expect(deck.isNew).toBe(true)
     deck.shuffle()
+    expect(deck.isShuffled).toBe(true)
+    expect(deck.isNew).toBe(false)
 
     deck.deal()
     deck.deal()
@@ -22,11 +25,15 @@ describe('Poker.Deck', function () {
     deck.deal()
     deck.deal()
     expect(deck.cards().length).toBe(42)
+    expect(deck.isNew).toBe(false)
 
     expect(deck.jokers).toBe(0)
 
     deck.reset()
+    expect(deck.isShuffled).toBe(false)
+    expect(deck.isNew).toBe(true)
     expect(deck.deal()).toBe('AS')
+    expect(deck.isNew).toBe(false)
   })
 
   it('should add and remove jokers correctly', function () {

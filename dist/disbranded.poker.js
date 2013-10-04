@@ -64,7 +64,8 @@ var Poker,
     this.cardsAll = CARDS.slice(0)
     this.cardsIn = []
     this.cardsOut = []
-    this.shuffled = false
+    this.isShuffled = false
+    this.isNew = true
     this.jokers = 0
 
     if (typeof options === 'object') {
@@ -126,7 +127,8 @@ var Poker,
     reset: function () {
       this.cardsIn = this.cardsAll.slice(0)
       this.cardsOut = []
-      this.shuffled = false
+      this.isShuffled = false
+      this.isNew = true
       return this
     },
 
@@ -137,7 +139,8 @@ var Poker,
     shuffle: function () {
       this.reset()
       this.cardsIn = _.shuffle(this.cardsIn)
-      this.shuffled = true
+      this.isShuffled = true
+      this.isNew = false
       return this
     },
 
@@ -151,6 +154,7 @@ var Poker,
       if (this.cardsIn.length > 0) {
         card = this.cardsIn.pop()
         this.cardsOut.push(card)
+        this.isNew = false
       }
       return card
     }
