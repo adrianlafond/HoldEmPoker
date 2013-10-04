@@ -8,7 +8,9 @@ module.exports = function (grunt) {
         src: [
           'src/export-top.js',
           'src/vars.js',
+          'src/deck.js',
           'src/poker.js',
+          'src/public-static.js',
           'src/export-bot.js'
         ],
         dest: 'dist/disbranded.poker.js'
@@ -16,9 +18,10 @@ module.exports = function (grunt) {
     },
     
     jasmine: {
-      src: 'dist/disbranded.poker-min.js',
+      src: 'dist/disbranded.poker.js',
       options: {
-        specs: 'spec/*.js'
+        specs: 'spec/*.js',
+        helpers: 'lib/*.js'
       }
     },
     
