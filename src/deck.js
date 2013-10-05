@@ -23,9 +23,6 @@
 
 
   Deck = function (options) {
-    this.cardsAll = CARDS.slice(0)
-    this.cardsIn = []
-    this.cardsOut = []
     this.isShuffled = false
     this.isNew = true
     this.jokers = 0
@@ -59,7 +56,6 @@
      * Remove all jokers from the deck.
      */
     removeJokers: function () {
-      this.cardsAll.slice(0, SIZE)
       this.jokers = 0
       this.reset()
       return this
@@ -73,9 +69,6 @@
       num = parseInt(num, 10)
       if (!isNaN(num)) {
         num = Math.max(0, Math.min(num, MAX_JOKERS - this.jokers))
-        _.times(num, function (n) {
-          this.cardsAll.push('W' + (n + 1))
-        }, this)
         this.jokers += num
         this.reset()
       }
@@ -87,7 +80,10 @@
      * Reset the deck to its original unshuffled order.
      */
     reset: function () {
-      this.cardsIn = this.cardsAll.slice(0)
+      this.cardsIn = CARDS.slice(0)
+      _.times(this.jokers, function (n) {
+        this.cardsIn[SIZE + n] = 'W' + (n + 1)
+      }, this)
       this.cardsOut = []
       this.isShuffled = false
       this.isNew = true
