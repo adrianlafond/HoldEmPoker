@@ -251,14 +251,7 @@ lingo = {
     },
 
     /**
-     * @param {index}
-     * @returns {string} card at index; null if index is out of range.
-     */
-    get: function (index) {
-      return _.has(this.cards, index) ? this.cards[index] : null
-    },
-
-    /**
+     * Add a single card or an array of cards to the hand.
      * @param {string|array} arguments
      */
     add: function () {
@@ -275,12 +268,33 @@ lingo = {
       return this
     },
 
+    /**
+     * @param {index}
+     * @returns {string} card at index; null if index is out of range.
+     */
+    get: function (index) {
+      return _.has(this.cards, index) ? this.cards[index] : null
+    },
+
+    /**
+     * Set the card at a specific index.
+     */
+    set: function (index, card) {
+      index = parseInt(index, 10)
+      if (_.isNumber(index) && !_.isNaN(index)) {
+        index = Math.max(0, Math.min(this.cards.length, index))
+        this.cards[index] = card
+        this.updateValue()
+      }
+      return this
+    },
+
 
     /**
      *
      */
     updateValue: function () {
-
+      // pass
     }
   }
 }());
