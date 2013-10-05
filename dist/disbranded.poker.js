@@ -333,7 +333,7 @@ Poker.lingo = function (lang) {
   lang = lang || 'en'
   if (lingo.hasOwnProperty(lang)) {
     return {
-      cards: _.extend({}, lingo[lang].cards)
+      cards: _.clone(lingo[lang].cards)
     }
   }
   return null
