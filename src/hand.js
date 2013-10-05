@@ -60,6 +60,39 @@
      */
     has: function (card) {
       return _.contains(this.cards, card)
+    },
+
+    /**
+     * @param {index}
+     * @returns {string} card at index; null if index is out of range.
+     */
+    get: function (index) {
+      return _.has(this.cards, index) ? this.cards[index] : null
+    },
+
+    /**
+     * @param {string|array} arguments
+     */
+    add: function () {
+      _.each(arguments, function (card, i) {
+        if (_.isString(card)) {
+          if (!this.has(card)) {
+            this.cards[this.cards.length] = card
+            this.updateValue()
+          }
+        } else if (_.isArray(card)) {
+          this.add.apply(this, card)
+        }
+      }, this)
+      return this
+    },
+
+
+    /**
+     *
+     */
+    updateValue: function () {
+
     }
   }
 }());

@@ -3,6 +3,7 @@
  * via the public Poker API.
  */
 Poker.Deck = Deck
+Poker.Hand = Hand
 
 
 /**

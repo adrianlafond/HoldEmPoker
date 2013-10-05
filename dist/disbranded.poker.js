@@ -86,9 +86,6 @@ lingo = {
 
 
   Deck = function (options) {
-    this.cardsAll = CARDS.slice(0)
-    this.cardsIn = []
-    this.cardsOut = []
     this.isShuffled = false
     this.isNew = true
     this.jokers = 0
@@ -122,7 +119,6 @@ lingo = {
      * Remove all jokers from the deck.
      */
     removeJokers: function () {
-      this.cardsAll.slice(0, SIZE)
       this.jokers = 0
       this.reset()
       return this
@@ -136,9 +132,6 @@ lingo = {
       num = parseInt(num, 10)
       if (!isNaN(num)) {
         num = Math.max(0, Math.min(num, MAX_JOKERS - this.jokers))
-        _.times(num, function (n) {
-          this.cardsAll.push('W' + (n + 1))
-        }, this)
         this.jokers += num
         this.reset()
       }
@@ -150,7 +143,10 @@ lingo = {
      * Reset the deck to its original unshuffled order.
      */
     reset: function () {
-      this.cardsIn = this.cardsAll.slice(0)
+      this.cardsIn = CARDS.slice(0)
+      _.times(this.jokers, function (n) {
+        this.cardsIn[SIZE + n] = 'W' + (n + 1)
+      }, this)
       this.cardsOut = []
       this.isShuffled = false
       this.isNew = true
@@ -252,6 +248,39 @@ lingo = {
      */
     has: function (card) {
       return _.contains(this.cards, card)
+    },
+
+    /**
+     * @param {index}
+     * @returns {string} card at index; null if index is out of range.
+     */
+    get: function (index) {
+      return _.has(this.cards, index) ? this.cards[index] : null
+    },
+
+    /**
+     * @param {string|array} arguments
+     */
+    add: function () {
+      _.each(arguments, function (card, i) {
+        if (_.isString(card)) {
+          if (!this.has(card)) {
+            this.cards[this.cards.length] = card
+            this.updateValue()
+          }
+        } else if (_.isArray(card)) {
+          this.add.apply(this, card)
+        }
+      }, this)
+      return this
+    },
+
+
+    /**
+     *
+     */
+    updateValue: function () {
+
     }
   }
 }());
@@ -279,6 +308,7 @@ Poker.prototype = {
  * via the public Poker API.
  */
 Poker.Deck = Deck
+Poker.Hand = Hand
 
 
 /**
