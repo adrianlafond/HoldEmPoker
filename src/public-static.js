@@ -12,7 +12,12 @@ Poker.Hand = Hand
  */
 Poker.lingo = function (lang) {
   lang = lang || 'en'
-  return lingo.hasOwnProperty(lang) ? lingo[lang] : null
+  if (lingo.hasOwnProperty(lang)) {
+    return {
+      cards: _.extend({}, lingo[lang].cards)
+    }
+  }
+  return null
 }
 
 

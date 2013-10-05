@@ -1,7 +1,7 @@
 /*
  * poker-game-engine v0.0.1
  * by Adrian Lafond / adrian [at] disbranded.com
- * last updated 2013-10-04
+ * last updated 2013-10-05
 **/
 
 ;(function (root, factory) {
@@ -331,7 +331,12 @@ Poker.Hand = Hand
  */
 Poker.lingo = function (lang) {
   lang = lang || 'en'
-  return lingo.hasOwnProperty(lang) ? lingo[lang] : null
+  if (lingo.hasOwnProperty(lang)) {
+    return {
+      cards: _.extend({}, lingo[lang].cards)
+    }
+  }
+  return null
 }
 
 
