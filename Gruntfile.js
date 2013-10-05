@@ -8,7 +8,9 @@ module.exports = function (grunt) {
         src: [
           'src/export-top.js',
           'src/vars.js',
+          'src/lingo.js',
           'src/deck.js',
+          'src/hand.js',
           'src/poker.js',
           'src/public-static.js',
           'src/export-bot.js'

@@ -2,7 +2,10 @@
  * Variables scoped to entire Poker module.
  */
 var Poker,
-    Deck
+    Deck,
+    Hand,
+
+    lingo
 
 
 
