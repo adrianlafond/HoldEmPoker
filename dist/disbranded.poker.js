@@ -201,16 +201,28 @@ lingo = {
     return function () {
       return u++
     }
-  }())
+  }()),
+
+
+  defaults = {
+    isHigh: true,
+    isLow: false
+  }
 
 
 
+  /**
+   * @constructor
+   * options:
+   *   id = defaults to uid()
+   *   isHigh = whether the hand checks "high" values; default true
+   *   isLow = whether the hand checks "low" values; default false
+   */
   Hand = function (options) {
     if (!(this instanceof Hand)) {
       return new Hand(id)
     }
-    this.options = options
-    this.id = options.id || uid()
+    this.options = _.extend({ id: uid() }, defaults, options)
     this.reset()
   }
 
@@ -248,9 +260,10 @@ lingo = {
      */
     reset: function () {
       this.cards = []
-      this.rank = 0
-      this.high = null
-      this.low = null
+      this.rankHigh = 0
+      this.rankLow = 0
+      this.cardsHigh = []
+      this.cardsLow = []
       return this
     },
 
@@ -299,6 +312,21 @@ lingo = {
         this.updateValue()
       }
       return this
+    },
+
+
+    /**
+     * @param {string} type H,hi,high or L,low, etc. Case insensitive;
+     *   just checks first character. Defaults to high.
+     * @returns the (cached) index of the rank of the hand (range 0 - 10).
+     * @see Hand constants above.
+     * Equivalent to querying value of this.rankHigh or this.rankLow.
+     */
+    rank: function (type) {
+      var low = typeof type === 'string'
+        && type.length > 0
+        && type.charAt(0).toUpperCase() === 'L'
+      return low ? this.rankLow : this.rankHigh
     },
 
 
