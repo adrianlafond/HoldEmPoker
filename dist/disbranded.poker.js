@@ -1,7 +1,7 @@
 /*
  * poker-game-engine v0.0.1
  * by Adrian Lafond / adrian [at] disbranded.com
- * last updated 2013-10-05
+ * last updated 2013-10-06
 **/
 
 ;(function (root, factory) {
@@ -194,11 +194,23 @@ lingo = {
   'use strict'
 
 
-  Hand = function (id) {
+  // If a Hand is not instantiated with an id,
+  // one will be created for it.
+  var uid = (function () {
+    var u = 0
+    return function () {
+      return u++
+    }
+  }())
+
+
+
+  Hand = function (options) {
     if (!(this instanceof Hand)) {
       return new Hand(id)
     }
-    this.id = id
+    this.options = options
+    this.id = options.id || uid()
     this.reset()
   }
 

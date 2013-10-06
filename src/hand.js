@@ -6,11 +6,23 @@
   'use strict'
 
 
-  Hand = function (id) {
+  // If a Hand is not instantiated with an id,
+  // one will be created for it.
+  var uid = (function () {
+    var u = 0
+    return function () {
+      return u++
+    }
+  }())
+
+
+
+  Hand = function (options) {
     if (!(this instanceof Hand)) {
       return new Hand(id)
     }
-    this.id = id
+    this.options = options
+    this.id = options.id || uid()
     this.reset()
   }
 
