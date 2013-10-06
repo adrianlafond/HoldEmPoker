@@ -361,7 +361,7 @@ Hand.prototype = {
     this.rankHigh = 0
 
     if (this.cards.length >= 5) {
-      if (result = Hand.isFlush(this.cards)) {
+      if (result = Hand.findFlush(this.cards)) {
         this.rankHigh = Hand.FLUSH
         this.cardsHigh = result.cards.slice(0, 5)
       }
@@ -393,8 +393,20 @@ Hand.prototype = {
 /**
  * Static methods attached to Poker.Hand.
  */
-Hand.isFlush = function (cards) {
-  return false
+
+/**
+ *
+ */
+Hand.findFlush = function (cards, low) {
+  var flush = null
+  if (cards.length < 5) {
+    return flush
+  }
+  low = !!low
+
+
+
+  return flush
 }
 
 

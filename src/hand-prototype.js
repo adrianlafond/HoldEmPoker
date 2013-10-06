@@ -99,7 +99,7 @@ Hand.prototype = {
     this.rankHigh = 0
 
     if (this.cards.length >= 5) {
-      if (result = Hand.isFlush(this.cards)) {
+      if (result = Hand.findFlush(this.cards)) {
         this.rankHigh = Hand.FLUSH
         this.cardsHigh = result.cards.slice(0, 5)
       }
