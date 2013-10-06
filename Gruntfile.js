@@ -11,6 +11,9 @@ module.exports = function (grunt) {
           'src/lingo.js',
           'src/deck.js',
           'src/hand.js',
+          'src/hand-constants.js',
+          'src/hand-prototype.js',
+          'src/hand-static.js',
           'src/poker.js',
           'src/public-static.js',
           'src/export-bot.js'
