@@ -231,8 +231,6 @@ lingo = {
 
 
 
-
-
 // @constants correspond with indices in lingo[lang].cards array
 // or Poker.lingo([lang]).cards array
 Hand.ROYAL_FLUSH     = 10
