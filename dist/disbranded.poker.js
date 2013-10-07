@@ -344,30 +344,47 @@ Hand.prototype = {
    * Find the best hand and update the cached rank values.
    */
   updateRank: function () {
-    if (this.options.isHigh) {
-      this.updateHigh()
+    var cards
+    if (this.cards.length >= 5) {
+      cards = this.sortedCardsCopy()
+      if (this.options.isHigh) {
+        this.updateHigh(cards)
+      }
+      if (this.options.isLow) {
+        this.updateLow(cards)
+      }
     }
-    if (this.options.isLow) {
-      this.updateLow()
-    }
+  },
+
+
+  sortedCardsCopy: function () {
+    var cards = this.cards.slice(0)
+    Hand.sortByRank(cards)
+    return cards
   },
 
 
   /**
    * Find the best high hand and update rankHigh.
    */
-  updateHigh: function () {
+  updateHigh: function (cards) {
     var result = null
     this.rankHigh = 0
+    cards = cards || this.sortedCardsCopy()
 
-    if (this.cards.length >= 5) {
-      if (result = Hand.findFlush(this.cards)) {
+    if (cards.length >= 5) {
+      if (result = Hand.findFlush({ cards: cards, sorted: true })) {
         this.rankHigh = Hand.FLUSH
-        this.cardsHigh = result.cards.slice(0, 5)
+        this.cardsHigh = result.cards
 
-        if (result = Hand.findStraightFlush(this.cardsHigh)) {
+        result = Hand.findStraightFlush({
+          cards: this.cardsHigh,
+          sorted: true,
+          flush: true
+        })
+        if (result) {
           this.rankHigh = result.royalFlush ? Hand.ROYAL_FLUSH : Hand.STRAIGHT_FLUSH
-          this.cardsHigh = results.cards.slice(0, 5)
+          this.cardsHigh = results.cards
         }
       }
     } else {
@@ -500,7 +517,7 @@ Hand.findFlush = function () {
  *   @returns highest straight flush found.
  * or:
  *   @params {object} with properties:
- *     {array} cards Mandatory; at least 5 flush cards.
+ *     {array} cards Mandatory; at least 5 cards.
  *     {boolean} flush Optional; if true will skip call to findFlush().
  *     {boolean} sorted Optional; whether cards are already sorted highest
  *       to lowest; default false.
@@ -530,6 +547,7 @@ Hand.findStraightFlush = function () {
     return null
   }
 
+  cards = cards.slice(0)
   if (!sorted) {
     Hand.sortByRank(cards)
   }
@@ -543,7 +561,7 @@ Hand.findStraightFlush = function () {
     }
   }
 
-  if (result = Hand.findStraight(cards, true)) {
+  if (result = Hand.findStraight({ cards: cards, sorted: sorted, low: low })) {
     result.royalFlush = Hand.rank(result.cards[0]) === 'A'
   }
   return result
@@ -551,10 +569,47 @@ Hand.findStraightFlush = function () {
 
 
 /**
- *
+ * Find a straight in an array of cards.
+ * Options for arguments:
+ *   @param {array} of at least 5 cards.
+ *   @returns highest straight found.
+ * or:
+ *   @params {object} with properties:
+ *     {array} cards Mandatory; at least 5 cards.
+ *     {boolean} sorted Optional; whether cards are already sorted highest
+ *       to lowest; default false.
+ *     {boolean} low Optional; finds lowest straight; default false.
+ *   @returns highest straight found unless options.low is true.
  */
-Hand.findStraight = function (cards) {
-  return null
+Hand.findStraight = function () {
+  var param = (arguments.length > 0) ? arguments[0] : null,
+      cards,
+      sorted = false,
+      flush = false,
+      low = false,
+      result
+
+  // Interpret arguments.
+  if (_.isArray(param)) {
+    cards = param
+  } else if (_.isObject(param)) {
+    cards = param.cards
+    sorted = param.sorted = true
+    low = param.low === true
+  }
+
+  // Make sure cards array is valid.
+  if (!_.isArray(cards) || cards.length < 5) {
+    return null
+  }
+
+  cards = cards.slice(0)
+  if (!sorted) {
+    Hand.sortByRank(cards)
+  }
+
+
+  return flush ? { cards: flush } : null
 }
 
 
