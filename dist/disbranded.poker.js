@@ -407,12 +407,15 @@ Hand.prototype = {
  * or:
  *   @params {object} with properties:
  *     {array} cards Mandatory; at least 5 cards.
+ *     {boolean} sorted Optional; whether cards are already sorted highest
+ *       to lowest; default false.
  *     {boolean} low Optional; finds lowest flush; default false.
  *   @returns highest flush found unless options.low is true.
  */
 Hand.findFlush = function () {
   var param = (arguments.length > 0) ? arguments[0] : null,
       cards = null,
+      sorted = false,
       low = false,
       flush = null,
       s, suit,
@@ -425,6 +428,7 @@ Hand.findFlush = function () {
     cards = param
   } else if (_.isObject(param)) {
     cards = param.cards
+    sorted = param.sorted === true
     low = param.low === true
   }
 
@@ -434,7 +438,9 @@ Hand.findFlush = function () {
   }
 
   cards = cards.slice(0)
-  Hand.sortByRank(cards)
+  if (!sorted) {
+    Hand.sortByRank(cards)
+  }
   clen = cards.length
 
   // Loop through the suits to match them to flushes.
@@ -496,6 +502,8 @@ Hand.findFlush = function () {
  *   @params {object} with properties:
  *     {array} cards Mandatory; at least 5 flush cards.
  *     {boolean} flush Optional; if true will skip call to findFlush().
+ *     {boolean} sorted Optional; whether cards are already sorted highest
+ *       to lowest; default false.
  *     {boolean} low Optional; finds lowest straight flush; default false.
  *   @returns highest straight flush found unless options.low is true.
  */
@@ -503,6 +511,7 @@ Hand.findStraightFlush = function () {
   var param = (arguments.length > 0) ? arguments[0] : null,
       cards,
       flush = false,
+      sorted = false,
       low = false,
       result
 
@@ -512,6 +521,7 @@ Hand.findStraightFlush = function () {
   } else if (_.isObject(param)) {
     cards = param.cards
     flush = param.flush === true
+    sorted = param.sorted = true
     low = param.low === true
   }
 
@@ -520,9 +530,13 @@ Hand.findStraightFlush = function () {
     return null
   }
 
+  if (!sorted) {
+    Hand.sortByRank(cards)
+  }
+
   // Make sure cards are a flush.
   if (!flush) {
-    if (result = Hand.findFlush({ cards: cards, low: low })) {
+    if (result = Hand.findFlush({ cards: cards, sorted: sorted, low: low })) {
       cards = result.cards
     } else {
       return null
