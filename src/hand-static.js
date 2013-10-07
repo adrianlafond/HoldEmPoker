@@ -171,9 +171,8 @@ Hand.findStraight = function () {
   var param = (arguments.length > 0) ? arguments[0] : null,
       cards,
       sorted = false,
-      flush = false,
       low = false,
-      result
+      straight = null
 
   // Interpret arguments.
   if (_.isArray(param)) {
@@ -195,7 +194,7 @@ Hand.findStraight = function () {
   }
 
 
-  return flush ? { cards: flush } : null
+  return straight ? { cards: straight } : null
 }
 
 
