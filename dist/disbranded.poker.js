@@ -612,6 +612,7 @@ Hand.findStraight = function () {
   }
 
   clen = cards.length
+  // TODO: check for best among multiple straights
   for (c = 0; c < clen; c++) {
     if (r === -1) {
       r = Hand.RANKS.indexOf(Hand.rank(cards[c]))
@@ -619,7 +620,9 @@ Hand.findStraight = function () {
       n = 1
     } else {
       tmpIndex = Hand.RANKS.indexOf(Hand.rank(cards[c]))
-      if (tmpIndex === r + 1) {
+      if (tmpIndex === r) {
+        continue
+      } else if (tmpIndex === r + 1) {
         r = tmpIndex
         straight[n++] = cards[c]
       } else if (n < 5) {
