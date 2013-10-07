@@ -91,6 +91,53 @@ Hand.findFlush = function () {
 
 
 /**
+ * Find a straight flush in an array of cards all of the same suit.
+ * In other words, the array must be a FLUSH, so call Hand.findFlush() first.
+ * Options for arguments:
+ *   @param {array} of at least 5 flush cards.
+ *   @returns highest straight flush found.
+ * or:
+ *   @params {object} with properties:
+ *     {array} cards Mandatory; at least 5 flush cards.
+ *     {boolean} low Optional; finds lowest straight flush; default false.
+ *   @returns highest straight flush found unless options.low is true.
+ */
+Hand.findStraightFlush = function () {
+  var param = (arguments.length > 0) ? arguments[0] : null,
+      cards,
+      low = false,
+      result
+
+  // Interpret arguments.
+  if (_.isArray(param)) {
+    cards = param
+  } else if (_.isObject(param)) {
+    cards = param.cards
+    low = !!param.low
+  }
+
+  // Make sure cards array is valid.
+  if (!_.isArray(cards) || cards.length < 5) {
+    return null
+  }
+
+  if (result = Hand.findStraight(cards, true)) {
+    result.royalFlush = Hand.rank(result.cards[0]) === 'A'
+  }
+  return result
+}
+
+
+/**
+ *
+ */
+Hand.findStraight = function (cards) {
+  return null
+}
+
+
+
+/**
  * Sorts an array of cards by rank.
  */
 Hand.sortByRank = function (cards) {

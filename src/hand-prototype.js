@@ -102,6 +102,11 @@ Hand.prototype = {
       if (result = Hand.findFlush(this.cards)) {
         this.rankHigh = Hand.FLUSH
         this.cardsHigh = result.cards.slice(0, 5)
+
+        if (result = Hand.findStraightFlush(this.cardsHigh)) {
+          this.rankHigh = result.royalFlush ? Hand.ROYAL_FLUSH : Hand.STRAIGHT_FLUSH
+          this.cardsHigh = results.cards.slice(0, 5)
+        }
       }
     } else {
       this.cardsHigh = []
