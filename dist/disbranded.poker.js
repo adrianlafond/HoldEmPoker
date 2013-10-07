@@ -425,7 +425,7 @@ Hand.findFlush = function () {
     cards = param
   } else if (_.isObject(param)) {
     cards = param.cards
-    low = !!param.low
+    low = param.low === true
   }
 
   // Make sure cards array is valid.
@@ -488,20 +488,21 @@ Hand.findFlush = function () {
 
 
 /**
- * Find a straight flush in an array of cards all of the same suit.
- * In other words, the array must be a FLUSH, so call Hand.findFlush() first.
+ * Find a straight flush in an array of cards.
  * Options for arguments:
- *   @param {array} of at least 5 flush cards.
+ *   @param {array} of at least 5 cards.
  *   @returns highest straight flush found.
  * or:
  *   @params {object} with properties:
  *     {array} cards Mandatory; at least 5 flush cards.
+ *     {boolean} flush Optional; if true will skip call to findFlush().
  *     {boolean} low Optional; finds lowest straight flush; default false.
  *   @returns highest straight flush found unless options.low is true.
  */
 Hand.findStraightFlush = function () {
   var param = (arguments.length > 0) ? arguments[0] : null,
       cards,
+      flush = false,
       low = false,
       result
 
@@ -510,12 +511,22 @@ Hand.findStraightFlush = function () {
     cards = param
   } else if (_.isObject(param)) {
     cards = param.cards
-    low = !!param.low
+    flush = param.flush === true
+    low = param.low === true
   }
 
   // Make sure cards array is valid.
   if (!_.isArray(cards) || cards.length < 5) {
     return null
+  }
+
+  // Make sure cards are a flush.
+  if (!flush) {
+    if (result = Hand.findFlush({ cards: cards, low: low })) {
+      cards = result.cards
+    } else {
+      return null
+    }
   }
 
   if (result = Hand.findStraight(cards, true)) {
