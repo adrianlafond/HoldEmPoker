@@ -53,4 +53,9 @@ describe('Poker hand ranks', function () {
     cards = ['5H', '2S', '7D', '8S', '6H', 'TS', 'AS']
     expect(Hand.findFlush(cards)).toBe(null)
   })
+
+  it ('should return a straight or null', function () {
+    var cards = ['2S', '3S', '4D', '5C', '6H']
+    expect(Hand.findStraight(cards).cards).toEqual(['6H', '5C', '4D', '3S', '2S'])
+  })
 })

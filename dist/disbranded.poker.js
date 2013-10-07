@@ -384,7 +384,7 @@ Hand.prototype = {
         })
         if (result) {
           this.rankHigh = result.royalFlush ? Hand.ROYAL_FLUSH : Hand.STRAIGHT_FLUSH
-          this.cardsHigh = results.cards
+          this.cardsHigh = result.cards
         }
       }
     } else {
@@ -586,7 +586,11 @@ Hand.findStraight = function () {
       cards,
       sorted = false,
       low = false,
-      straight = null
+      straight = null,
+      c, clen,
+      r = -1,
+      n = 0,
+      tmpIndex
 
   // Interpret arguments.
   if (_.isArray(param)) {
@@ -607,8 +611,31 @@ Hand.findStraight = function () {
     Hand.sortByRank(cards)
   }
 
+  clen = cards.length
+  for (c = 0; c < clen; c++) {
+    if (r === -1) {
+      r = Hand.RANKS.indexOf(Hand.rank(cards[c]))
+      straight = [cards[c]]
+      n = 1
+    } else {
+      tmpIndex = Hand.RANKS.indexOf(Hand.rank(cards[c]))
+      if (tmpIndex === r + 1) {
+        r = tmpIndex
+        straight[n++] = cards[c]
+      } else if (n < 5) {
+        r = -1
+        n = 0
+        straight = null
+      }
+    }
+  }
 
-  return straight ? { cards: straight } : null
+  if (straight) {
+    return {
+      cards: low ? straight.slice(straight.length - 5) : straight.slice(0, 5)
+    }
+  }
+  return null
 }
 
 
@@ -691,7 +718,7 @@ Poker = function () {
 
 
 Poker.prototype = {
-  
+
 }
 
 

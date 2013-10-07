@@ -172,7 +172,10 @@ Hand.findStraight = function () {
       cards,
       sorted = false,
       low = false,
-      straight = null
+      straight = null,
+      c, clen,
+      r = -1,
+      tmpIndex
 
   // Interpret arguments.
   if (_.isArray(param)) {
@@ -193,6 +196,22 @@ Hand.findStraight = function () {
     Hand.sortByRank(cards)
   }
 
+  clen = cards.length
+  for (c = 0; c < clen; c++) {
+    if (r === -1) {
+      r = Hand.RANKS.indexOf(Hand.rank(cards[c]))
+      straight = [cards[c]]
+    } else {
+      tmpIndex = Hand.RANKS.indexOf(Hand.rank(cards[c]))
+      if (tmpIndex === r + 1) {
+        r = tmpIndex
+        straight.push(cards[c])
+      } else {
+        r = -1
+        straight = null
+      }
+    }
+  }
 
   return straight ? { cards: straight } : null
 }
