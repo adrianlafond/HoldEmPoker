@@ -19,8 +19,10 @@ Hand.WORSE = 1
 Hand.EVEN = 0
 
 // @constants used for sorting
-Hand.RANKS = '23456789TJQKAW'
-Hand.SUITS = 'CDHS'
+// Ranks are "backwards" because higher ranks have
+// lower indices in sorted arrays.
+Hand.RANKS = 'WAKQJT98765432'
+Hand.SUITS = 'SHDC'
 
 
 
