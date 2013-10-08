@@ -1,7 +1,7 @@
 /*
  * poker-game-engine v0.0.1
  * by Adrian Lafond / adrian [at] disbranded.com
- * last updated 2013-10-07
+ * last updated 2013-10-08
 **/
 
 ;(function (root, factory) {
@@ -222,9 +222,9 @@ lingo = {
    */
   Hand = function (options) {
     if (!(this instanceof Hand)) {
-      return new Hand(id)
+      return new Hand(options)
     }
-    this.options = _.extend({ id: uid() }, defaults, options)
+    this.options = _.extend({ id: uid() }, defaults, options || {})
     this.reset()
   }
 }());
@@ -373,6 +373,9 @@ Hand.prototype = {
     cards = cards || this.sortedCardsCopy()
 
     if (cards.length >= 5) {
+
+      // Test first for a flush, since that continues directly with
+      // a test for a straight and royal flush.
       if (result = Hand.findFlush({ cards: cards, sorted: true })) {
         this.rankHigh = Hand.FLUSH
         this.cardsHigh = result.cards
@@ -386,6 +389,12 @@ Hand.prototype = {
           this.rankHigh = result.royalFlush ? Hand.ROYAL_FLUSH : Hand.STRAIGHT_FLUSH
           this.cardsHigh = result.cards
         }
+      }
+
+      // Next find sets of cards of the same rank, since 4 of a kind
+      // is the next hand not yet found.
+      if (result = Hand.findSets({ cards: cards, sorted: true })) {
+
       }
     } else {
       this.cardsHigh = []
@@ -504,7 +513,6 @@ Hand.findFlush = function () {
  * Find a straight flush in an array of cards.
  * Options for arguments:
  *   @param {array} of at least 5 cards.
- *   @returns highest straight flush found.
  * or:
  *   @params {object} with properties:
  *     {array} cards Mandatory; at least 5 cards.
@@ -512,7 +520,7 @@ Hand.findFlush = function () {
  *     {boolean} sorted Optional; whether cards are already sorted highest
  *       to lowest; default false.
  *     {boolean} low Optional; finds lowest straight flush; default false.
- *   @returns highest straight flush found unless options.low is true.
+ * @returns { cards: [best flush found] }
  */
 Hand.findStraightFlush = function () {
   var param = (arguments.length > 0) ? arguments[0] : null,
@@ -528,7 +536,7 @@ Hand.findStraightFlush = function () {
   } else if (_.isObject(param)) {
     cards = param.cards
     flush = param.flush === true
-    sorted = param.sorted = true
+    sorted = param.sorted === true
     low = param.low === true
   }
 
@@ -562,14 +570,13 @@ Hand.findStraightFlush = function () {
  * Find a straight in an array of cards.
  * Options for arguments:
  *   @param {array} of at least 5 cards.
- *   @returns highest straight found.
  * or:
  *   @params {object} with properties:
  *     {array} cards Mandatory; at least 5 cards.
  *     {boolean} sorted Optional; whether cards are already sorted highest
  *       to lowest; default false.
  *     {boolean} low Optional; finds lowest straight; default false.
- *   @returns highest straight found unless options.low is true.
+ * @returns { cards: [best straight found] }
  */
 Hand.findStraight = function () {
   var param = (arguments.length > 0) ? arguments[0] : null,
@@ -587,7 +594,7 @@ Hand.findStraight = function () {
     cards = param
   } else if (_.isObject(param)) {
     cards = param.cards
-    sorted = param.sorted = true
+    sorted = param.sorted === true
     low = param.low === true
   }
 
@@ -596,7 +603,7 @@ Hand.findStraight = function () {
     return null
   }
 
-  cards = cards.slice(0)
+  cards = cards.slice()
   if (!sorted) {
     Hand.sortByRank(cards)
   }
@@ -621,24 +628,157 @@ Hand.findStraight = function () {
         r = tmpIndex
         tmpStr8.push(cards[c])
       } else {
-        //
+        // Current loop card does not fit onto the straight.
         if (tmpStr8.length >= 5) {
-          str8 = tmpStr8.slice(0)
+          str8 = tmpStr8.slice()
+          tmpStr8 = null
+          if (!low) {
+            break
+          }
         }
-        r = -1
-        tmpStr8 = null
+        // If enough cards are left, see if there is still a straight in them.
+        if (clen - (c + 1) >= 5) {
+          r = -1
+          tmpStr8 = null
+        }
       }
     }
   }
 
-  if (tmpStr8.length >= 5) {
+  if (tmpStr8 && tmpStr8.length >= 5) {
     if (str8) {
-      str8 = Hand.getBestCardsByRank(str8, tmpStr8)
+      str8 = Hand.getBestCardsByRank({
+        low: low,
+        cards: [str8, tmpStr8]
+      })
     } else {
       str8 = tmpStr8
     }
   }
-  return str8 ? { cards: str8 } : null
+  if (str8) {
+    if (low) {
+      return { cards: str8.slice(str8.length - 5) }
+    }
+    return { cards: str8.slice(0, 5) }
+  }
+  return null
+}
+
+
+
+/**
+ * Find sets of cards of the same rank in an array of cards.
+ * Options for arguments:
+ *   @param {array} of at least 5 cards.
+ * or:
+ *   @params {object} with properties:
+ *     {array} cards Mandatory; at least 5 cards.
+ *     {boolean} sorted Optional; whether cards are already sorted highest
+ *       to lowest; default false.
+ * @returns { sets: [], kickers: [], type: [index of Hand.RANKS] }
+ */
+Hand.findSets = function () {
+  var param = (arguments.length > 0) ? arguments[0] : null,
+      cards,
+      sorted = false,
+      sets = [],
+      r,
+      n,
+      set,
+      c, clen,
+      slen,
+      remainderIndex = 0,
+      kickers,
+      type
+
+  // Interpret arguments.
+  if (_.isArray(param)) {
+    cards = param
+  } else if (_.isObject(param)) {
+    cards = param.cards
+    sorted = param.sorted === true
+  }
+
+  // Make sure cards array is valid.
+  if (!_.isArray(cards) || cards.length < 5) {
+    return null
+  }
+
+  cards = cards.slice()
+  if (!sorted) {
+    Hand.sortByRank(cards)
+  }
+
+  n = 0
+  clen = cards.length
+
+  // Find sets, including sets of one.
+  for (r = 1; r < 13; r++) {
+    set = []
+    for (c = n; c < clen; c++) {
+      if (Hand.RANKS.indexOf(Hand.rank(cards[c])) === r) {
+        set.push(cards[c])
+        if (r === 12) {
+          sets.push(set)
+        }
+      } else if (set.length >= 1) {
+        n = c++
+        sets.push(set)
+        break
+      }
+    }
+  }
+
+  // Sort sets by set size.
+  sets.sort(function (a, b) {
+    return Math.max(-1, Math.min(1, b.length - a.length))
+  })
+
+  // Separate the sets that matter from those that don't.
+  for (c = 0; c < 2; c++) {
+    slen = sets[c].length
+    if (slen >= 3) {
+      if (slen === 4) {
+        remainderIndex = 1
+        break
+      }
+    } else if (sets[c].length >= 2) {
+      remainderIndex = c + 1
+    }
+  }
+
+  // Sort the kickers.
+  kickers = []
+  for (c = remainderIndex, clen = sets.length; c < clen; c++) {
+    if ((slen = sets[c].length) > 1) {
+      kickers = kickers.concat[sets[c]]
+    } else {
+      kickers.push(sets[c][0])
+    }
+  }
+  kickers.sort(Hand.compareCardsByRank)
+
+  // Delete the kickers from the sets.
+  sets = sets.slice(remainderIndex)
+
+  // Determine type
+  switch (sets[0].length) {
+    case 4:
+      type = Hand.FOUR_OF_A_KIND
+      break
+    case 3:
+      //
+
+  }
+
+  if (sets.length) {
+    return {
+      sets: sets,
+      kickers: kickers,
+      type: type
+    }
+  }
+  return null
 }
 
 

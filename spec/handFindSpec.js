@@ -54,6 +54,16 @@ describe('Poker hand ranks', function () {
     expect(Hand.findFlush(cards)).toBe(null)
   })
 
+  if ('should return a low flow or null', function () {
+    var optns = { low: true}
+
+    optns.cards = ['5S', '7S', '2S', '2H', '8S', 'KS', 'JS']
+    expect(Hand.findStraight(optns).cards).toEqual(['JS', '8S', '7S', '5S', '2S'])
+
+    optns.cards = ['5S', '7S', '2S', '2H', '8S', 'KD', 'JD']
+    expect(Hand.findStraight(optns)).toBe(null)
+  })
+
   it ('should return a straight or null', function () {
     var cards = ['2S', '3S', '4D', '5C', '6H']
     expect(Hand.findStraight(cards).cards).toEqual(['6H', '5C', '4D', '3S', '2S'])
@@ -66,5 +76,26 @@ describe('Poker hand ranks', function () {
 
     cards = ['2S', '6H', '4D', '3S', '3H', '2H', '5C']
     expect(Hand.findStraight(cards).cards).toEqual(['6H', '5C', '4D', '3S', '2S'])
+
+    cards = ['2C', 'AD', '3H', 'KS', '4C', 'QD', '5H', 'JS', '6C', 'TD', '7H', '9S']
+    expect(Hand.findStraight(cards).cards).toEqual(['AD', 'KS', 'QD', 'JS', 'TD'])
+  })
+
+  it ('should return a low straight or null', function () {
+    var optns = { low: true }
+
+    optns.cards = ['2S', '2H', '3S', '3H', '4D', '5C', '6H']
+    expect(Hand.findStraight(optns).cards).toEqual(['6H', '5C', '4D', '3S', '2S'])
+
+    optns.cards = ['3S', '4H', '5S', '9H', '6D', '7C', '8H']
+    expect(Hand.findStraight(optns).cards).toEqual(['7C', '6D', '5S', '4H', '3S'])
+
+    optns.cards = ['3S', '4H', '5S', '9H', 'AD', '7C', '8H']
+    expect(Hand.findStraight(optns)).toBe(null)
+
+    optns.cards = ['3S', '4H', '5S', '9H', '6D', '7C', '8H', 'TS', 'JH', 'QD', 'KC', 'AS']
+    expect(Hand.findStraight(optns).cards).toEqual(['7C', '6D', '5S', '4H', '3S'])
+    // optns.low = false
+    // expect(Hand.findStraight(optns).cards).toEqual(['7C', '6D', '5S', '4H', '3S'])
   })
 })

@@ -34,9 +34,9 @@
    */
   Hand = function (options) {
     if (!(this instanceof Hand)) {
-      return new Hand(id)
+      return new Hand(options)
     }
-    this.options = _.extend({ id: uid() }, defaults, options)
+    this.options = _.extend({ id: uid() }, defaults, options || {})
     this.reset()
   }
 }());

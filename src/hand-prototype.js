@@ -111,6 +111,9 @@ Hand.prototype = {
     cards = cards || this.sortedCardsCopy()
 
     if (cards.length >= 5) {
+
+      // Test first for a flush, since that continues directly with
+      // a test for a straight and royal flush.
       if (result = Hand.findFlush({ cards: cards, sorted: true })) {
         this.rankHigh = Hand.FLUSH
         this.cardsHigh = result.cards
@@ -124,6 +127,12 @@ Hand.prototype = {
           this.rankHigh = result.royalFlush ? Hand.ROYAL_FLUSH : Hand.STRAIGHT_FLUSH
           this.cardsHigh = result.cards
         }
+      }
+
+      // Next find sets of cards of the same rank, since 4 of a kind
+      // is the next hand not yet found.
+      if (result = Hand.findSets({ cards: cards, sorted: true })) {
+
       }
     } else {
       this.cardsHigh = []
