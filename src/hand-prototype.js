@@ -122,7 +122,7 @@ Hand.prototype = {
         })
         if (result) {
           this.rankHigh = result.royalFlush ? Hand.ROYAL_FLUSH : Hand.STRAIGHT_FLUSH
-          this.cardsHigh = results.cards
+          this.cardsHigh = result.cards
         }
       }
     } else {

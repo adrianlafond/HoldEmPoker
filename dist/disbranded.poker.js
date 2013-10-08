@@ -1,7 +1,7 @@
 /*
  * poker-game-engine v0.0.1
  * by Adrian Lafond / adrian [at] disbranded.com
- * last updated 2013-10-06
+ * last updated 2013-10-07
 **/
 
 ;(function (root, factory) {
@@ -487,19 +487,9 @@ Hand.findFlush = function () {
       } else {
         tmpCards = low ? tmpCards.slice(tmpCards.length - 5) : tmpCards.slice(0, 5)
         if (low) {
-          for (n = 0; n < 5; n++) {
-            if (Hand.isLower(tmpCards[n], flush[n])) {
-              flush = tmpCards
-              break
-            }
-          }
+          flush = Hand.getBestCardsByRank({ low: true, cards: [tmpCards, flush] })
         } else {
-          for (n = 0; n < 5; n++) {
-            if (Hand.isHigher(tmpCards[n], flush[n])) {
-              flush = tmpCards
-              break
-            }
-          }
+          flush = Hand.getBestCardsByRank(tmpCards, flush)
         }
       }
     }
@@ -586,10 +576,10 @@ Hand.findStraight = function () {
       cards,
       sorted = false,
       low = false,
-      straight = null,
+      tmpStr8 = null,
+      str8 = null,
       c, clen,
       r = -1,
-      n = 0,
       tmpIndex
 
   // Interpret arguments.
@@ -612,33 +602,85 @@ Hand.findStraight = function () {
   }
 
   clen = cards.length
-  // TODO: check for best among multiple straights
   for (c = 0; c < clen; c++) {
     if (r === -1) {
+      // No straight cards yet, so start a straight with current card.
       r = Hand.RANKS.indexOf(Hand.rank(cards[c]))
-      straight = [cards[c]]
-      n = 1
+      tmpStr8 = [cards[c]]
+
     } else {
+      // A straight is in the works and it must be determined
+      // if the current loop card can be added to it.
       tmpIndex = Hand.RANKS.indexOf(Hand.rank(cards[c]))
+
       if (tmpIndex === r) {
+        // If rank is same as last card in the straight, skip.
         continue
       } else if (tmpIndex === r + 1) {
+        // If rank is next after the last card in the straight, add it.
         r = tmpIndex
-        straight[n++] = cards[c]
-      } else if (n < 5) {
+        tmpStr8.push(cards[c])
+      } else {
+        //
+        if (tmpStr8.length >= 5) {
+          str8 = tmpStr8.slice(0)
+        }
         r = -1
-        n = 0
-        straight = null
+        tmpStr8 = null
       }
     }
   }
 
-  if (straight) {
-    return {
-      cards: low ? straight.slice(straight.length - 5) : straight.slice(0, 5)
+  if (tmpStr8.length >= 5) {
+    if (str8) {
+      str8 = Hand.getBestCardsByRank(str8, tmpStr8)
+    } else {
+      str8 = tmpStr8
     }
   }
-  return null
+  return str8 ? { cards: str8 } : null
+}
+
+
+
+/**
+ * Compares array of arrays of cards and returns the array of cards
+ * with the best hand by card rank. The arrays must already be sorted.
+ * Can be called either by passing the arrays as separate arguments,
+ * or by passing an object with properties:
+ *   low: {boolean} default false
+ *   cards: {array} array of arrays of cards
+ */
+Hand.getBestCardsByRank = function () {
+  var array = arguments[0].hasOwnProperty('cards')
+        ? arguments[0].cards
+        : Array.prototype.slice.call(arguments),
+      low = arguments[0].hasOwnProperty('low')
+        ? (arguments[0].low === true)
+        : false,
+      cmprFn = low ? Hand.isLower : Hand.isHigher,
+      a = 1,
+      alen = array.length,
+      c, clen,
+      bestArray = array[0].slice(),
+      tmpArray
+
+  for (; a < alen; a++) {
+    clen = array[a].length
+    if (low) {
+      tmpArray = array[a].slice(Math.max(0, clen - 5))
+      clen = tmpArray.length
+    } else {
+      tmpArray = array[a].slice()
+    }
+    for (c = 0; c < clen; c++) {
+      if (cmprFn(tmpArray[c], bestArray[c])) {
+        bestArray = tmpArray
+        break
+      }
+    }
+  }
+  return bestArray
 }
 
 
@@ -721,7 +763,7 @@ Poker = function () {
 
 
 Poker.prototype = {
-
+  
 }
 
 
