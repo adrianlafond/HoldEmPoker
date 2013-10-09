@@ -115,6 +115,7 @@ Hand.prototype = {
       // Test first for a flush, since that continues directly with
       // a test for a straight and royal flush.
       if (result = Hand.findFlush({ cards: cards, sorted: true })) {
+        // Hand is at least a flush.
         this.rankHigh = Hand.FLUSH
         this.cardsHigh = result.cards
 
@@ -124,16 +125,48 @@ Hand.prototype = {
           flush: true
         })
         if (result) {
+          // Hand is straight or royal flush. Exit since hand cannot be higher.
           this.rankHigh = result.royalFlush ? Hand.ROYAL_FLUSH : Hand.STRAIGHT_FLUSH
           this.cardsHigh = result.cards
+          return
         }
       }
 
       // Next find sets of cards of the same rank, since 4 of a kind
       // is the next hand not yet found.
       if (result = Hand.findSets({ cards: cards, sorted: true })) {
+        if (result.type > this.rankHigh) {
+          this.rankHigh = result.type
+          switch (this.rankHigh) {
+            case Hand.FOUR_OF_A_KIND:
+              this.cardsHigh = result.sets[0].concat(result.kickers)
+              break
+            case Hand.FULL_HOUSE:
+              this.cardsHigh = result.sets[0].concat(result.sets[1])
+              break
+            case Hand.THREE_OF_A_KIND:
+              this.cardsHigh = result.sets[0].concat(result.kickers)
+              break
+            case Hand.TWO_PAIR:
+              this.cardsHigh = result.sets[0].concat(result.sets[1], result.kickers)
+              break
+            case Hand.ONE_PAIR:
+              this.cardsHigh = result.sets[0].concat(result.kickers)
+              break
+            default:
+              this.cardsHigh = [].concat(result.kickers)
+              break
+          }
+        }
 
+      } else {
+        if (this.rankHigh < Hand.HIGH_CARD) {
+          // Best 5-card hand is a mere high card.
+          this.rankHigh = Hand.HIGH_CARD
+          this.cardsHigh = cards.slice(0, 5)
+        }
       }
+
     } else {
       this.cardsHigh = []
     }

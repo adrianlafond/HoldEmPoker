@@ -138,8 +138,9 @@ Hand.findStraightFlush = function () {
 
   if (result = Hand.findStraight({ cards: cards, sorted: sorted, low: low })) {
     result.royalFlush = Hand.rank(result.cards[0]) === 'A'
+    return result
   }
-  return result
+  return null
 }
 
 
@@ -258,13 +259,16 @@ Hand.findSets = function () {
   var param = (arguments.length > 0) ? arguments[0] : null,
       cards,
       sorted = false,
-      sets = [],
+      sets,
+      setsLen,
+      finalSets,
+      setsCardsLen = 0,
       r,
-      n,
       set,
       c, clen,
       slen,
-      remainderIndex = 0,
+      handLen = 0,
+      sliceLen,
       kickers,
       type
 
@@ -286,20 +290,21 @@ Hand.findSets = function () {
     Hand.sortByRank(cards)
   }
 
-  n = 0
   clen = cards.length
+  sets = []
+  finalSets = []
+  kickers = []
 
   // Find sets, including sets of one.
-  for (r = 1; r < 13; r++) {
+  for (r = 1; r < 14; r++) {
     set = []
-    for (c = n; c < clen; c++) {
+    for (c = 0; c < clen; c++) {
       if (Hand.RANKS.indexOf(Hand.rank(cards[c])) === r) {
         set.push(cards[c])
-        if (r === 12) {
+        if (c === clen - 1) {
           sets.push(set)
         }
       } else if (set.length >= 1) {
-        n = c++
         sets.push(set)
         break
       }
@@ -312,31 +317,25 @@ Hand.findSets = function () {
   })
 
   // Separate the sets that matter from those that don't.
-  for (c = 0; c < 2; c++) {
-    slen = sets[c].length
-    if (slen >= 3) {
-      if (slen === 4) {
-        remainderIndex = 1
-        break
+  for (c = 0, setsLen = sets.length; c < setsLen; c++) {
+    if (handLen < 5 && (slen = sets[c].length) >= 2) {
+      sliceLen = Math.min(slen, 5 - handLen)
+      finalSets.push(sets[c].slice(0, sliceLen))
+      setsCardsLen += sliceLen
+      if (sliceLen < slen - 1) {
+        kickers.push(sets[c].slice(sliceLen))
       }
-    } else if (sets[c].length >= 2) {
-      remainderIndex = c + 1
+      handLen += slen
+    } else {
+      kickers = kickers.length ? kickers.concat(sets[c]) : sets[c]
+      handLen += sets[c].length
     }
+    handLen = Math.min(5, handLen)
   }
+
 
   // Sort the kickers.
-  kickers = []
-  for (c = remainderIndex, clen = sets.length; c < clen; c++) {
-    if ((slen = sets[c].length) > 1) {
-      kickers = kickers.concat[sets[c]]
-    } else {
-      kickers.push(sets[c][0])
-    }
-  }
   kickers.sort(Hand.compareCardsByRank)
-
-  // Delete the kickers from the sets.
-  sets = sets.slice(remainderIndex)
 
   // Determine type
   switch (sets[0].length) {
@@ -344,14 +343,19 @@ Hand.findSets = function () {
       type = Hand.FOUR_OF_A_KIND
       break
     case 3:
-      //
-
+      type = (finalSets.length === 2) ? Hand.FULL_HOUSE : Hand.THREE_OF_A_KIND
+      break
+    case 2:
+      type = (finalSets.length === 2) ? Hand.TWO_PAIR : Hand.ONE_PAIR
+      break
+    default:
+      type = Hand.HIGH_CARD
   }
 
-  if (sets.length) {
+  if (finalSets.length) {
     return {
-      sets: sets,
-      kickers: kickers,
+      sets: finalSets,
+      kickers: kickers.slice(0, 5 - setsCardsLen),
       type: type
     }
   }

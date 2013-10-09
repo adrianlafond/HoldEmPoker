@@ -38,6 +38,10 @@
     }
     this.options = _.extend({ id: uid() }, defaults, options || {})
     this.reset()
+    if (this.options.cards) {
+      this.add(this.options.cards)
+      delete this.options.cards
+    }
   }
 }());
 

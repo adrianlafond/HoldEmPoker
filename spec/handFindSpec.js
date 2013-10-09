@@ -18,7 +18,7 @@ describe('Poker hand ranks', function () {
     expect(Hand.suit('2C')).toBe('C')
   })
 
-  it ('should rank cards correctly', function () {
+  it('should rank cards correctly', function () {
     expect(Hand.isHigher('TS', '8D')).toBe(true)
     expect(Hand.isHigher('8D', 'TS')).toBe(false)
     expect(Hand.isLower('TS', '8D')).toBe(false)
@@ -64,7 +64,7 @@ describe('Poker hand ranks', function () {
     expect(Hand.findStraight(optns)).toBe(null)
   })
 
-  it ('should return a straight or null', function () {
+  it('should return a straight or null', function () {
     var cards = ['2S', '3S', '4D', '5C', '6H']
     expect(Hand.findStraight(cards).cards).toEqual(['6H', '5C', '4D', '3S', '2S'])
 
@@ -81,7 +81,7 @@ describe('Poker hand ranks', function () {
     expect(Hand.findStraight(cards).cards).toEqual(['AD', 'KS', 'QD', 'JS', 'TD'])
   })
 
-  it ('should return a low straight or null', function () {
+  it('should return a low straight or null', function () {
     var optns = { low: true }
 
     optns.cards = ['2S', '2H', '3S', '3H', '4D', '5C', '6H']
@@ -97,5 +97,39 @@ describe('Poker hand ranks', function () {
     expect(Hand.findStraight(optns).cards).toEqual(['7C', '6D', '5S', '4H', '3S'])
     // optns.low = false
     // expect(Hand.findStraight(optns).cards).toEqual(['7C', '6D', '5S', '4H', '3S'])
+  })
+
+
+  it('should find sets correctly', function () {
+    var sets = Hand.findSets(['TS', '8C', 'TC', '2D', '3H', 'QC', 'KD'])
+    expect(sets.type).toBe(Hand.ONE_PAIR)
+    expect(sets.sets).toEqual([['TS', 'TC']])
+    expect(sets.kickers).toEqual(['KD', 'QC', '8C'])
+
+    sets = Hand.findSets(['TS', '8C', 'TC', '2D', '2H', 'QC', 'KD'])
+    expect(sets.type).toBe(Hand.TWO_PAIR)
+    expect(sets.sets).toEqual([['TS', 'TC'], ['2D', '2H']])
+    expect(sets.kickers).toEqual(['KD'])
+
+    sets = Hand.findSets(['TS', '8C', 'TC', 'TD', '2H', 'QC', 'KD'])
+    expect(sets.type).toBe(Hand.THREE_OF_A_KIND)
+    expect(sets.sets).toEqual([['TS', 'TC', 'TD']])
+    expect(sets.kickers).toEqual(['KD', 'QC'])
+
+    sets = Hand.findSets(['TS', '8C', 'TC', 'TD', '2H', '2C', 'KD'])
+    expect(sets.type).toBe(Hand.FULL_HOUSE)
+    expect(sets.sets).toEqual([['TS', 'TC', 'TD'], ['2H', '2C']])
+    expect(sets.kickers).toEqual([])
+
+    sets = Hand.findSets(['TS', '8C', 'TC', 'TD', '2H', 'TH', 'KD'])
+    expect(sets.type).toBe(Hand.FOUR_OF_A_KIND)
+    expect(sets.sets).toEqual([['TS', 'TC', 'TD', 'TH']])
+    expect(sets.kickers).toEqual(['KD'])
+
+    sets = Hand.findSets(['TS', '8C', '5C', '2D', '3H', 'QC', 'KD'])
+    expect(sets).toBe(null)
+
+    sets = Hand.findSets(['TS', 'TC', '5C', '5D'])
+    expect(sets).toBe(null)
   })
 })
