@@ -45,4 +45,17 @@ describe('hand instance ranks', function () {
     expect(hand.rank()).toBe(Hand.ONE_PAIR)
     expect(hand.cardsHigh).toEqual(['8S', '8D', 'KH', '7C', '2D'])
   })
+
+
+  it('should return a flush not a straight', function () {
+    var hand = new Hand({ cards: ['AD', '4S', '5D', '7S', '6S', '8S', 'KS'] })
+    expect(hand.rank()).toBe(Hand.FLUSH)
+    expect(hand.cardsHigh).toEqual(['KS', '8S', '7S', '6S', '4S'])
+  })
+
+  it('should return a full house not a flush', function () {
+    var hand = new Hand({ cards: ['AD', '4S', 'AC', '7S', '6S', '8S', 'AS', '4D'] })
+    expect(hand.rank()).toBe(Hand.FULL_HOUSE)
+    expect(hand.cardsHigh).toEqual(['AD', 'AC', 'AS', '4S', '4D'])
+  })
 })

@@ -114,7 +114,7 @@ Hand.prototype = {
 
       // Test first for a flush, since that continues directly with
       // a test for a straight and royal flush.
-      if (result = Hand.findFlush({ cards: cards, sorted: true })) {
+      if (result = Hand.findFlush({ cards: cards, sorted: true, all: true })) {
         // Hand is at least a flush.
         this.rankHigh = Hand.FLUSH
         this.cardsHigh = result.cards
@@ -132,9 +132,18 @@ Hand.prototype = {
         }
       }
 
+      // Find straights.
+      if (this.rankHigh < Hand.STRAIGHT) {
+        if (result = Hand.findStraight({ cards: cards, sorted: true })) {
+          this.rankHigh = Hand.STRAIGHT
+          this.cardsHigh = result.cards
+        }
+      }
+
       // Next find sets of cards of the same rank, since 4 of a kind
       // is the next hand not yet found.
       if (result = Hand.findSets({ cards: cards, sorted: true })) {
+        console.log(result)
         if (result.type > this.rankHigh) {
           this.rankHigh = result.type
           switch (this.rankHigh) {
@@ -185,6 +194,31 @@ Hand.prototype = {
     } else {
       this.cardsLow = []
     }
+  },
+
+
+  /**
+   * Compares this hand's highest hand to another hand's highest hand.
+   * @param {Hand} hand
+   * @returns -1, 0, or 1 (for sorting)
+   */
+  compareHighest: function (hand) {
+    var c, cmpr
+    if (this.rankHigh > hand.rankHigh) {
+      return -1
+    } else if (this.rankHigh < hand.rankHigh) {
+      return 1
+    } else {
+      if (this.cardsHigh.length && hand.cardsHigh.length) {
+        for (c = 0; c < 5; c++) {
+          cmpr = Hand.compareCardsByRank(this.cardsHigh[c], hand.cardsHigh[c])
+          if (cmpr !== 0) {
+            return cmpr
+          }
+        }
+      }
+    }
+    return 0
   }
 }
 

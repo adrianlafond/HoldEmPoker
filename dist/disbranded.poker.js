@@ -1,7 +1,7 @@
 /*
  * poker-game-engine v0.0.1
  * by Adrian Lafond / adrian [at] disbranded.com
- * last updated 2013-10-08
+ * last updated 2013-10-09
 **/
 
 ;(function (root, factory) {
@@ -380,7 +380,7 @@ Hand.prototype = {
 
       // Test first for a flush, since that continues directly with
       // a test for a straight and royal flush.
-      if (result = Hand.findFlush({ cards: cards, sorted: true })) {
+      if (result = Hand.findFlush({ cards: cards, sorted: true, all: true })) {
         // Hand is at least a flush.
         this.rankHigh = Hand.FLUSH
         this.cardsHigh = result.cards
@@ -398,9 +398,18 @@ Hand.prototype = {
         }
       }
 
+      // Find straights.
+      if (this.rankHigh < Hand.STRAIGHT) {
+        if (result = Hand.findStraight({ cards: cards, sorted: true })) {
+          this.rankHigh = Hand.STRAIGHT
+          this.cardsHigh = result.cards
+        }
+      }
+
       // Next find sets of cards of the same rank, since 4 of a kind
       // is the next hand not yet found.
       if (result = Hand.findSets({ cards: cards, sorted: true })) {
+        console.log(result)
         if (result.type > this.rankHigh) {
           this.rankHigh = result.type
           switch (this.rankHigh) {
@@ -451,6 +460,31 @@ Hand.prototype = {
     } else {
       this.cardsLow = []
     }
+  },
+
+
+  /**
+   * Compares this hand's highest hand to another hand's highest hand.
+   * @param {Hand} hand
+   * @returns -1, 0, or 1 (for sorting)
+   */
+  compareHighest: function (hand) {
+    var c, cmpr
+    if (this.rankHigh > hand.rankHigh) {
+      return -1
+    } else if (this.rankHigh < hand.rankHigh) {
+      return 1
+    } else {
+      if (this.cardsHigh.length && hand.cardsHigh.length) {
+        for (c = 0; c < 5; c++) {
+          cmpr = Hand.compareCardsByRank(this.cardsHigh[c], hand.cardsHigh[c])
+          if (cmpr !== 0) {
+            return cmpr
+          }
+        }
+      }
+    }
+    return 0
   }
 }
 
@@ -473,6 +507,8 @@ Hand.prototype = {
  *     {boolean} sorted Optional; whether cards are already sorted highest
  *       to lowest; default false.
  *     {boolean} low Optional; finds lowest flush; default false.
+ *     {boolean} all Optional; returns all flush hands (more than 5), for
+ *       use in teting for a straight flush; default false
  *   @returns highest flush found unless options.low is true.
  */
 Hand.findFlush = function () {
@@ -480,11 +516,13 @@ Hand.findFlush = function () {
       cards = null,
       sorted = false,
       low = false,
+      all = false,
       flush = null,
       s, suit,
       c, clen,
       n,
-      tmpCards
+      tmpCards,
+      tmpCardsLen
 
   // Interpret arguments.
   if (_.isArray(param)) {
@@ -493,6 +531,7 @@ Hand.findFlush = function () {
     cards = param.cards
     sorted = param.sorted === true
     low = param.low === true
+    all = param.all === true
   }
 
   // Make sure cards array is valid.
@@ -520,18 +559,23 @@ Hand.findFlush = function () {
     }
 
     // If the subset has at least 5 cards, it is a flush.
-    if (tmpCards.length >= 5) {
+    tmpCardsLen = tmpCards.length
+    if (tmpCardsLen >= 5) {
 
       // If no other flush has yet been found, this one will do.
       // This will also get the job done 99.999% of the time.
       if (flush === null) {
-        flush = low ? tmpCards.slice(tmpCards.length - 5) : tmpCards.slice(0, 5)
+        flush = low
+          ? tmpCards.slice(tmpCardsLen - 5)
+          : tmpCards.slice(0, all ? tmpCardsLen : 5)
 
       // Compare this flush to a flush that was already found,
       // in the unlikely event that a hand contains >= 10 cards
       // and multiple flushes.
       } else {
-        tmpCards = low ? tmpCards.slice(tmpCards.length - 5) : tmpCards.slice(0, 5)
+        tmpCards = low
+          ? tmpCards.slice(tmpCards.length - 5)
+          : tmpCards.slice(0, all ? tmpCardsLen : 5)
         if (low) {
           flush = Hand.getBestCardsByRank({ low: true, cards: [tmpCards, flush] })
         } else {
@@ -675,9 +719,9 @@ Hand.findStraight = function () {
           }
         }
         // If enough cards are left, see if there is still a straight in them.
-        if (clen - (c + 1) >= 5) {
-          r = -1
-          tmpStr8 = null
+        if (clen - c >= 5) {
+          r = tmpIndex
+          tmpStr8 = [cards[c]]
         }
       }
     }
