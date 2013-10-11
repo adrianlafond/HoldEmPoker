@@ -273,12 +273,6 @@ Hand.findSets = function () {
       setsLen,
       finalSets,
       setsCardsLen = 0,
-      r,
-      set,
-      c, clen,
-      slen,
-      handLen = 0,
-      sliceLen,
       kickers,
       type
 
@@ -300,26 +294,30 @@ Hand.findSets = function () {
     Hand.sortByRank(cards)
   }
 
-  clen = cards.length
-  sets = []
-  finalSets = []
-  kickers = []
-
-  // Find sets, including sets of one.
-  for (r = 1; r < 14; r++) {
-    set = []
-    for (c = 0; c < clen; c++) {
-      if (Hand.RANKS.indexOf(Hand.rank(cards[c])) === r) {
-        set.push(cards[c])
-        if (c === clen - 1) {
+  sets = (function (cards) {
+    var sets = [],
+        r = 1,
+        set,
+        c,
+        clen = cards.length
+    for (; r < 14; r++) {
+      set = []
+      for (c = 0; c < clen; c++) {
+        if (Hand.RANKS.indexOf(Hand.rank(cards[c])) === r) {
+          set.push(cards[c])
+          if (c === clen - 1) {
+            sets.push(set)
+          }
+        } else if (set.length >= 1) {
           sets.push(set)
+          break
         }
-      } else if (set.length >= 1) {
-        sets.push(set)
-        break
       }
     }
-  }
+    return sets
+  }(cards))
+  finalSets = []
+  kickers = []
 
   // Sort sets by set size.
   sets.sort(function (a, b) {
@@ -327,21 +325,28 @@ Hand.findSets = function () {
   })
 
   // Separate the sets that matter from those that don't.
-  for (c = 0, setsLen = sets.length; c < setsLen; c++) {
-    if (handLen < 5 && (slen = sets[c].length) >= 2) {
-      sliceLen = Math.min(slen, 5 - handLen)
-      finalSets.push(sets[c].slice(0, sliceLen))
-      setsCardsLen += sliceLen
-      if (sliceLen < slen - 1) {
-        kickers.push(sets[c].slice(sliceLen))
+  ;(function () {
+    var c = 0,
+        setsLen = sets.length,
+        handLen = 0,
+        sliceLen,
+        slen
+    for (c = 0, setsLen = sets.length; c < setsLen; c++) {
+      if (handLen < 4 && (slen = sets[c].length) >= 2) {
+        sliceLen = Math.min(slen, 5 - handLen)
+        finalSets.push(sets[c].slice(0, sliceLen))
+        setsCardsLen += sliceLen
+        if (sliceLen < slen - 1) {
+          kickers.push(sets[c].slice(sliceLen))
+        }
+        handLen += slen
+      } else {
+        kickers = kickers.length ? kickers.concat(sets[c]) : sets[c]
+        handLen += sets[c].length
       }
-      handLen += slen
-    } else {
-      kickers = kickers.length ? kickers.concat(sets[c]) : sets[c]
-      handLen += sets[c].length
+      handLen = Math.min(5, handLen)
     }
-    handLen = Math.min(5, handLen)
-  }
+  }());
 
 
   // Sort the kickers.
@@ -371,6 +376,7 @@ Hand.findSets = function () {
   }
   return null
 }
+
 
 
 
