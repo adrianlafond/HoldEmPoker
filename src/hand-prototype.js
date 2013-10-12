@@ -216,9 +216,18 @@ Hand.prototype = {
       for (c = cards.length - 1; c >= 0; c--) {
         if (n === 0 || (Hand.rank(tmpLow[n - 1]) !== Hand.rank(cards[c]))) {
           tmpLow[n++] = cards[c]
+
           if (tmpLow.length === 5) {
-            this.cardsLow = tmpLow
-            break
+            if (!this.options.ignoreFlushes && Hand.findFlush(tmpLow)) {
+              tmpLow = tmpLow.slice(0, 4)
+              n = 4
+            } else if (!this.options.ignoreStraights && Hand.findStraight(tmpLow)) {
+              tmpLow = tmpLow.slice(0, 4)
+              n = 4
+            } else {
+              this.cardsLow = tmpLow
+              break
+            }
           }
         }
       }

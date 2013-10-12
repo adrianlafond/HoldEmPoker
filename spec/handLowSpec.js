@@ -32,4 +32,22 @@ describe('test low hands', function () {
     hand = new Hand({ cards: ['AS', '4C', 'AH', '4D', '3D', 'AD', '2C'], low: true })
     expect(hand.cardsLow).toEqual(['AS', '2C', '3D', '4D', 'AD'])
   })
+
+  it('should find the best low hand when ignoreFlushes is false', function () {
+    var cards = ['AS', '4C', '4D', '4S', '3S', '5S', '2S'],
+        hand = new Hand({ cards: cards, low: true, ignoreFlushes: true })
+    expect(hand.cardsLow).toEqual(['AS', '2S', '3S', '4S', '5S'])
+
+    hand = new Hand({ cards: cards, low: true, ignoreFlushes: false })
+    expect(hand.cardsLow).toEqual([])
+  })
+
+  it('should find the best low hand when ignoreStraights is flase', function () {
+    var cards = ['3S', '4C', '7D', '6S', '4D', '5S', '4S'],
+        hand = new Hand({ cards: cards, low: true, ignoreStraights: true })
+    expect(hand.cardsLow).toEqual(['3S', '4S', '5S', '6S', '7D'])
+
+    hand = new Hand({ cards: cards, low: true, ignoreStraights: false })
+    expect(hand.cardsLow).toEqual([])
+  })
 })
