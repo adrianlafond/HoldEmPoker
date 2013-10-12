@@ -1,7 +1,7 @@
 /*
  * poker-game-engine v0.0.1
  * by Adrian Lafond / adrian [at] disbranded.com
- * last updated 2013-10-10
+ * last updated 2013-10-12
 **/
 
 ;(function (root, factory) {
@@ -206,7 +206,10 @@ lingo = {
 
   defaults = {
     isHigh: true,
-    isLow: false
+    isLow: false,
+    acesAreLow: true,
+    ignoreStraights: true,
+    ignoreFlushes: true
   }
 
 
@@ -217,6 +220,16 @@ lingo = {
    *   id = defaults to uid()
    *   isHigh = whether the hand checks "high" values; default true
    *   isLow = whether the hand checks "low" values; default false
+   *   acesAreLow = in low, if aces count as 1/low; default true
+   *   ignoreStraights = in low, if straights can be low; default true
+   *   ignoreFlushes = in low, if flushes can be low; default true
+   *
+   * Options to set for low hands:
+   *   Ace-to-five low = acesAreLow, ignoreStraights, ignoreFlushes
+   *   Ace-to-six low = acesAreLow, !ignoreStraights, !ignoreFlushes
+   *   Deuce-to-seven low = !acesAreLow, !ignoreStraights, !ignoreFlushes
+   *   Deuce-to-six low = !acesAreLow, ignoreStraights, ignoreFlushes
+   * If !acesAreLow, A-2-3-4-5 is not a straight, since A != 1.
    *
    * If any options are updated after instantiation, reset() should be called.
    */
@@ -388,7 +401,8 @@ Hand.prototype = {
         result = Hand.findStraightFlush({
           cards: this.cardsHigh,
           sorted: true,
-          flush: true
+          flush: true,
+          acesAreLow: this.options.acesAreLow
         })
         if (result) {
           // Hand is straight or royal flush. Exit since hand cannot be higher.
@@ -400,7 +414,12 @@ Hand.prototype = {
 
       // Find straights.
       if (this.rankHigh < Hand.STRAIGHT) {
-        if (result = Hand.findStraight({ cards: cards, sorted: true })) {
+        result = Hand.findStraight({
+          cards: cards,
+          sorted: true,
+          acesAreLow: this.options.acesAreLow
+        })
+        if (result) {
           this.rankHigh = Hand.STRAIGHT
           this.cardsHigh = result.cards
         }
@@ -601,6 +620,7 @@ Hand.findFlush = function () {
  *     {boolean} sorted Optional; whether cards are already sorted highest
  *       to lowest; default false.
  *     {boolean} low Optional; finds lowest straight flush; default false.
+ *     {boolean} acesAreLow Optional; default true.
  * @returns { cards: [best flush found] }
  */
 Hand.findStraightFlush = function () {
@@ -609,6 +629,7 @@ Hand.findStraightFlush = function () {
       flush = false,
       sorted = false,
       low = false,
+      acesAreLow = true,
       result
 
   // Interpret arguments.
@@ -619,6 +640,7 @@ Hand.findStraightFlush = function () {
     flush = param.flush === true
     sorted = param.sorted === true
     low = param.low === true
+    acesAreLow = !(param.acesAreLow === false)
   }
 
   // Make sure cards array is valid.
@@ -633,14 +655,26 @@ Hand.findStraightFlush = function () {
 
   // Make sure cards are a flush.
   if (!flush) {
-    if (result = Hand.findFlush({ cards: cards, sorted: sorted, low: low })) {
+    result = Hand.findFlush({
+      cards: cards,
+      sorted: sorted,
+      low: low,
+      acesAreLow: acesAreLow
+    })
+    if (result) {
       cards = result.cards
     } else {
       return null
     }
   }
 
-  if (result = Hand.findStraight({ cards: cards, sorted: sorted, low: low })) {
+  result = Hand.findStraight({
+    cards: cards,
+    sorted: sorted,
+    low: low,
+    acesAreLow: acesAreLow
+  })
+  if (result) {
     result.royalFlush = Hand.rank(result.cards[0]) === 'A'
     return result
   }
@@ -658,6 +692,7 @@ Hand.findStraightFlush = function () {
  *     {boolean} sorted Optional; whether cards are already sorted highest
  *       to lowest; default false.
  *     {boolean} low Optional; finds lowest straight; default false.
+ *     {boolean} acesAreLow Optional; default true.
  * @returns { cards: [best straight found] }
  */
 Hand.findStraight = function () {
@@ -665,11 +700,14 @@ Hand.findStraight = function () {
       cards,
       sorted = false,
       low = false,
+      acesAreLow = true,
+      ace = null,
       tmpStr8 = null,
       str8 = null,
       c, clen,
       r = -1,
-      tmpIndex
+      tmpIndex,
+      ranks
 
   // Interpret arguments.
   if (_.isArray(param)) {
@@ -678,6 +716,7 @@ Hand.findStraight = function () {
     cards = param.cards
     sorted = param.sorted === true
     low = param.low === true
+    acesAreLow = !(param.acesAreLow === false)
   }
 
   // Make sure cards array is valid.
@@ -709,8 +748,28 @@ Hand.findStraight = function () {
         // If rank is next after the last card in the straight, add it.
         r = tmpIndex
         tmpStr8.push(cards[c])
+
+        // Test fot 5-4-3-2-A straight.
+        if (acesAreLow && tmpStr8.length === 4 && Hand.rank(tmpStr8[0]) === '5') {
+          ;(function () {
+            var i = 0,
+                aceIndex = Hand.RANKS.indexOf('A'),
+                cardIndex
+            for (; i < clen; i++) {
+              cardIndex = Hand.RANKS.indexOf(Hand.rank(cards[i]))
+              if (cardIndex === aceIndex) {
+                tmpStr8[4] = cards[i]
+                break
+              } else if (cardIndex > aceIndex) {
+                break
+              }
+            }
+          }());
+        }
+
       } else {
         // Current loop card does not fit onto the straight.
+        // Test if straight is complete.
         if (tmpStr8.length >= 5) {
           str8 = tmpStr8.slice()
           tmpStr8 = null
@@ -719,7 +778,7 @@ Hand.findStraight = function () {
           }
         }
         // If enough cards are left, see if there is still a straight in them.
-        if (clen - c >= 5) {
+        if (clen - c >= 4) {
           r = tmpIndex
           tmpStr8 = [cards[c]]
         }

@@ -35,6 +35,14 @@
    *   acesAreLow = in low, if aces count as 1/low; default true
    *   ignoreStraights = in low, if straights can be low; default true
    *   ignoreFlushes = in low, if flushes can be low; default true
+   *
+   * Options to set for low hands:
+   *   Ace-to-five low = acesAreLow, ignoreStraights, ignoreFlushes
+   *   Ace-to-six low = acesAreLow, !ignoreStraights, !ignoreFlushes
+   *   Deuce-to-seven low = !acesAreLow, !ignoreStraights, !ignoreFlushes
+   *   Deuce-to-six low = !acesAreLow, ignoreStraights, ignoreFlushes
+   * If !acesAreLow, A-2-3-4-5 is not a straight, since A != 1.
+   *
    * If any options are updated after instantiation, reset() should be called.
    */
   Hand = function (options) {

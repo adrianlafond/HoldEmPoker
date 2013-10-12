@@ -107,6 +107,7 @@ Hand.findFlush = function () {
  *     {boolean} sorted Optional; whether cards are already sorted highest
  *       to lowest; default false.
  *     {boolean} low Optional; finds lowest straight flush; default false.
+ *     {boolean} acesAreLow Optional; default true.
  * @returns { cards: [best flush found] }
  */
 Hand.findStraightFlush = function () {
@@ -115,6 +116,7 @@ Hand.findStraightFlush = function () {
       flush = false,
       sorted = false,
       low = false,
+      acesAreLow = true,
       result
 
   // Interpret arguments.
@@ -125,6 +127,7 @@ Hand.findStraightFlush = function () {
     flush = param.flush === true
     sorted = param.sorted === true
     low = param.low === true
+    acesAreLow = !(param.acesAreLow === false)
   }
 
   // Make sure cards array is valid.
@@ -139,14 +142,26 @@ Hand.findStraightFlush = function () {
 
   // Make sure cards are a flush.
   if (!flush) {
-    if (result = Hand.findFlush({ cards: cards, sorted: sorted, low: low })) {
+    result = Hand.findFlush({
+      cards: cards,
+      sorted: sorted,
+      low: low,
+      acesAreLow: acesAreLow
+    })
+    if (result) {
       cards = result.cards
     } else {
       return null
     }
   }
 
-  if (result = Hand.findStraight({ cards: cards, sorted: sorted, low: low })) {
+  result = Hand.findStraight({
+    cards: cards,
+    sorted: sorted,
+    low: low,
+    acesAreLow: acesAreLow
+  })
+  if (result) {
     result.royalFlush = Hand.rank(result.cards[0]) === 'A'
     return result
   }
@@ -164,6 +179,7 @@ Hand.findStraightFlush = function () {
  *     {boolean} sorted Optional; whether cards are already sorted highest
  *       to lowest; default false.
  *     {boolean} low Optional; finds lowest straight; default false.
+ *     {boolean} acesAreLow Optional; default true.
  * @returns { cards: [best straight found] }
  */
 Hand.findStraight = function () {
@@ -171,11 +187,14 @@ Hand.findStraight = function () {
       cards,
       sorted = false,
       low = false,
+      acesAreLow = true,
+      ace = null,
       tmpStr8 = null,
       str8 = null,
       c, clen,
       r = -1,
-      tmpIndex
+      tmpIndex,
+      ranks
 
   // Interpret arguments.
   if (_.isArray(param)) {
@@ -184,6 +203,7 @@ Hand.findStraight = function () {
     cards = param.cards
     sorted = param.sorted === true
     low = param.low === true
+    acesAreLow = !(param.acesAreLow === false)
   }
 
   // Make sure cards array is valid.
@@ -215,8 +235,28 @@ Hand.findStraight = function () {
         // If rank is next after the last card in the straight, add it.
         r = tmpIndex
         tmpStr8.push(cards[c])
+
+        // Test fot 5-4-3-2-A straight.
+        if (acesAreLow && tmpStr8.length === 4 && Hand.rank(tmpStr8[0]) === '5') {
+          ;(function () {
+            var i = 0,
+                aceIndex = Hand.RANKS.indexOf('A'),
+                cardIndex
+            for (; i < clen; i++) {
+              cardIndex = Hand.RANKS.indexOf(Hand.rank(cards[i]))
+              if (cardIndex === aceIndex) {
+                tmpStr8[4] = cards[i]
+                break
+              } else if (cardIndex > aceIndex) {
+                break
+              }
+            }
+          }());
+        }
+
       } else {
         // Current loop card does not fit onto the straight.
+        // Test if straight is complete.
         if (tmpStr8.length >= 5) {
           str8 = tmpStr8.slice()
           tmpStr8 = null
@@ -225,7 +265,7 @@ Hand.findStraight = function () {
           }
         }
         // If enough cards are left, see if there is still a straight in them.
-        if (clen - c >= 5) {
+        if (clen - c >= 4) {
           r = tmpIndex
           tmpStr8 = [cards[c]]
         }

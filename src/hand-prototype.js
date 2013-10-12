@@ -122,7 +122,8 @@ Hand.prototype = {
         result = Hand.findStraightFlush({
           cards: this.cardsHigh,
           sorted: true,
-          flush: true
+          flush: true,
+          acesAreLow: this.options.acesAreLow
         })
         if (result) {
           // Hand is straight or royal flush. Exit since hand cannot be higher.
@@ -134,7 +135,12 @@ Hand.prototype = {
 
       // Find straights.
       if (this.rankHigh < Hand.STRAIGHT) {
-        if (result = Hand.findStraight({ cards: cards, sorted: true })) {
+        result = Hand.findStraight({
+          cards: cards,
+          sorted: true,
+          acesAreLow: this.options.acesAreLow
+        })
+        if (result) {
           this.rankHigh = Hand.STRAIGHT
           this.cardsHigh = result.cards
         }

@@ -74,6 +74,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jasmine')
   grunt.loadNpmTasks('grunt-contrib-watch')
 
-  grunt.registerTask('default', ['concat', 'uglify', 'usebanner', 'jasmine'])
+  // grunt.registerTask('default', ['concat', 'uglify', 'usebanner', 'jasmine'])
+  grunt.registerTask('build', ['concat', 'uglify', 'usebanner'])
   grunt.registerTask('test', ['jasmine'])
+  grunt.registerTask('default', ['build', 'test'])
 };
