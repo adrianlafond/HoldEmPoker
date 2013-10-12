@@ -85,10 +85,10 @@ Hand.prototype = {
     var cards
     if (this.cards.length >= 5) {
       cards = this.sortedCardsCopy()
-      if (this.options.isHigh) {
+      if (this.options.high) {
         this.updateHigh(cards)
       }
-      if (this.options.isLow) {
+      if (this.options.low) {
         this.updateLow(cards)
       }
     }
@@ -149,7 +149,6 @@ Hand.prototype = {
       // Next find sets of cards of the same rank, since 4 of a kind
       // is the next hand not yet found.
       if (result = Hand.findSets({ cards: cards, sorted: true })) {
-        console.log(result)
         if (result.type > this.rankHigh) {
           this.rankHigh = result.type
           switch (this.rankHigh) {
@@ -191,12 +190,39 @@ Hand.prototype = {
   /**
    * Find the best low hand and update rankLow.
    */
-  updateLow: function () {
-    var result = null
+  updateLow: function (cards) {
+    var result = null,
+        c,
+        n,
+        tmpLow
+
     this.rankLow = 0
+    cards = cards ? cards.slice() : this.sortedCardsCopy()
 
     if (this.cards.length >= 5) {
-      //
+      // acesAreLow: true,
+      // ignoreStraights: true,
+      // ignoreFlushes: true
+
+      // Shift aces to end (ie, count as < 2).
+      if (this.options.acesAreLow) {
+        while (Hand.rank(cards[0]) === 'A') {
+          cards.push(cards.shift())
+        }
+      }
+
+      tmpLow = []
+      n = 0
+      for (c = cards.length - 1; c >= 0; c--) {
+        if (n === 0 || (Hand.rank(tmpLow[n - 1]) !== Hand.rank(cards[c]))) {
+          tmpLow[n++] = cards[c]
+          if (tmpLow.length === 5) {
+            this.cardsLow = tmpLow
+            break
+          }
+        }
+      }
+
     } else {
       this.cardsLow = []
     }
@@ -225,6 +251,16 @@ Hand.prototype = {
       }
     }
     return 0
+  },
+
+
+  /**
+   * Compare this hand's lowest hand to another hand's lowest hand.
+   * @param {Hand} hand
+   * @returns -1, 0, or 1 (for sorting)
+   */
+  compareLowest: function (hand) {
+    //
   }
 }
 

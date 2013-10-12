@@ -17,8 +17,8 @@
 
 
   defaults = {
-    isHigh: true,
-    isLow: false,
+    high: true,
+    low: false,
     acesAreLow: true,
     ignoreStraights: true,
     ignoreFlushes: true
@@ -30,8 +30,8 @@
    * @constructor
    * options:
    *   id = defaults to uid()
-   *   isHigh = whether the hand checks "high" values; default true
-   *   isLow = whether the hand checks "low" values; default false
+   *   high = whether the hand checks "high" values; default true
+   *   low = whether the hand checks "low" values; default false
    *   acesAreLow = in low, if aces count as 1/low; default true
    *   ignoreStraights = in low, if straights can be low; default true
    *   ignoreFlushes = in low, if flushes can be low; default true
