@@ -485,7 +485,7 @@ Hand.prototype = {
 
       // Shift aces to end (ie, count as < 2).
       if (this.options.acesAreLow) {
-        while (Hand.rank(cards[0]) === 'A') {
+        if (Hand.rank(cards[0]) === 'A') {
           cards.push(cards.shift())
         }
       }

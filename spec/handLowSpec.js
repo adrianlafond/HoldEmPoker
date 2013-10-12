@@ -30,6 +30,6 @@ describe('test low hands', function () {
     expect(hand.cardsLow).toEqual(['2C', '3D', '4D', '5H', '7S'])
 
     hand = new Hand({ cards: ['AS', '4C', 'AH', '4D', '3D', 'AD', '2C'], low: true })
-    expect(hand.cardsLow).toEqual(['AS', '2C', '3D', '4C', 'AH'])
+    expect(hand.cardsLow).toEqual(['AS', '2C', '3D', '4D', 'AD'])
   })
 })
