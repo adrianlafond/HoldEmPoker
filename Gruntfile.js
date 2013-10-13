@@ -8,7 +8,6 @@ module.exports = function (grunt) {
         src: [
           'src/export-top.js',
           'src/vars.js',
-          'src/lingo.js',
           'src/deck.js',
           'src/hand.js',
           'src/hand-constants.js',
@@ -19,6 +18,10 @@ module.exports = function (grunt) {
           'src/export-bot.js'
         ],
         dest: 'dist/disbranded.poker.js'
+      },
+      lingo: {
+        src: ['src/lingo.en.js'],
+        dest: 'dist/disbranded.poker.lingo.en.js'
       }
     },
 
@@ -34,7 +37,8 @@ module.exports = function (grunt) {
       min: {
         options: {},
         files: {
-          'dist/disbranded.poker-min.js': ['dist/disbranded.poker.js']
+          'dist/disbranded.poker-min.js': ['dist/disbranded.poker.js'],
+          'dist/disbranded.poker.lingo.en-min.js': ['dist/disbranded.poker.lingo.en.js']
         }
       }
     },
