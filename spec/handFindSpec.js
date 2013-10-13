@@ -85,7 +85,7 @@ describe('Poker hand ranks', function () {
   })
 
   it('should return a low straight or null', function () {
-    var optns = { low: Hand.ACE_TO_FIVE_LOW }
+    var optns = { low: true }
 
     optns.cards = ['2S', '2H', '3S', '3H', '4D', '5C', '6H']
     expect(Hand.findStraight(optns).cards).toEqual(['6H', '5C', '4D', '3S', '2S'])

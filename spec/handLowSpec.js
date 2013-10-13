@@ -14,7 +14,8 @@ describe('test low hands', function () {
   it('should find a straight when aces are NOT low', function () {
     var result = Hand.findStraight({
       cards: ['AS', '4C', 'QH', '4D', '3D', '5H', '2C'],
-      low: Hand.DEUCE_TO_SIX_LOW
+      low: true,
+      acesAreLow: false
     })
     expect(result).toBe(null)
   })
