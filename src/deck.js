@@ -80,10 +80,11 @@
      * Reset the deck to its original unshuffled order.
      */
     reset: function () {
-      this.cardsIn = CARDS.slice(0)
-      _.times(this.jokers, function (n) {
+      var n = 0
+      this.cardsIn = CARDS.slice()
+      for (; n < this.jokers; n++) {
         this.cardsIn[SIZE + n] = 'W' + (n + 1)
-      }, this)
+      }
       this.cardsOut = []
       this.isShuffled = false
       this.isNew = true
@@ -95,8 +96,14 @@
      * Shuffle/randomize the deck.
      */
     shuffle: function () {
+      var cards, cardsLen, r
       this.reset()
-      this.cardsIn = _.shuffle(this.cardsIn)
+      cards = this.cardsIn.slice()
+      this.cardsIn = []
+      while ((cardsLen = cards.length) > 0) {
+        r = Math.floor(Math.random() * cardsLen)
+        this.cardsIn.push(cards.splice(r, 1))
+      }
       this.isShuffled = true
       this.isNew = false
       return this
