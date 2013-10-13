@@ -308,7 +308,7 @@ var Poker,
   var uid = (function () {
     var u = 0
     return function () {
-      return u++
+      return 'hand-' + u++
     }
   }()),
 
@@ -1257,7 +1257,7 @@ Hand.suit = function (card) {
   var uid = (function () {
     var u = 0
     return function () {
-      return u++
+      return 'player-' + u++
     }
   }()),
 
