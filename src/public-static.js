@@ -4,7 +4,9 @@
  */
 Poker.Deck = Deck
 Poker.Hand = Hand
-
+Poker.Player = Player
+Poker.Pot = Pot
+Poker.Table = Table
 Poker.util = util
 
 

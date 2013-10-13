@@ -31,10 +31,14 @@
  * Variables scoped to entire Poker module.
  */
 var Poker,
+
+    util,
+
     Deck,
     Hand,
-
-    util
+    Player,
+    Pot,
+    Table
 
 
 
@@ -1243,6 +1247,106 @@ Hand.suit = function (card) {
 
 
 /**
+ * Poker.Player
+ */
+;(function () {
+  'use strict'
+
+  // If a PLayer is not instantiated with an id,
+  // one will be created for it.
+  var uid = (function () {
+    var u = 0
+    return function () {
+      return u++
+    }
+  }()),
+
+  defaults = {
+    //
+  }
+
+
+  /**
+   * @constructor
+   */
+  Player = function (options) {
+    if (!(this instanceof Player)) {
+      return new Player(options)
+    }
+    this.options = util.extend({ id: uid() }, defaults, options || {})
+  }
+
+  Player.prototype = {
+    //
+  }
+}());
+
+
+
+
+/**
+ * Poker.Pot
+ */
+;(function () {
+  'use strict'
+
+
+  var defaults = {
+    //
+  }
+
+
+  /**
+   * @constructor
+   */
+  Pot = function (options) {
+    if (!(this instanceof Pot)) {
+      return new Pot(options)
+    }
+    this.options = util.extend({ id: uid() }, defaults, options || {})
+  }
+
+  Pot.prototype = {
+    //
+  }
+}());
+
+
+
+
+
+/**
+ * Poker.Table
+ */
+;(function () {
+  'use strict'
+
+
+  var defaults = {
+    //
+  }
+
+
+  /**
+   * @constructor
+   */
+  Table = function (options) {
+    if (!(this instanceof Table)) {
+      return new Table(options)
+    }
+    this.options = util.extend({ id: uid() }, defaults, options || {})
+  }
+
+  Table.prototype = {
+    //
+  }
+}());
+
+
+
+
+
+/**
  * The main Poker class and the returned API.
  */
 Poker = function () {
@@ -1263,7 +1367,9 @@ Poker.prototype = {
  */
 Poker.Deck = Deck
 Poker.Hand = Hand
-
+Poker.Player = Player
+Poker.Pot = Pot
+Poker.Table = Table
 Poker.util = util
 
 
