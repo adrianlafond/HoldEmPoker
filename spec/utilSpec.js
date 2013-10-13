@@ -33,4 +33,11 @@ describe('Poker.util', function () {
   expect(util.isObject()).toBe(false)
   expect(util.isObject(true)).toBe(false)
   expect(util.isObject('[object Object]')).toBe(false)
+
+  var a = { foo: 'bar', ug: 'ly' },
+      b = { foo: 'ugh', say: 'what' }
+  expect(util.extend({}, a, b)).toEqual({ foo: 'ugh', ug: 'ly', say: 'what' })
+  expect(util.clone(a)).toEqual({ foo: 'bar', ug: 'ly' })
+  expect(a === a).toBe(true)
+  expect(util.clone(a) === a).toBe(false)
 })
