@@ -25,7 +25,6 @@ Hand.findFlush = function () {
       all = false,
       flush = null,
       s, suit,
-      c, clen,
       n,
       tmpCards,
       tmpCardsLen
@@ -49,20 +48,19 @@ Hand.findFlush = function () {
   if (!sorted) {
     Hand.sortByRank(cards)
   }
-  clen = cards.length
 
   // Loop through the suits to match them to flushes.
   for (s = 0; s < 4; s++) {
-    suit = Hand.SUITS[s]
+    suit = Hand.SUITS.charAt(s)
     tmpCards = []
     n = 0
 
     // Find the subset of cards with the current suit.
-    for (c = 0; c < clen; c++) {
-      if (cards[c].charAt(1) === suit) {
-        tmpCards[n++] = cards[c]
+    util.each(cards, function (card, c) {
+      if (Hand.suit(card) === suit) {
+        tmpCards[n++] = card
       }
-    }
+    })
 
     // If the subset has at least 5 cards, it is a flush.
     tmpCardsLen = tmpCards.length
@@ -191,7 +189,6 @@ Hand.findStraight = function () {
       ace = null,
       tmpStr8 = null,
       str8 = null,
-      c, clen,
       r = -1,
       tmpIndex,
       ranks
@@ -216,41 +213,39 @@ Hand.findStraight = function () {
     Hand.sortByRank(cards)
   }
 
-  clen = cards.length
-  for (c = 0; c < clen; c++) {
-    if (r === -1) {
+  util.each(cards, function (card, c) {
+    if (r === -1 || tmpStr8 === null) {
       // No straight cards yet, so start a straight with current card.
-      r = Hand.RANKS.indexOf(Hand.rank(cards[c]))
-      tmpStr8 = [cards[c]]
+      r = Hand.RANKS.indexOf(Hand.rank(card))
+      tmpStr8 = [card]
 
     } else {
       // A straight is in the works and it must be determined
       // if the current loop card can be added to it.
-      tmpIndex = Hand.RANKS.indexOf(Hand.rank(cards[c]))
+      tmpIndex = Hand.RANKS.indexOf(Hand.rank(card))
 
       if (tmpIndex === r) {
         // If rank is same as last card in the straight, skip.
-        continue
+
       } else if (tmpIndex === r + 1) {
         // If rank is next after the last card in the straight, add it.
         r = tmpIndex
-        tmpStr8.push(cards[c])
+        tmpStr8.push(card)
 
         // Test fot 5-4-3-2-A straight.
         if (acesAreLow && tmpStr8.length === 4 && Hand.rank(tmpStr8[0]) === '5') {
           ;(function () {
-            var i = 0,
-                aceIndex = Hand.RANKS.indexOf('A'),
+            var aceIndex = Hand.RANKS.indexOf('A'),
                 cardIndex
-            for (; i < clen; i++) {
-              cardIndex = Hand.RANKS.indexOf(Hand.rank(cards[i]))
+            util.each(cards, function (cardA, i) {
+              cardIndex = Hand.RANKS.indexOf(Hand.rank(cardA))
               if (cardIndex === aceIndex) {
-                tmpStr8[4] = cards[i]
-                break
+                tmpStr8[4] = cardA
+                return false
               } else if (cardIndex > aceIndex) {
-                break
+                return false
               }
-            }
+            }, this)
           }());
         }
 
@@ -258,20 +253,21 @@ Hand.findStraight = function () {
         // Current loop card does not fit onto the straight.
         // Test if straight is complete.
         if (tmpStr8.length >= 5) {
-          str8 = tmpStr8.slice()
+          str8 = tmpStr8.slice(0, 5)
           tmpStr8 = null
           if (!low) {
-            break
+            return false
           }
         }
-        // If enough cards are left, see if there is still a straight in them.
-        if (clen - c >= 4) {
-          r = tmpIndex
-          tmpStr8 = [cards[c]]
+
+        if (cards.length - c < 4) {
+          return false
         }
+        r = tmpIndex
+        tmpStr8 = [card]
       }
     }
-  }
+  }, this)
 
   if (tmpStr8 && tmpStr8.length >= 5) {
     if (str8) {
@@ -371,21 +367,21 @@ Hand.findSets = function () {
         handLen = 0,
         sliceLen,
         slen
-    for (c = 0, setsLen = sets.length; c < setsLen; c++) {
-      if (handLen < 4 && (slen = sets[c].length) >= 2) {
+    util.each(sets, function (set, c) {
+      if (handLen < 4 && (slen = set.length) >= 2) {
         sliceLen = Math.min(slen, 5 - handLen)
-        finalSets.push(sets[c].slice(0, sliceLen))
+        finalSets.push(set.slice(0, sliceLen))
         setsCardsLen += sliceLen
         if (sliceLen < slen - 1) {
-          kickers.push(sets[c].slice(sliceLen))
+          kickers.push(set.slice(sliceLen))
         }
         handLen += slen
       } else {
-        kickers = kickers.length ? kickers.concat(sets[c]) : sets[c]
-        handLen += sets[c].length
+        kickers = kickers.length ? kickers.concat(set) : set
+        handLen += set.length
       }
       handLen = Math.min(5, handLen)
-    }
+    }, this)
   }());
 
 
@@ -436,27 +432,26 @@ Hand.getBestCardsByRank = function () {
         ? (arguments[0].low === true)
         : false,
       cmprFn = low ? Hand.isLower : Hand.isHigher,
-      a = 1,
-      alen = array.length,
-      c, clen,
-      bestArray = array[0].slice(),
-      tmpArray
+      bestArray
 
-  for (; a < alen; a++) {
-    clen = array[a].length
-    if (low) {
-      tmpArray = array[a].slice(Math.max(0, clen - 5))
-      clen = tmpArray.length
+  util.each(array, function (cards, a) {
+    var tmpArray
+    if (a === 0) {
+      bestArray = cards.slice()
     } else {
-      tmpArray = array[a].slice()
-    }
-    for (c = 0; c < clen; c++) {
-      if (cmprFn(tmpArray[c], bestArray[c])) {
-        bestArray = tmpArray
-        break
+      if (low) {
+        tmpArray = cards.slice(Math.max(0, cards.length - 5))
+      } else {
+        tmpArray = cards.slice()
       }
+      util.each(tmpArray, function (card, c) {
+        if (cmprFn(card, bestArray[c])) {
+          bestArray = tmpArray
+          return false
+        }
+      })
     }
-  }
+  })
   return bestArray
 }
 

@@ -20,14 +20,14 @@ Hand.prototype = {
    * @returns {boolean}
    */
   has: function (card) {
-    var c = 0,
-        clen = this.cards.length
-    for (; c < clen; c++) {
-      if (this.cards[c] === card) {
-        return true
+    var match = false
+    util.each(this.cards, function (testCard, c) {
+      if (testCard === card) {
+        match = true
+        return false
       }
-    }
-    return false
+    })
+    return match
   },
 
   /**
