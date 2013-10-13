@@ -2,13 +2,13 @@
 
 
 describe('Poker', function () {
-  var poker
-  
+  var Poker = DISBRANDED.Poker
+
   beforeEach(function () {
-    poker = new DISBRANDED.Poker
+    // Poker = new DISBRANDED.Poker
   })
-  
+
   it('should pass a test', function () {
-    expect(poker.name).toBe('Poker')
+    // expect(Poker).toBe('Poker')
   })
 })

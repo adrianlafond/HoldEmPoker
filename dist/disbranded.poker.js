@@ -1303,7 +1303,7 @@ Hand.suit = function (card) {
     if (!(this instanceof Pot)) {
       return new Pot(options)
     }
-    this.options = util.extend({ id: uid() }, defaults, options || {})
+    this.options = util.extend({}, defaults, options || {})
   }
 
   Pot.prototype = {
@@ -1334,7 +1334,7 @@ Hand.suit = function (card) {
     if (!(this instanceof Table)) {
       return new Table(options)
     }
-    this.options = util.extend({ id: uid() }, defaults, options || {})
+    this.options = util.extend({}, defaults, options || {})
   }
 
   Table.prototype = {
@@ -1349,14 +1349,36 @@ Hand.suit = function (card) {
 /**
  * The main Poker class and the returned API.
  */
-Poker = function () {
-  this.name = 'Poker'
-}
+;(function () {
+  'use strict'
 
 
-Poker.prototype = {
-  
-}
+  var defaults = {
+    //
+  }
+
+
+  /**
+   * @constructor
+   */
+  Poker = function (options) {
+    if (!(this instanceof Poker)) {
+      return new Poker(options)
+    }
+    this.options = util.extend({}, defaults, options || {})
+  }
+
+  Poker.prototype = {
+    //
+  }
+}());
+
+
+
+
+
+
+
 
 
 

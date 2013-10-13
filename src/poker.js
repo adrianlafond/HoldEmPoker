@@ -1,14 +1,36 @@
 /**
  * The main Poker class and the returned API.
  */
-Poker = function () {
-  this.name = 'Poker'
-}
+;(function () {
+  'use strict'
 
 
-Poker.prototype = {
-  
-}
+  var defaults = {
+    //
+  }
+
+
+  /**
+   * @constructor
+   */
+  Poker = function (options) {
+    if (!(this instanceof Poker)) {
+      return new Poker(options)
+    }
+    this.options = util.extend({}, defaults, options || {})
+  }
+
+  Poker.prototype = {
+    //
+  }
+}());
+
+
+
+
+
+
+
 
 
 

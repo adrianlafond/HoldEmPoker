@@ -17,7 +17,7 @@
     if (!(this instanceof Pot)) {
       return new Pot(options)
     }
-    this.options = util.extend({ id: uid() }, defaults, options || {})
+    this.options = util.extend({}, defaults, options || {})
   }
 
   Pot.prototype = {

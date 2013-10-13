@@ -17,7 +17,7 @@
     if (!(this instanceof Table)) {
       return new Table(options)
     }
-    this.options = util.extend({ id: uid() }, defaults, options || {})
+    this.options = util.extend({}, defaults, options || {})
   }
 
   Table.prototype = {
