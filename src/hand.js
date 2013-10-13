@@ -11,7 +11,7 @@
   var uid = (function () {
     var u = 0
     return function () {
-      return u++
+      return 'hand-' + u++
     }
   }()),
 
