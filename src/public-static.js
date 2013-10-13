@@ -5,20 +5,8 @@
 Poker.Deck = Deck
 Poker.Hand = Hand
 
+Poker.util = util
 
-/**
- * @param {string} lang
- * @returns poker lingo for a particular language. Defaults to English.
- */
-Poker.lingo = function (lang) {
-  lang = lang || 'en'
-  if (lingo.hasOwnProperty(lang)) {
-    return {
-      cards: _.clone(lingo[lang].cards)
-    }
-  }
-  return null
-}
 
 
 

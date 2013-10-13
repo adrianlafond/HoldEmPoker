@@ -5,7 +5,7 @@ var Poker,
     Deck,
     Hand,
 
-    lingo
+    util
 
 
 
