@@ -262,10 +262,37 @@ Hand.prototype = {
    * @returns -1, 0, or 1 (for sorting)
    */
   compareLowest: function (hand) {
-    //
+    var cardsLowLen = this.cardsLow.length,
+        handLowLen = hand.cardsLow.length,
+        c,
+        crank,
+        hrank
+    if (cardsLowLen < 5 && handLowLen < 5) {
+      return 0
+    } else if (cardsLowLen < 5 && handLowLen >= 5) {
+      return 1
+    } else if (cardsLowLen >= 5 && handLowLen < 5) {
+      return -1
+    } else {
+      for (c = 4; c >= 0; c--) {
+        crank = Hand.RANKS.indexOf(Hand.rank(this.cardsLow[c]))
+        hrank = Hand.RANKS.indexOf(Hand.rank(hand.cardsLow[c]))
+        if (crank < hrank) {
+          return 1
+        } else if (crank > hrank) {
+          return -1
+        }
+      }
+    }
+    return 0
   },
 
 
+
+  /**
+   * Configures settings for various lowball options.
+   * Called by reset().
+   */
   configLow: function () {
     if (this.options.low === true) {
       this.options.low = Hand.ACE_TO_FIVE_LOW
@@ -295,6 +322,7 @@ Hand.prototype = {
         this.acesAreLow = true
         this.ignoreStraights = true
         this.ignoreFlushes = true
+        this.options.low = 0
         break
     }
   }

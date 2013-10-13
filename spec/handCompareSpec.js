@@ -41,4 +41,40 @@ describe('hand comparisons', function () {
     expect(h_2pair.compareHighest(h_3kind)).toBe(Hand.WORSE)
     expect(h_straight.compareHighest(h_3kind)).toBe(Hand.BETTER)
   })
+
+  it('should call the lowest hand', function () {
+    var opts = { low: Hand.ACE_TO_FIVE_LOW },
+        h_null = new Hand(opts),
+        h_8 = new Hand(opts),
+        h_6 = new Hand(opts),
+        h_5 = new Hand(opts)
+
+    h_null.add('KS', 'KC', 'QH', '4D', '7D', 'KD', 'KH')
+    expect(h_null.cardsLow).toEqual([])
+
+    h_8.add('5C', '8D', 'KS', 'AD', '4H', 'QH', '7D')
+    expect(h_8.cardsLow).toEqual(['AD', '4H', '5C', '7D', '8D'])
+
+    h_6.add('5C', '6D', 'KS', 'AD', '4H', 'QH', '2D')
+    expect(h_6.cardsLow).toEqual(['AD', '2D', '4H', '5C', '6D'])
+
+    h_5.add('5C', '3H', 'KS', 'AD', '4H', 'QH', '2D')
+    expect(h_5.cardsLow).toEqual(['AD', '2D', '3H', '4H', '5C'])
+
+    expect(h_null.compareLowest(h_8)).toBe(Hand.WORSE)
+    expect(h_null.compareLowest(h_6)).toBe(Hand.WORSE)
+    expect(h_null.compareLowest(h_5)).toBe(Hand.WORSE)
+
+    expect(h_8.compareLowest(h_null)).toBe(Hand.BETTER)
+    expect(h_8.compareLowest(h_6)).toBe(Hand.WORSE)
+    expect(h_8.compareLowest(h_5)).toBe(Hand.WORSE)
+
+    expect(h_6.compareLowest(h_null)).toBe(Hand.BETTER)
+    expect(h_6.compareLowest(h_8)).toBe(Hand.BETTER)
+    expect(h_6.compareLowest(h_5)).toBe(Hand.WORSE)
+
+    expect(h_5.compareLowest(h_null)).toBe(Hand.BETTER)
+    expect(h_5.compareLowest(h_8)).toBe(Hand.BETTER)
+    expect(h_5.compareLowest(h_6)).toBe(Hand.BETTER)
+  })
 })
