@@ -26,7 +26,7 @@ module.exports = function (grunt) {
     },
 
     jasmine: {
-      src: 'dist/disbranded.poker.js',
+      src: ['dist/disbranded.poker.js', 'dist/disbranded.poker.lingo.en.js'],
       options: {
         specs: 'spec/*.js',
         helpers: 'lib/*.js'
