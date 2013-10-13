@@ -9,8 +9,7 @@ Hand.prototype = {
   reset: function () {
     this.configLow()
     this.cards = []
-    this.rankHigh = 0
-    this.rankLow = 0
+    this.rank = 0
     this.cardsHigh = []
     this.cardsLow = []
     return this
@@ -73,21 +72,6 @@ Hand.prototype = {
 
 
   /**
-   * @param {string} type H,hi,high or L,low, etc. Case insensitive;
-   *   just checks first character. Defaults to high.
-   * @returns the (cached) index of the rank of the hand (range 0 - 10).
-   * @see Hand constants above.
-   * Equivalent to querying value of this.rankHigh or this.rankLow.
-   */
-  rank: function (type) {
-    var low = typeof type === 'string'
-      && type.length > 0
-      && type.charAt(0).toUpperCase() === 'L'
-    return low ? this.rankLow : this.rankHigh
-  },
-
-
-  /**
    * Find the best hand and update the cached rank values.
    */
   updateRank: function () {
@@ -112,11 +96,11 @@ Hand.prototype = {
 
 
   /**
-   * Find the best high hand and update rankHigh.
+   * Find the best high hand and update rank.
    */
   updateHigh: function (cards) {
     var result = null
-    this.rankHigh = 0
+    this.rank = 0
     cards = cards || this.sortedCardsCopy()
 
     if (cards.length >= 5) {
@@ -125,7 +109,7 @@ Hand.prototype = {
       // a test for a straight and royal flush.
       if (result = Hand.findFlush({ cards: cards, sorted: true, all: true })) {
         // Hand is at least a flush.
-        this.rankHigh = Hand.FLUSH
+        this.rank = Hand.FLUSH
         this.cardsHigh = result.cards
 
         result = Hand.findStraightFlush({
@@ -136,21 +120,21 @@ Hand.prototype = {
         })
         if (result) {
           // Hand is straight or royal flush. Exit since hand cannot be higher.
-          this.rankHigh = result.royalFlush ? Hand.ROYAL_FLUSH : Hand.STRAIGHT_FLUSH
+          this.rank = result.royalFlush ? Hand.ROYAL_FLUSH : Hand.STRAIGHT_FLUSH
           this.cardsHigh = result.cards
           return
         }
       }
 
       // Find straights.
-      if (this.rankHigh < Hand.STRAIGHT) {
+      if (this.rank < Hand.STRAIGHT) {
         result = Hand.findStraight({
           cards: cards,
           sorted: true,
           acesAreLow: this.acesAreLow
         })
         if (result) {
-          this.rankHigh = Hand.STRAIGHT
+          this.rank = Hand.STRAIGHT
           this.cardsHigh = result.cards
         }
       }
@@ -158,9 +142,9 @@ Hand.prototype = {
       // Next find sets of cards of the same rank, since 4 of a kind
       // is the next hand not yet found.
       if (result = Hand.findSets({ cards: cards, sorted: true })) {
-        if (result.type > this.rankHigh) {
-          this.rankHigh = result.type
-          switch (this.rankHigh) {
+        if (result.type > this.rank) {
+          this.rank = result.type
+          switch (this.rank) {
             case Hand.FOUR_OF_A_KIND:
               this.cardsHigh = result.sets[0].concat(result.kickers)
               break
@@ -183,9 +167,9 @@ Hand.prototype = {
         }
 
       } else {
-        if (this.rankHigh < Hand.HIGH_CARD) {
+        if (this.rank < Hand.HIGH_CARD) {
           // Best 5-card hand is a mere high card.
-          this.rankHigh = Hand.HIGH_CARD
+          this.rank = Hand.HIGH_CARD
           this.cardsHigh = cards.slice(0, 5)
         }
       }
@@ -254,9 +238,9 @@ Hand.prototype = {
    */
   compareHighest: function (hand) {
     var c, cmpr
-    if (this.rankHigh > hand.rankHigh) {
+    if (this.rank > hand.rank) {
       return -1
-    } else if (this.rankHigh < hand.rankHigh) {
+    } else if (this.rank < hand.rank) {
       return 1
     } else {
       if (this.cardsHigh.length && hand.cardsHigh.length) {
