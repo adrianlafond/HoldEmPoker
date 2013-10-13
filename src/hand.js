@@ -18,10 +18,7 @@
 
   defaults = {
     high: true,
-    low: false,
-    acesAreLow: true,
-    ignoreStraights: true,
-    ignoreFlushes: true
+    low: false
   }
 
 
@@ -32,16 +29,10 @@
    *   id = defaults to uid()
    *   high = whether the hand checks "high" values; default true
    *   low = whether the hand checks "low" values; default false
-   *   acesAreLow = in low, if aces count as 1/low; default true
-   *   ignoreStraights = in low, if straights can be low; default true
-   *   ignoreFlushes = in low, if flushes can be low; default true
    *
-   * Options to set for low hands:
-   *   Ace-to-five low = acesAreLow, ignoreStraights, ignoreFlushes
-   *   Ace-to-six low = acesAreLow, !ignoreStraights, !ignoreFlushes
-   *   Deuce-to-seven low = !acesAreLow, !ignoreStraights, !ignoreFlushes
-   *   Deuce-to-six low = !acesAreLow, ignoreStraights, ignoreFlushes
-   * If !acesAreLow, A-2-3-4-5 is not a straight, since A != 1.
+   * Other options for low: Hand.ACE_TO_FIVE_LOW, Hand.ACE_TO_SIX_LOW,
+   * Hand.DEUCE_TO_SEVEN_LOW, Hand.DEUCE_TO_SIX_LOW.
+   * See https://en.wikipedia.org/wiki/Lowball_(poker)
    *
    * If any options are updated after instantiation, reset() should be called.
    */

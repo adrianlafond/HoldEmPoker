@@ -11,6 +11,13 @@ Hand.TWO_PAIR        = 3
 Hand.ONE_PAIR        = 2
 Hand.HIGH_CARD       = 1
 
+// @contants for low hand styles
+Hand.ACE_TO_FIVE_LOW    = 1
+Hand.ACE_TO_SIX_LOW     = 2,
+Hand.DEUCE_TO_SEVEN_LOW = 3,
+Hand.DEUCE_TO_SIX_LOW   = 4
+
+
 // @constants for comparisons between hands
 // They are "backwards" for purposes of array sorting
 // (better is closer to start of array).

@@ -311,10 +311,7 @@ var Poker,
 
   defaults = {
     high: true,
-    low: false,
-    acesAreLow: true,
-    ignoreStraights: true,
-    ignoreFlushes: true
+    low: false
   }
 
 
@@ -325,16 +322,10 @@ var Poker,
    *   id = defaults to uid()
    *   high = whether the hand checks "high" values; default true
    *   low = whether the hand checks "low" values; default false
-   *   acesAreLow = in low, if aces count as 1/low; default true
-   *   ignoreStraights = in low, if straights can be low; default true
-   *   ignoreFlushes = in low, if flushes can be low; default true
    *
-   * Options to set for low hands:
-   *   Ace-to-five low = acesAreLow, ignoreStraights, ignoreFlushes
-   *   Ace-to-six low = acesAreLow, !ignoreStraights, !ignoreFlushes
-   *   Deuce-to-seven low = !acesAreLow, !ignoreStraights, !ignoreFlushes
-   *   Deuce-to-six low = !acesAreLow, ignoreStraights, ignoreFlushes
-   * If !acesAreLow, A-2-3-4-5 is not a straight, since A != 1.
+   * Other options for low: Hand.ACE_TO_FIVE_LOW, Hand.ACE_TO_SIX_LOW,
+   * Hand.DEUCE_TO_SEVEN_LOW, Hand.DEUCE_TO_SIX_LOW.
+   * See https://en.wikipedia.org/wiki/Lowball_(poker)
    *
    * If any options are updated after instantiation, reset() should be called.
    */
@@ -366,6 +357,13 @@ Hand.TWO_PAIR        = 3
 Hand.ONE_PAIR        = 2
 Hand.HIGH_CARD       = 1
 
+// @contants for low hand styles
+Hand.ACE_TO_FIVE_LOW    = 1
+Hand.ACE_TO_SIX_LOW     = 2,
+Hand.DEUCE_TO_SEVEN_LOW = 3,
+Hand.DEUCE_TO_SIX_LOW   = 4
+
+
 // @constants for comparisons between hands
 // They are "backwards" for purposes of array sorting
 // (better is closer to start of array).
@@ -391,6 +389,7 @@ Hand.prototype = {
    * Remove all cards from the hand.
    */
   reset: function () {
+    this.configLow()
     this.cards = []
     this.rankHigh = 0
     this.rankLow = 0
@@ -515,7 +514,7 @@ Hand.prototype = {
           cards: this.cardsHigh,
           sorted: true,
           flush: true,
-          acesAreLow: this.options.acesAreLow
+          acesAreLow: this.acesAreLow
         })
         if (result) {
           // Hand is straight or royal flush. Exit since hand cannot be higher.
@@ -530,7 +529,7 @@ Hand.prototype = {
         result = Hand.findStraight({
           cards: cards,
           sorted: true,
-          acesAreLow: this.options.acesAreLow
+          acesAreLow: this.acesAreLow
         })
         if (result) {
           this.rankHigh = Hand.STRAIGHT
@@ -597,7 +596,7 @@ Hand.prototype = {
       // ignoreFlushes: true
 
       // Shift aces to end (ie, count as < 2).
-      if (this.options.acesAreLow) {
+      if (this.acesAreLow) {
         if (Hand.rank(cards[0]) === 'A') {
           cards.push(cards.shift())
         }
@@ -610,10 +609,10 @@ Hand.prototype = {
           tmpLow[n++] = cards[c]
 
           if (tmpLow.length === 5) {
-            if (!this.options.ignoreFlushes && Hand.findFlush(tmpLow)) {
+            if (!this.ignoreFlushes && Hand.findFlush(tmpLow)) {
               tmpLow = tmpLow.slice(0, 4)
               n = 4
-            } else if (!this.options.ignoreStraights && Hand.findStraight(tmpLow)) {
+            } else if (!this.ignoreStraights && Hand.findStraight(tmpLow)) {
               tmpLow = tmpLow.slice(0, 4)
               n = 4
             } else {
@@ -662,6 +661,40 @@ Hand.prototype = {
    */
   compareLowest: function (hand) {
     //
+  },
+
+
+  configLow: function () {
+    if (this.options.low === true) {
+      this.options.low = Hand.ACE_TO_FIVE_LOW
+    }
+    switch (this.options.low) {
+      case Hand.ACE_TO_FIVE_LOW:
+        this.acesAreLow = true
+        this.ignoreStraights = true
+        this.ignoreFlushes = true
+        break
+      case Hand.ACE_TO_SIX_LOW:
+        this.acesAreLow = true
+        this.ignoreStraights = false
+        this.ignoreFlushes = false
+        break
+      case Hand.DEUCE_TO_SEVEN_LOW:
+        this.acesAreLow = false
+        this.ignoreStraights = false
+        this.ignoreFlushes = false
+        break
+      case Hand.DEUCE_TO_SIX_LOW:
+        this.acesAreLow = false
+        this.ignoreStraights = true
+        this.ignoreFlushes = true
+        break
+      default:
+        this.acesAreLow = true
+        this.ignoreStraights = true
+        this.ignoreFlushes = true
+        break
+    }
   }
 }
 

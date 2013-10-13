@@ -34,6 +34,13 @@
       'Four of a Kind',
       'Straight Flush',
       'Royal Flush'
+    ],
+    low: [
+      null,
+      'Ace-to-five low',
+      'Ace-to-six low',
+      'Deuce-to-seven low',
+      'Deuce-to-six low'
     ]
   }
 }));
