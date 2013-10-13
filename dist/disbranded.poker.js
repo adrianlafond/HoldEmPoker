@@ -1,7 +1,7 @@
 /*
  * poker-game-engine v0.0.1
  * by Adrian Lafond / adrian [at] disbranded.com
- * last updated 2013-10-12
+ * last updated 2013-10-13
 **/
 
 ;(function (root, factory) {
@@ -10,18 +10,18 @@
    */
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['underscore'], factory);
+    define(factory);
   } else if (typeof exports === 'object') {
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like enviroments that support module.exports,
     // like Node.
-    module.exports = factory(require('underscore'));
+    module.exports = factory();
   } else {
     // Browser globals (root is window)
     root.DISBRANDED = root.DISBRANDED || {}
-    root.DISBRANDED.Poker = factory(root._);
+    root.DISBRANDED.Poker = factory();
   }
-}(this, function (_) {
+}(this, function () {
   'use strict'
 
 
@@ -111,6 +111,35 @@ var Poker,
   }
 
 
+  function has(obj, key) {
+    return Object.prototype.hasOwnProperty.call(obj, key)
+  }
+
+
+  function each(obj, iterator, context) {
+    var i, len
+    if (obj) {
+      if (obj.forEach) {
+        obj.forEach(iterator, context)
+      } else if (obj.length === parseFloat(obj.length)) {
+        for (i = 0, len = obj.length; i < len; i++) {
+          if (!iterator.call(context, obj[i], i)) {
+            return
+          }
+        }
+      } else {
+        for (i in obj) {
+          if (Object.prototype.hasOwnProperty.call(obj, i)) {
+            if (!iterator.call(context, obj[i], i)) {
+              return
+            }
+          }
+        }
+      }
+    }
+  }
+
+
   util = (function () {
     return {
       isNull: isNull,
@@ -124,7 +153,9 @@ var Poker,
       isArray: isArray,
       isObject: isObject,
       extend: extend,
-      clone: clone
+      clone: clone,
+      has: has,
+      each: each
     }
   }());
 }());
@@ -311,7 +342,7 @@ var Poker,
     if (!(this instanceof Hand)) {
       return new Hand(options)
     }
-    this.options = _.extend({ id: uid() }, defaults, options || {})
+    this.options = util.extend({ id: uid() }, defaults, options || {})
     this.reset()
     if (this.options.cards) {
       this.add(this.options.cards)
@@ -373,7 +404,14 @@ Hand.prototype = {
    * @returns {boolean}
    */
   has: function (card) {
-    return _.contains(this.cards, card)
+    var c = 0,
+        clen = this.cards.length
+    for (; c < clen; c++) {
+      if (this.cards[c] === card) {
+        return true
+      }
+    }
+    return false
   },
 
   /**
@@ -381,13 +419,14 @@ Hand.prototype = {
    * @param {string|array} arguments
    */
   add: function () {
-    _.each(arguments, function (card, i) {
-      if (_.isString(card)) {
+    var args = Array.prototype.slice.call(arguments)
+    util.each(args, function (card, i) {
+      if (util.isString(card)) {
         if (!this.has(card)) {
           this.cards[this.cards.length] = card
           this.updateRank()
         }
-      } else if (_.isArray(card)) {
+      } else if (util.isArray(card)) {
         this.add.apply(this, card)
       }
     }, this)
@@ -399,7 +438,7 @@ Hand.prototype = {
    * @returns {string} card at index; null if index is out of range.
    */
   get: function (index) {
-    return _.has(this.cards, index) ? this.cards[index] : null
+    return util.has(this.cards, index) ? this.cards[index] : null
   },
 
   /**
@@ -407,7 +446,7 @@ Hand.prototype = {
    */
   set: function (index, card) {
     index = parseInt(index, 10)
-    if (_.isNumber(index) && !_.isNaN(index)) {
+    if (util.isNumber(index)) {
       index = Math.max(0, Math.min(this.cards.length, index))
       this.cards[index] = card
       this.updateRank()
@@ -663,9 +702,9 @@ Hand.findFlush = function () {
       tmpCardsLen
 
   // Interpret arguments.
-  if (_.isArray(param)) {
+  if (util.isArray(param)) {
     cards = param
-  } else if (_.isObject(param)) {
+  } else if (util.isObject(param)) {
     cards = param.cards
     sorted = param.sorted === true
     low = param.low === true
@@ -673,7 +712,7 @@ Hand.findFlush = function () {
   }
 
   // Make sure cards array is valid.
-  if (!_.isArray(cards) || cards.length < 5) {
+  if (!util.isArray(cards) || cards.length < 5) {
     return null
   }
 
@@ -752,9 +791,9 @@ Hand.findStraightFlush = function () {
       result
 
   // Interpret arguments.
-  if (_.isArray(param)) {
+  if (util.isArray(param)) {
     cards = param
-  } else if (_.isObject(param)) {
+  } else if (util.isObject(param)) {
     cards = param.cards
     flush = param.flush === true
     sorted = param.sorted === true
@@ -763,7 +802,7 @@ Hand.findStraightFlush = function () {
   }
 
   // Make sure cards array is valid.
-  if (!_.isArray(cards) || cards.length < 5) {
+  if (!util.isArray(cards) || cards.length < 5) {
     return null
   }
 
@@ -829,9 +868,9 @@ Hand.findStraight = function () {
       ranks
 
   // Interpret arguments.
-  if (_.isArray(param)) {
+  if (util.isArray(param)) {
     cards = param
-  } else if (_.isObject(param)) {
+  } else if (util.isObject(param)) {
     cards = param.cards
     sorted = param.sorted === true
     low = param.low === true
@@ -839,7 +878,7 @@ Hand.findStraight = function () {
   }
 
   // Make sure cards array is valid.
-  if (!_.isArray(cards) || cards.length < 5) {
+  if (!util.isArray(cards) || cards.length < 5) {
     return null
   }
 
@@ -949,15 +988,15 @@ Hand.findSets = function () {
       type
 
   // Interpret arguments.
-  if (_.isArray(param)) {
+  if (util.isArray(param)) {
     cards = param
-  } else if (_.isObject(param)) {
+  } else if (util.isObject(param)) {
     cards = param.cards
     sorted = param.sorted === true
   }
 
   // Make sure cards array is valid.
-  if (!_.isArray(cards) || cards.length < 5) {
+  if (!util.isArray(cards) || cards.length < 5) {
     return null
   }
 

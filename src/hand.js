@@ -49,7 +49,7 @@
     if (!(this instanceof Hand)) {
       return new Hand(options)
     }
-    this.options = _.extend({ id: uid() }, defaults, options || {})
+    this.options = util.extend({ id: uid() }, defaults, options || {})
     this.reset()
     if (this.options.cards) {
       this.add(this.options.cards)

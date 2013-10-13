@@ -70,6 +70,35 @@
   }
 
 
+  function has(obj, key) {
+    return Object.prototype.hasOwnProperty.call(obj, key)
+  }
+
+
+  function each(obj, iterator, context) {
+    var i, len
+    if (obj) {
+      if (obj.forEach) {
+        obj.forEach(iterator, context)
+      } else if (obj.length === parseFloat(obj.length)) {
+        for (i = 0, len = obj.length; i < len; i++) {
+          if (!iterator.call(context, obj[i], i)) {
+            return
+          }
+        }
+      } else {
+        for (i in obj) {
+          if (Object.prototype.hasOwnProperty.call(obj, i)) {
+            if (!iterator.call(context, obj[i], i)) {
+              return
+            }
+          }
+        }
+      }
+    }
+  }
+
+
   util = (function () {
     return {
       isNull: isNull,
@@ -83,7 +112,9 @@
       isArray: isArray,
       isObject: isObject,
       extend: extend,
-      clone: clone
+      clone: clone,
+      has: has,
+      each: each
     }
   }());
 }());

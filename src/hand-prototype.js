@@ -20,7 +20,14 @@ Hand.prototype = {
    * @returns {boolean}
    */
   has: function (card) {
-    return _.contains(this.cards, card)
+    var c = 0,
+        clen = this.cards.length
+    for (; c < clen; c++) {
+      if (this.cards[c] === card) {
+        return true
+      }
+    }
+    return false
   },
 
   /**
@@ -28,13 +35,14 @@ Hand.prototype = {
    * @param {string|array} arguments
    */
   add: function () {
-    _.each(arguments, function (card, i) {
-      if (_.isString(card)) {
+    var args = Array.prototype.slice.call(arguments)
+    util.each(args, function (card, i) {
+      if (util.isString(card)) {
         if (!this.has(card)) {
           this.cards[this.cards.length] = card
           this.updateRank()
         }
-      } else if (_.isArray(card)) {
+      } else if (util.isArray(card)) {
         this.add.apply(this, card)
       }
     }, this)
@@ -46,7 +54,7 @@ Hand.prototype = {
    * @returns {string} card at index; null if index is out of range.
    */
   get: function (index) {
-    return _.has(this.cards, index) ? this.cards[index] : null
+    return util.has(this.cards, index) ? this.cards[index] : null
   },
 
   /**
@@ -54,7 +62,7 @@ Hand.prototype = {
    */
   set: function (index, card) {
     index = parseInt(index, 10)
-    if (_.isNumber(index) && !_.isNaN(index)) {
+    if (util.isNumber(index)) {
       index = Math.max(0, Math.min(this.cards.length, index))
       this.cards[index] = card
       this.updateRank()

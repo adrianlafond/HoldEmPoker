@@ -31,9 +31,9 @@ Hand.findFlush = function () {
       tmpCardsLen
 
   // Interpret arguments.
-  if (_.isArray(param)) {
+  if (util.isArray(param)) {
     cards = param
-  } else if (_.isObject(param)) {
+  } else if (util.isObject(param)) {
     cards = param.cards
     sorted = param.sorted === true
     low = param.low === true
@@ -41,7 +41,7 @@ Hand.findFlush = function () {
   }
 
   // Make sure cards array is valid.
-  if (!_.isArray(cards) || cards.length < 5) {
+  if (!util.isArray(cards) || cards.length < 5) {
     return null
   }
 
@@ -120,9 +120,9 @@ Hand.findStraightFlush = function () {
       result
 
   // Interpret arguments.
-  if (_.isArray(param)) {
+  if (util.isArray(param)) {
     cards = param
-  } else if (_.isObject(param)) {
+  } else if (util.isObject(param)) {
     cards = param.cards
     flush = param.flush === true
     sorted = param.sorted === true
@@ -131,7 +131,7 @@ Hand.findStraightFlush = function () {
   }
 
   // Make sure cards array is valid.
-  if (!_.isArray(cards) || cards.length < 5) {
+  if (!util.isArray(cards) || cards.length < 5) {
     return null
   }
 
@@ -197,9 +197,9 @@ Hand.findStraight = function () {
       ranks
 
   // Interpret arguments.
-  if (_.isArray(param)) {
+  if (util.isArray(param)) {
     cards = param
-  } else if (_.isObject(param)) {
+  } else if (util.isObject(param)) {
     cards = param.cards
     sorted = param.sorted === true
     low = param.low === true
@@ -207,7 +207,7 @@ Hand.findStraight = function () {
   }
 
   // Make sure cards array is valid.
-  if (!_.isArray(cards) || cards.length < 5) {
+  if (!util.isArray(cards) || cards.length < 5) {
     return null
   }
 
@@ -317,15 +317,15 @@ Hand.findSets = function () {
       type
 
   // Interpret arguments.
-  if (_.isArray(param)) {
+  if (util.isArray(param)) {
     cards = param
-  } else if (_.isObject(param)) {
+  } else if (util.isObject(param)) {
     cards = param.cards
     sorted = param.sorted === true
   }
 
   // Make sure cards array is valid.
-  if (!_.isArray(cards) || cards.length < 5) {
+  if (!util.isArray(cards) || cards.length < 5) {
     return null
   }
 
