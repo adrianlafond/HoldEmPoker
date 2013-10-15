@@ -41,6 +41,13 @@
       'Ace-to-six low',
       'Deuce-to-seven low',
       'Deuce-to-six low'
+    ],
+    action: [
+      null,
+      'fold',
+      'bet',
+      'call',
+      'raise'
     ]
   }
 }));

@@ -2,6 +2,7 @@
  * Static classes and properties made accessible
  * via the public Poker API.
  */
+Poker.Card = Card
 Poker.Deck = Deck
 Poker.Hand = Hand
 Poker.Player = Player

@@ -5,6 +5,7 @@ var Poker,
 
     util,
 
+    Card,
     Deck,
     Hand,
     Player,
