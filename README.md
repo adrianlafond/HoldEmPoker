@@ -7,4 +7,6 @@ TODO:
 - Player
 - Pot
 - Table
-- Poker (gameplay)
+- Dealer
+- Poker (public)
+- gameplay data format
