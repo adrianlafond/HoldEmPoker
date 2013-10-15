@@ -1296,42 +1296,40 @@ Hand.suit = function (card) {
   }()),
 
   defaults = {
-    //
-  },
-
-  UP    = 'up',
-  DOWN  = 'down'
+    id: null,
+    chips: 0
+  }
 
 
   /**
    * @constructor
    */
   Player = function (options) {
-    this.options = util.extend({ id: uid() }, defaults, options || {})
-    this.folded = false
-    this.chips = 0
+    this.options = util.extend({}, defaults, options || {})
+    this.id = this.options.id || uid()
+    this.chips = this.options.chips
     this.bet = 0
+    this.folded = false
     this.hand = new Hand
-    this.cardsUp = []
-    this.cardsDn = []
+    this.cards = []
   }
 
   Player.prototype = {
 
     /**
-     *
+     * @param {Card}
      */
-    addCard: function (options) {
-      this.hand.add(options.card)
-      if (options.face = UP) {
-        this.cardsUp.push(options.card)
-      } else {
-        this.cardsDn.push(options.card)
-      }
+    addCard: function (card) {
+      this.hand.add(card.value)
+      this.cards.push(card)
     },
 
+    /**
+     *
+     */
     removeCards: function () {
-      //
+      this.hand.reset()
+      this.cards = []
     }
   }
 
