@@ -7,6 +7,7 @@ Poker.Hand = Hand
 Poker.Player = Player
 Poker.Pot = Pot
 Poker.Table = Table
+Poker.Dealer = Dealer
 Poker.util = util
 
 
