@@ -14,11 +14,8 @@
   }()),
 
   defaults = {
-    //
-  },
-
-  UP    = 'up',
-  DOWN  = 'down'
+    chips: 0
+  }
 
 
   /**
@@ -27,7 +24,7 @@
   Player = function (options) {
     this.options = util.extend({ id: uid() }, defaults, options || {})
     this.folded = false
-    this.chips = 0
+    this.chips = this.options.chips
     this.bet = 0
     this.hand = new Hand
     this.cards = []
