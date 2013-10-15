@@ -9,7 +9,7 @@
    * @constructor
    */
   Card = function (options) {
-    this.value = options.card
+    this.value = options.value
     this.rank = this.value.charAt(0)
     this.suit = this.value.charAt(1)
     this.face = (options.face === Card.FACE_UP) ? Card.FACE_UP : Card.FACE_DOWN

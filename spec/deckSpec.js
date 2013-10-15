@@ -33,7 +33,7 @@ describe('Poker.Deck', function () {
     deck.reset()
     expect(deck.isShuffled).toBe(false)
     expect(deck.isNew).toBe(true)
-    expect(deck.deal()).toBe('AS')
+    expect(deck.deal().value).toBe('AS')
     expect(deck.isNew).toBe(false)
   })
 

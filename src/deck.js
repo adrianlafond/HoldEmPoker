@@ -81,11 +81,11 @@
      */
     reset: function () {
       var n = 0
-      this.cardsIn = CARDS.slice()
+      this.cardsIn = []
       this.cardsOut = []
       util.each(CARDS, function (card, i) {
         this.cardsIn[i] = new Card({ value: card })
-      })
+      }, this)
       for (; n < this.jokers; n++) {
         this.cardsIn[SIZE + n] = new Card({ value: 'W' + (n + 1) })
       }

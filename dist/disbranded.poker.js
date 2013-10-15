@@ -176,7 +176,7 @@ var Poker,
    * @constructor
    */
   Card = function (options) {
-    this.value = options.card
+    this.value = options.value
     this.rank = this.value.charAt(0)
     this.suit = this.value.charAt(1)
     this.face = (options.face === Card.FACE_UP) ? Card.FACE_UP : Card.FACE_DOWN
@@ -276,16 +276,18 @@ var Poker,
      */
     reset: function () {
       var n = 0
-      this.cardsIn = CARDS.slice()
+      this.cardsIn = []
+      this.cardsOut = []
+      util.each(CARDS, function (card, i) {
+        this.cardsIn[i] = new Card({ value: card })
+      }, this)
       for (; n < this.jokers; n++) {
-        this.cardsIn[SIZE + n] = new Card
-        //'W' + (n + 1)
+        this.cardsIn[SIZE + n] = new Card({ value: 'W' + (n + 1) })
       }
       util.each(this.cardsIn, function (card) {
         card.face = Card.FACE_DOWN
         card.community = false
       })
-      this.cardsOut = []
       this.isShuffled = false
       this.isNew = true
       return this
