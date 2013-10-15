@@ -37,9 +37,6 @@
    * If any options are updated after instantiation, reset() should be called.
    */
   Hand = function (options) {
-    if (!(this instanceof Hand)) {
-      return new Hand(options)
-    }
     this.options = util.extend({ id: uid() }, defaults, options || {})
     this.reset()
     if (this.options.cards) {

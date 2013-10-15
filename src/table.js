@@ -14,9 +14,6 @@
    * @constructor
    */
   Table = function (options) {
-    if (!(this instanceof Table)) {
-      return new Table(options)
-    }
     this.options = util.extend({}, defaults, options || {})
   }
 

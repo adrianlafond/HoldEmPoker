@@ -22,9 +22,6 @@
    * @constructor
    */
   Player = function (options) {
-    if (!(this instanceof Player)) {
-      return new Player(options)
-    }
     this.options = util.extend({ id: uid() }, defaults, options || {})
   }
 
