@@ -30,26 +30,25 @@
     this.chips = 0
     this.bet = 0
     this.hand = new Hand
-    this.cardsUp = []
-    this.cardsDn = []
+    this.cards = []
   }
 
   Player.prototype = {
 
     /**
-     *
+     * @param {Card}
      */
-    addCard: function (options) {
-      this.hand.add(options.card)
-      if (options.face = UP) {
-        this.cardsUp.push(options.card)
-      } else {
-        this.cardsDn.push(options.card)
-      }
+    addCard: function (card) {
+      this.hand.add(card.value)
+      this.cards.push(card)
     },
 
+    /**
+     *
+     */
     removeCards: function () {
-      //
+      this.hand.reset()
+      this.cards = []
     }
   }
 
