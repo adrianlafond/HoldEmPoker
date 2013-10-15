@@ -34,6 +34,7 @@ var Poker,
 
     util,
 
+    Card,
     Deck,
     Hand,
     Player,
@@ -165,6 +166,34 @@ var Poker,
   }());
 }());
 /**
+ * Poker.Card
+ */
+;(function () {
+  'use strict'
+
+
+  /**
+   * @constructor
+   */
+  Card = function (options) {
+    this.value = options.card
+    this.rank = this.value.charAt(0)
+    this.suit = this.value.charAt(1)
+    this.face = (options.face === Card.FACE_UP) ? Card.FACE_UP : Card.FACE_DOWN
+    this.community = false
+  }
+
+
+  // Constants
+  Card.FACE_DOWN  = 0
+  Card.FACE_UP    = 1
+  Card.COMMUNITY  = 2
+}());
+
+
+
+
+/**
  * The deck of poker cards.
  */
 ;(function () {
@@ -208,7 +237,7 @@ var Poker,
      * @returns undealt cards remaining in deck.
      */
     cards: function () {
-      return this.cardsIn.slice(0)
+      return this.cardsIn.slice()
     },
 
     /**
@@ -249,8 +278,13 @@ var Poker,
       var n = 0
       this.cardsIn = CARDS.slice()
       for (; n < this.jokers; n++) {
-        this.cardsIn[SIZE + n] = 'W' + (n + 1)
+        this.cardsIn[SIZE + n] = new Card
+        //'W' + (n + 1)
       }
+      util.each(this.cardsIn, function (card) {
+        card.face = Card.FACE_DOWN
+        card.community = false
+      })
       this.cardsOut = []
       this.isShuffled = false
       this.isNew = true
@@ -335,9 +369,6 @@ var Poker,
    * If any options are updated after instantiation, reset() should be called.
    */
   Hand = function (options) {
-    if (!(this instanceof Hand)) {
-      return new Hand(options)
-    }
     this.options = util.extend({ id: uid() }, defaults, options || {})
     this.reset()
     if (this.options.cards) {
@@ -1264,22 +1295,50 @@ Hand.suit = function (card) {
 
   defaults = {
     //
-  }
+  },
+
+  UP    = 'up',
+  DOWN  = 'down'
 
 
   /**
    * @constructor
    */
   Player = function (options) {
-    if (!(this instanceof Player)) {
-      return new Player(options)
-    }
     this.options = util.extend({ id: uid() }, defaults, options || {})
+    this.folded = false
+    this.chips = 0
+    this.bet = 0
+    this.hand = new Hand
+    this.cardsUp = []
+    this.cardsDn = []
   }
 
   Player.prototype = {
-    //
+
+    /**
+     *
+     */
+    addCard: function (options) {
+      this.hand.add(options.card)
+      if (options.face = UP) {
+        this.cardsUp.push(options.card)
+      } else {
+        this.cardsDn.push(options.card)
+      }
+    },
+
+    removeCards: function () {
+      //
+    }
   }
+
+
+  // Constants that correspond with lingo[lang].action array.
+  Player.FOLD   = 1
+  Player.BET    = 2
+  Player.CALL   = 3
+  Player.RAISE  = 4
 }());
 
 
@@ -1301,9 +1360,6 @@ Hand.suit = function (card) {
    * @constructor
    */
   Pot = function (options) {
-    if (!(this instanceof Pot)) {
-      return new Pot(options)
-    }
     this.options = util.extend({}, defaults, options || {})
   }
 
@@ -1332,9 +1388,6 @@ Hand.suit = function (card) {
    * @constructor
    */
   Table = function (options) {
-    if (!(this instanceof Table)) {
-      return new Table(options)
-    }
     this.options = util.extend({}, defaults, options || {})
   }
 
@@ -1416,11 +1469,13 @@ Hand.suit = function (card) {
  * Static classes and properties made accessible
  * via the public Poker API.
  */
+Poker.Card = Card
 Poker.Deck = Deck
 Poker.Hand = Hand
 Poker.Player = Player
 Poker.Pot = Pot
 Poker.Table = Table
+Poker.Dealer = Dealer
 Poker.util = util
 
 

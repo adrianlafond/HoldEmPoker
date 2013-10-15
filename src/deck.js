@@ -42,7 +42,7 @@
      * @returns undealt cards remaining in deck.
      */
     cards: function () {
-      return this.cardsIn.slice(0)
+      return this.cardsIn.slice()
     },
 
     /**
@@ -82,10 +82,17 @@
     reset: function () {
       var n = 0
       this.cardsIn = CARDS.slice()
-      for (; n < this.jokers; n++) {
-        this.cardsIn[SIZE + n] = 'W' + (n + 1)
-      }
       this.cardsOut = []
+      util.each(CARDS, function (card, i) {
+        this.cardsIn[i] = new Card({ value: card })
+      })
+      for (; n < this.jokers; n++) {
+        this.cardsIn[SIZE + n] = new Card({ value: 'W' + (n + 1) })
+      }
+      util.each(this.cardsIn, function (card) {
+        card.face = Card.FACE_DOWN
+        card.community = false
+      })
       this.isShuffled = false
       this.isNew = true
       return this
