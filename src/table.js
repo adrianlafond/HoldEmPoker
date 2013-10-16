@@ -15,7 +15,7 @@
    */
   Table = function (options) {
     this.options = util.extend({}, defaults, options || {})
-    this.players = []
+    this.reset()
   }
 
   Table.prototype = {
@@ -48,6 +48,7 @@
         this.remove(index)
         this.players[index] = options.player
       }
+      return this
     },
 
 
@@ -74,6 +75,7 @@
         this.players.spice(index, 1)
         // fire player removed event
       }
+      return this
     },
 
 
@@ -84,27 +86,38 @@
       return this.players[index] || null
     },
 
-
     /**
-     * Remove all players from the table.
-     */
-    reset: function () {
-      this.players = []
-    },
-
-    /**
-     * Returns the id of the player with the dealer button.
+     * Returns the player with the dealer button.
      */
     button: function () {
-      //
+      var n = this.options.seats
+      while (n-- > 0) {
+        if (this.players[n]) {
+          return this.players[n]
+        }
+      }
+      return null
     },
 
     /**
      * Push the button to next player, before the start of a new hand.
      */
     advance: function () {
-      //
-    }
+      this.players.unshift(this.players.pop())
+      return this
+    },
+
+
+    /**
+     * Remove all players from the table.
+     */
+    reset: function () {
+      this.players = []
+      util.times(this.options.seats, function (index) {
+        this.players[index] = null
+      }, this)
+      return this
+    },
   }
 }());
 
