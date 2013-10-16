@@ -1469,6 +1469,20 @@ Hand.suit = function (card) {
       return this.players[index] || null
     },
 
+
+    /**
+     * Return the seat index for player with @param id.
+     * Returns -1 if not found.
+     */
+    indexOf: function (id) {
+      util.each(this.players, function (player, i) {
+        if (this.players[i] && this.players[i].id === id) {
+          return i
+        }
+      })
+      return -1
+    },
+
     /**
      * Returns the player with the dealer button.
      */
