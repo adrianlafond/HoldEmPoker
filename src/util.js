@@ -99,6 +99,15 @@
   }
 
 
+  function times(repeat, iterator, context) {
+    for (var i = 0; i < repeat; i++) {
+      if (!iterator.call(context, i)) {
+        return
+      }
+    }
+  }
+
+
   util = (function () {
     return {
       isNull: isNull,
