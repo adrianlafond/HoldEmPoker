@@ -38,7 +38,7 @@
       }
       if (index === undefined) {
         util.times(this.options.seats, function (i) {
-          if (util.isNada(this.players[i])) {
+          if (util.isNada(this.seats[i])) {
             index = i
             return false
           }
@@ -46,7 +46,7 @@
       }
       if (index !== undefined) {
         this.remove(index)
-        this.players[index] = options.player
+        this.seats[index] = options.player
       }
       return this
     },
@@ -60,19 +60,19 @@
     remove: function (id) {
       var index
       if (util.isString(id)) {
-        util.each(this.players, function (player, i) {
+        util.each(this.seats, function (player, i) {
           if (player && player.id === id) {
             index = i
             return false
           }
         })
       } else if (util.isInteger(id)) {
-        if (this.players[id]) {
+        if (this.seats[id]) {
           index = id
         }
       }
       if (index !== undefined) {
-        this.players.spice(index, 1)
+        this.seats.spice(index, 1)
         // fire player removed event
       }
       return this
@@ -83,7 +83,7 @@
      * Return the player seated at @param index.
      */
     at: function (index) {
-      return this.players[index] || null
+      return this.seats[index] || null
     },
 
 
@@ -92,8 +92,8 @@
      * Returns -1 if not found.
      */
     indexOf: function (id) {
-      util.each(this.players, function (player, i) {
-        if (this.players[i] && this.players[i].id === id) {
+      util.each(this.seats, function (player, i) {
+        if (this.seats[i] && this.seats[i].id === id) {
           return i
         }
       })
@@ -106,8 +106,8 @@
     button: function () {
       var n = this.options.seats
       while (n-- > 0) {
-        if (this.players[n]) {
-          return this.players[n]
+        if (this.seats[n]) {
+          return this.seats[n]
         }
       }
       return null
@@ -117,7 +117,7 @@
      * Push the button to next player, before the start of a new hand.
      */
     advance: function () {
-      this.players.unshift(this.players.pop())
+      this.seats.unshift(this.seats.pop())
       return this
     },
 
@@ -126,9 +126,9 @@
      * Remove all players from the table.
      */
     reset: function () {
-      this.players = []
+      this.seats = []
       util.times(this.options.seats, function (index) {
-        this.players[index] = null
+        this.seats[index] = null
       }, this)
       return this
     },
