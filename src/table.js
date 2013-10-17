@@ -31,6 +31,8 @@
       var index,
           tmpIndex,
           player
+
+      // Either add player or read options.
       if (options instanceof Player) {
         player = options
       } else {
@@ -42,6 +44,11 @@
           }
         }
       }
+
+      // If player is already seated, unseat him.
+     this.remove(player)
+
+      // Find seat index if it has not already been set.
       if (index === undefined) {
         util.times(this.options.seats, function (i) {
           if (util.isNada(this.seats[i])) {
@@ -50,6 +57,8 @@
           }
         }, this)
       }
+
+      // Seat the player.
       if (index !== undefined) {
         this.remove(index)
         this.seats[index] = player
@@ -62,9 +71,13 @@
      * Remove a player from the table.
      * @param {string} id Remove the player with that id.
      * @param {number} id Remove the player at that seat index.
+     * @param {Player} id Remove the player.
      */
     remove: function (id) {
       var index
+      if (id instanceof Player) {
+        id = Player.id
+      }
       if (util.isString(id)) {
         util.each(this.seats, function (player, i) {
           if (player && player.id === id) {
@@ -78,7 +91,7 @@
         }
       }
       if (index !== undefined) {
-        this.seats.spice(index, 1)
+        this.seats[index] = null
         // fire player removed event
       }
       return this

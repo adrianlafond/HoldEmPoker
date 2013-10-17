@@ -129,14 +129,14 @@ var Poker,
         obj.forEach(iterator, context)
       } else if (obj.length === parseFloat(obj.length)) {
         for (i = 0, len = obj.length; i < len; i++) {
-          if (!iterator.call(context, obj[i], i)) {
+          if (iterator.call(context, obj[i], i) === false) {
             return
           }
         }
       } else {
         for (i in obj) {
           if (Object.prototype.hasOwnProperty.call(obj, i)) {
-            if (!iterator.call(context, obj[i], i)) {
+            if (iterator.call(context, obj[i], i) === false) {
               return
             }
           }
@@ -148,7 +148,7 @@ var Poker,
 
   function times(repeat, iterator, context) {
     for (var i = 0; i < repeat; i++) {
-      if (!iterator.call(context, i)) {
+      if (iterator.call(context, i) === false) {
         return
       }
     }
@@ -170,7 +170,8 @@ var Poker,
       extend: extend,
       clone: clone,
       has: has,
-      each: each
+      each: each,
+      times: times
     }
   }());
 }());
@@ -1414,6 +1415,8 @@ Hand.suit = function (card) {
       var index,
           tmpIndex,
           player
+
+      // Either add player or read options.
       if (options instanceof Player) {
         player = options
       } else {
@@ -1425,6 +1428,11 @@ Hand.suit = function (card) {
           }
         }
       }
+
+      // If player is already seated, unseat him.
+     this.remove(player)
+
+      // Find seat index if it has not already been set.
       if (index === undefined) {
         util.times(this.options.seats, function (i) {
           if (util.isNada(this.seats[i])) {
@@ -1433,6 +1441,8 @@ Hand.suit = function (card) {
           }
         }, this)
       }
+
+      // Seat the player.
       if (index !== undefined) {
         this.remove(index)
         this.seats[index] = player
@@ -1445,9 +1455,13 @@ Hand.suit = function (card) {
      * Remove a player from the table.
      * @param {string} id Remove the player with that id.
      * @param {number} id Remove the player at that seat index.
+     * @param {Player} id Remove the player.
      */
     remove: function (id) {
       var index
+      if (id instanceof Player) {
+        id = Player.id
+      }
       if (util.isString(id)) {
         util.each(this.seats, function (player, i) {
           if (player && player.id === id) {
@@ -1461,7 +1475,7 @@ Hand.suit = function (card) {
         }
       }
       if (index !== undefined) {
-        this.seats.spice(index, 1)
+        this.seats[index] = null
         // fire player removed event
       }
       return this
