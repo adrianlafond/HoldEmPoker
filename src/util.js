@@ -82,14 +82,14 @@
         obj.forEach(iterator, context)
       } else if (obj.length === parseFloat(obj.length)) {
         for (i = 0, len = obj.length; i < len; i++) {
-          if (!iterator.call(context, obj[i], i)) {
+          if (iterator.call(context, obj[i], i) === false) {
             return
           }
         }
       } else {
         for (i in obj) {
           if (Object.prototype.hasOwnProperty.call(obj, i)) {
-            if (!iterator.call(context, obj[i], i)) {
+            if (iterator.call(context, obj[i], i) === false) {
               return
             }
           }
@@ -101,7 +101,7 @@
 
   function times(repeat, iterator, context) {
     for (var i = 0; i < repeat; i++) {
-      if (!iterator.call(context, i)) {
+      if (iterator.call(context, i) === false) {
         return
       }
     }
@@ -123,7 +123,8 @@
       extend: extend,
       clone: clone,
       has: has,
-      each: each
+      each: each,
+      times: times
     }
   }());
 }());
