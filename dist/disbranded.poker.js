@@ -1,7 +1,7 @@
 /*
  * poker-game-engine v0.0.1
  * by Adrian Lafond / adrian [at] disbranded.com
- * last updated 2013-10-15
+ * last updated 2013-10-16
 **/
 
 ;(function (root, factory) {
@@ -1412,11 +1412,17 @@ Hand.suit = function (card) {
      */
     add: function (options) {
       var index,
-          tmpIndex
-      if (options.hasOwnProperty('seat')) {
-        tmpIndex = +options.seat
-        if (util.isInteger(tmpIndex) && tmpIndex >= 0 && tmpIndex < this.options.seats) {
-          index = tmpIndex
+          tmpIndex,
+          player
+      if (options instanceof Player) {
+        player = options
+      } else {
+        player = options.player
+        if (options.hasOwnProperty('seat')) {
+          tmpIndex = +options.seat
+          if (util.isInteger(tmpIndex) && tmpIndex >= 0 && tmpIndex < this.options.seats) {
+            index = tmpIndex
+          }
         }
       }
       if (index === undefined) {
@@ -1429,7 +1435,7 @@ Hand.suit = function (card) {
       }
       if (index !== undefined) {
         this.remove(index)
-        this.seats[index] = options.player
+        this.seats[index] = player
       }
       return this
     },

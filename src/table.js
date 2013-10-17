@@ -29,11 +29,17 @@
      */
     add: function (options) {
       var index,
-          tmpIndex
-      if (options.hasOwnProperty('seat')) {
-        tmpIndex = +options.seat
-        if (util.isInteger(tmpIndex) && tmpIndex >= 0 && tmpIndex < this.options.seats) {
-          index = tmpIndex
+          tmpIndex,
+          player
+      if (options instanceof Player) {
+        player = options
+      } else {
+        player = options.player
+        if (options.hasOwnProperty('seat')) {
+          tmpIndex = +options.seat
+          if (util.isInteger(tmpIndex) && tmpIndex >= 0 && tmpIndex < this.options.seats) {
+            index = tmpIndex
+          }
         }
       }
       if (index === undefined) {
@@ -46,7 +52,7 @@
       }
       if (index !== undefined) {
         this.remove(index)
-        this.seats[index] = options.player
+        this.seats[index] = player
       }
       return this
     },
