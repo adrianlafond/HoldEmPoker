@@ -29,6 +29,7 @@
   Pot.POT_LIMIT       = 2
   Pot.NO_LIMIT        = 3
   Pot.CAP_LIMIT       = 4
+
 }());
 
 
