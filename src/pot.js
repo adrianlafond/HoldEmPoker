@@ -6,7 +6,8 @@
 
 
   var defaults = {
-    maxRaises: 3
+    maxRaises: 3,
+    limit: 0
   }
 
 
