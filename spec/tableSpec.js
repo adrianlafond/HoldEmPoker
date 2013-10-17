@@ -27,5 +27,43 @@ describe('Poker.Table', function () {
     table.add({ player: p2 })
     expect(table.at(0).id).toBe('p1')
     expect(table.at(1).id).toBe('p2')
+
+    table.remove(p2)
+    expect(table.at(1)).toBe(null)
+
+    table.add(p2).add(p3).add(p4).add(p5)
+    expect(table.at(2) instanceof Player).toBe(true)
+    expect(table.at(0).id).toBe('p1')
+    expect(table.at(1).id).toBe('p2')
+    expect(table.at(2).id).toBe('p3')
+    expect(table.at(3).id).toBe('p4')
+    expect(table.at(4).id).toBe('p5')
+
+    table.add(p6)
+    expect(table.at(0).id).toBe('p1')
+    expect(table.at(1).id).toBe('p2')
+    expect(table.at(2).id).toBe('p3')
+    expect(table.at(3).id).toBe('p4')
+    expect(table.at(4).id).toBe('p5')
+
+    table.add({ player: p6, seat: 5 })
+    expect(table.at(4).id).toBe('p5')
+
+    table.add({ player: p6, seat: 4 })
+    expect(table.at(4).id).toBe('p6')
+
+    expect(table.indexOf('p2')).toBe(1)
+    expect(table.indexOf('p5')).toBe(-1)
+
+    expect(table.button()).toBe(p6)
+    table.advance()
+    expect(table.button()).toBe(p4)
+    expect(table.at(0).id).toBe('p6')
+
+    table.options.seats = 2
+    table.reset()
+    expect(table.at(0)).toBe(null)
+    table.add({ seat: 2, player: p1 })
+    expect(table.indexOf('p1')).toBe(-1)
   })
 })

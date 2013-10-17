@@ -41,6 +41,8 @@
           tmpIndex = +options.seat
           if (util.isInteger(tmpIndex) && tmpIndex >= 0 && tmpIndex < this.options.seats) {
             index = tmpIndex
+          } else {
+            return this
           }
         }
       }
@@ -76,7 +78,7 @@
     remove: function (id) {
       var index
       if (id instanceof Player) {
-        id = Player.id
+        id = id.id
       }
       if (util.isString(id)) {
         util.each(this.seats, function (player, i) {
@@ -108,15 +110,19 @@
 
     /**
      * Return the seat index for player with @param id.
+     * Or return the seart index for @param {Player} id.
      * Returns -1 if not found.
      */
     indexOf: function (id) {
+      var index = -1,
+          id = (id instanceof Player) ? id.id : id
       util.each(this.seats, function (player, i) {
-        if (this.seats[i] && this.seats[i].id === id) {
-          return i
+        if (player && player.id === id) {
+          index = i
+          return false
         }
-      })
-      return -1
+      }, this)
+      return index
     },
 
     /**
