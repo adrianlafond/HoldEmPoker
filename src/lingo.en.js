@@ -37,10 +37,10 @@
     ],
     low: [
       null,
-      'Ace-to-five low',
-      'Ace-to-six low',
-      'Deuce-to-seven low',
-      'Deuce-to-six low'
+      'Ace-to-five Low',
+      'Ace-to-six Low',
+      'Deuce-to-seven Low',
+      'Deuce-to-six Low'
     ],
     action: [
       null,
@@ -48,6 +48,13 @@
       'bet',
       'call',
       'raise'
+    ],
+    pot: [
+      'Fixed Limit',
+      'Fpread Limit',
+      'Pot Limit',
+      'No Limit',
+      'Cap Limit'
     ]
   }
 }));
