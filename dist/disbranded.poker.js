@@ -1362,7 +1362,8 @@ Hand.suit = function (card) {
 
 
   var defaults = {
-    //
+    maxRaises: 3,
+    limit: 0
   }
 
 
@@ -1376,6 +1377,14 @@ Hand.suit = function (card) {
   Pot.prototype = {
     //
   }
+
+
+  // Constants correspond to lingo[lang].pot.
+  Pot.FIXED_LIMIT     = 0
+  Pot.SPREAD_LIMIT    = 1
+  Pot.POT_LIMIT       = 2
+  Pot.NO_LIMIT        = 3
+  Pot.CAP_LIMIT       = 4
 }());
 
 
