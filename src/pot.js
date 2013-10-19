@@ -5,16 +5,7 @@
   'use strict'
 
 
-  /**
-   * Pot instances do not validate bets against the betting limit type.
-   * That is up to the Dealer / game controller.
-   * Options are for organization only.
-   * "limit" refers to type of bet limit (eg, Pot.FIXED_LIMIT), not chips.
-   */
-  var defaults = {
-    maxRaises: 3,
-    limit: 0
-  }
+  var defaults = {}
 
 
   /**
@@ -115,7 +106,7 @@
    * Validates additions to the pot.
    */
   Pot.Bet = function (player, chips, allin) {
-    if (!(this instance of Pot.Bet)) {
+    if (!(this instanceof Pot.Bet)) {
       return new Pot.Bet(player, chips, allin)
     }
     if (!util.isString(player)) { return null }

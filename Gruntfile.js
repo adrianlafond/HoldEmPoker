@@ -16,6 +16,7 @@ module.exports = function (grunt) {
           'src/hand-prototype.js',
           'src/hand-static.js',
           'src/player.js',
+          'src/round.js',
           'src/pot.js',
           'src/table.js',
           'src/dealer.js',

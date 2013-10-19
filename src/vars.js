@@ -9,6 +9,7 @@ var Poker,
     Deck,
     Hand,
     Player,
+    Round,
     Pot,
     Table,
     Dealer
