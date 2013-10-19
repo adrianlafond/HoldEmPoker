@@ -38,7 +38,9 @@ var Poker,
     Deck,
     Hand,
     Player,
+    Bet,
     Round,
+    SidePot,
     Pot,
     Table,
     Dealer
@@ -1358,6 +1360,28 @@ Hand.suit = function (card) {
 ;(function () {
   'use strict'
 
+  /**
+   * Validates calls/bets made into the pot.
+   */
+  Bet = function (players, chops, allin) {
+    if (!(this instanceof Pot.Bet)) {
+      return new Pot.Bet(player, chips, allin)
+    }
+    if (!util.isString(player)) { return null }
+    if (!util.isNumber(chips)) { return null }
+    this.player = player
+    this.chips = chips
+    this.allin = allin === true
+  }
+}());
+
+
+
+
+
+;(function () {
+  'use strict'
+
 
   var defaults = {
     maxRaises: 3,
@@ -1375,11 +1399,41 @@ Hand.suit = function (card) {
 
 
   Round.prototype = {
+
     reset: function () {
-      //
+      this.bets = []
     }
   }
 }());
+
+
+
+
+;(function () {
+  'use strict'
+
+  /**
+   * A pot is actually a collection of side pots.
+   */
+  SidePot = function () {
+    this.total = 0
+    this.bets = []
+    this.call = 0
+  }
+
+  SidePot.prototype = {
+    /**
+     * @param {Bet} bet
+     * TODO: figure out if/when new side pots should be created.
+     */
+    add: function (bet) {
+      bet.allin = bet.allin || (bet.chips < this.call)
+      this.bets.push(bet)
+      return null// or new Pot.SidePot
+    }
+  }
+}());
+
 
 
 
@@ -1458,49 +1512,15 @@ Hand.suit = function (card) {
 
     /**
      * Reset all. Empties side pots and creates a new empty main pot.
+     * Each pot inside a Pot instance is an instance of a SidePot.
      */
     reset: function () {
-      this.pots = [new Pot.SidePot]
+      this.pots = [new SidePot]
     }
   }
 
 
 
-  /**
-   * A pot is actually a collection of side pots.
-   */
-  Pot.SidePot = function () {
-    this.total = 0
-    this.bets = []
-    this.call = 0
-  }
-
-  Pot.SidePot.prototype = {
-    /**
-     * @param {Pot.Bet} bet
-     * TODO: figure out if/when new side pots should be created.
-     */
-    add: function (bet) {
-      bet.allin = bet.allin || (bet.chips < this.call)
-      this.bets.push(bet)
-      return null// or new Pot.SidePot
-    }
-  }
-
-
-  /**
-   * Validates additions to the pot.
-   */
-  Pot.Bet = function (player, chips, allin) {
-    if (!(this instanceof Pot.Bet)) {
-      return new Pot.Bet(player, chips, allin)
-    }
-    if (!util.isString(player)) { return null }
-    if (!util.isNumber(chips)) { return null }
-    this.player = player
-    this.chips = chips
-    this.allin = allin === true
-  }
 
 
   // Constants correspond to lingo[lang].pot.
@@ -1751,14 +1771,17 @@ Hand.suit = function (card) {
  * Static classes and properties made accessible
  * via the public Poker API.
  */
-Poker.Card = Card
-Poker.Deck = Deck
-Poker.Hand = Hand
-Poker.Player = Player
-Poker.Pot = Pot
-Poker.Table = Table
-Poker.Dealer = Dealer
-Poker.util = util
+Poker.Card      = Card
+Poker.Deck      = Deck
+Poker.Hand      = Hand
+Poker.Player    = Player
+Poker.Bet       = Bet
+Poker.Round     = Round
+Poker.SidePot   = SidePot
+Poker.Pot       = Pot
+Poker.Table     = Table
+Poker.Dealer    = Dealer
+Poker.util      = util
 
 
 

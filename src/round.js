@@ -18,8 +18,9 @@
 
 
   Round.prototype = {
+
     reset: function () {
-      //
+      this.bets = []
     }
   }
 }());
