@@ -1363,7 +1363,7 @@ Hand.suit = function (card) {
   /**
    * Validates calls/bets made into the pot.
    */
-  Bet = function (players, chops, allin) {
+  Bet = function (player, chops, allin) {
     if (!(this instanceof Pot.Bet)) {
       return new Pot.Bet(player, chips, allin)
     }
