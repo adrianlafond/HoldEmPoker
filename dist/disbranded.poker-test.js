@@ -1,8 +1,3 @@
-/*
- * poker-game-engine v0.0.1
- * by Adrian Lafond / adrian [at] disbranded.com
- * last updated 2013-10-20
-**/
 
 ;(function (root, factory) {
   /**
@@ -1944,6 +1939,31 @@ Poker.CAP_LIMIT       = CAP_LIMIT
 Poker.BETTER  = BETTER
 Poker.WORSE   = WORSE
 Poker.EVEN    = EVEN
+
+
+
+
+/**
+ * Static classes and properties made accessible
+ * via the public Poker API.
+ * USED ONLY FOR TESTING!!!
+ */
+Poker.Card      = Card
+Poker.Deck      = Deck
+Poker.Hand      = Hand
+Poker.Player    = Player
+Poker.Bet       = Bet
+Poker.Round     = Round
+Poker.SidePot   = SidePot
+Poker.Pot       = Pot
+Poker.Table     = Table
+Poker.Dealer    = Dealer
+Poker.util      = util
+
+
+
+
+
 
 
 

@@ -109,7 +109,7 @@ Hand.prototype = {
       // a test for a straight and royal flush.
       if (result = Hand.findFlush({ cards: cards, sorted: true, all: true })) {
         // Hand is at least a flush.
-        this.rank = Hand.FLUSH
+        this.rank = FLUSH
         this.cardsHigh = result.cards
 
         result = Hand.findStraightFlush({
@@ -120,21 +120,21 @@ Hand.prototype = {
         })
         if (result) {
           // Hand is straight or royal flush. Exit since hand cannot be higher.
-          this.rank = result.royalFlush ? Hand.ROYAL_FLUSH : Hand.STRAIGHT_FLUSH
+          this.rank = result.royalFlush ? ROYAL_FLUSH : STRAIGHT_FLUSH
           this.cardsHigh = result.cards
           return
         }
       }
 
       // Find straights.
-      if (this.rank < Hand.STRAIGHT) {
+      if (this.rank < STRAIGHT) {
         result = Hand.findStraight({
           cards: cards,
           sorted: true,
           acesAreLow: this.acesAreLow
         })
         if (result) {
-          this.rank = Hand.STRAIGHT
+          this.rank = STRAIGHT
           this.cardsHigh = result.cards
         }
       }
@@ -145,19 +145,19 @@ Hand.prototype = {
         if (result.type > this.rank) {
           this.rank = result.type
           switch (this.rank) {
-            case Hand.FOUR_OF_A_KIND:
+            case FOUR_OF_A_KIND:
               this.cardsHigh = result.sets[0].concat(result.kickers)
               break
-            case Hand.FULL_HOUSE:
+            case FULL_HOUSE:
               this.cardsHigh = result.sets[0].concat(result.sets[1])
               break
-            case Hand.THREE_OF_A_KIND:
+            case THREE_OF_A_KIND:
               this.cardsHigh = result.sets[0].concat(result.kickers)
               break
-            case Hand.TWO_PAIR:
+            case TWO_PAIR:
               this.cardsHigh = result.sets[0].concat(result.sets[1], result.kickers)
               break
-            case Hand.ONE_PAIR:
+            case ONE_PAIR:
               this.cardsHigh = result.sets[0].concat(result.kickers)
               break
             default:
@@ -167,9 +167,9 @@ Hand.prototype = {
         }
 
       } else {
-        if (this.rank < Hand.HIGH_CARD) {
+        if (this.rank < HIGH_CARD) {
           // Best 5-card hand is a mere high card.
-          this.rank = Hand.HIGH_CARD
+          this.rank = HIGH_CARD
           this.cardsHigh = cards.slice(0, 5)
         }
       }
@@ -295,25 +295,25 @@ Hand.prototype = {
    */
   configLow: function () {
     if (this.options.low === true) {
-      this.options.low = Hand.ACE_TO_FIVE_LOW
+      this.options.low = ACE_TO_FIVE_LOW
     }
     switch (this.options.low) {
-      case Hand.ACE_TO_FIVE_LOW:
+      case ACE_TO_FIVE_LOW:
         this.acesAreLow = true
         this.ignoreStraights = true
         this.ignoreFlushes = true
         break
-      case Hand.ACE_TO_SIX_LOW:
+      case ACE_TO_SIX_LOW:
         this.acesAreLow = true
         this.ignoreStraights = false
         this.ignoreFlushes = false
         break
-      case Hand.DEUCE_TO_SEVEN_LOW:
+      case DEUCE_TO_SEVEN_LOW:
         this.acesAreLow = false
         this.ignoreStraights = false
         this.ignoreFlushes = false
         break
-      case Hand.DEUCE_TO_SIX_LOW:
+      case DEUCE_TO_SIX_LOW:
         this.acesAreLow = false
         this.ignoreStraights = true
         this.ignoreFlushes = true

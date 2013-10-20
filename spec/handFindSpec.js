@@ -2,7 +2,8 @@
 
 
 describe('Poker hand ranks', function () {
-  var Hand = DISBRANDED.Poker.Hand
+  var Poker = DISBRANDED.Poker,
+      Hand = Poker.Hand
 
   it('should find the correct rank of a card', function () {
     expect(Hand.rank('AS')).toBe('A')
@@ -55,7 +56,7 @@ describe('Poker hand ranks', function () {
   })
 
   if ('should return a low flow or null', function () {
-    var optns = { low: Hand.ACE_TO_FIVE_LOW }
+    var optns = { low: Poker.ACE_TO_FIVE_LOW }
 
     optns.cards = ['5S', '7S', '2S', '2H', '8S', 'KS', 'JS']
     expect(Hand.findStraight(optns).cards).toEqual(['JS', '8S', '7S', '5S', '2S'])
@@ -105,27 +106,27 @@ describe('Poker hand ranks', function () {
 
   it('should find sets correctly', function () {
     var sets = Hand.findSets(['TS', '8C', 'TC', '2D', '3H', 'QC', 'KD'])
-    expect(sets.type).toBe(Hand.ONE_PAIR)
+    expect(sets.type).toBe(Poker.ONE_PAIR)
     expect(sets.sets).toEqual([['TS', 'TC']])
     expect(sets.kickers).toEqual(['KD', 'QC', '8C'])
 
     sets = Hand.findSets(['TS', '8C', 'TC', '2D', '2H', 'QC', 'KD'])
-    expect(sets.type).toBe(Hand.TWO_PAIR)
+    expect(sets.type).toBe(Poker.TWO_PAIR)
     expect(sets.sets).toEqual([['TS', 'TC'], ['2D', '2H']])
     expect(sets.kickers).toEqual(['KD'])
 
     sets = Hand.findSets(['TS', '8C', 'TC', 'TD', '2H', 'QC', 'KD'])
-    expect(sets.type).toBe(Hand.THREE_OF_A_KIND)
+    expect(sets.type).toBe(Poker.THREE_OF_A_KIND)
     expect(sets.sets).toEqual([['TS', 'TC', 'TD']])
     expect(sets.kickers).toEqual(['KD', 'QC'])
 
     sets = Hand.findSets(['TS', '8C', 'TC', 'TD', '2H', '2C', 'KD'])
-    expect(sets.type).toBe(Hand.FULL_HOUSE)
+    expect(sets.type).toBe(Poker.FULL_HOUSE)
     expect(sets.sets).toEqual([['TS', 'TC', 'TD'], ['2H', '2C']])
     expect(sets.kickers).toEqual([])
 
     sets = Hand.findSets(['TS', '8C', 'TC', 'TD', '2H', 'TH', 'KD'])
-    expect(sets.type).toBe(Hand.FOUR_OF_A_KIND)
+    expect(sets.type).toBe(Poker.FOUR_OF_A_KIND)
     expect(sets.sets).toEqual([['TS', 'TC', 'TD', 'TH']])
     expect(sets.kickers).toEqual(['KD'])
 

@@ -4,7 +4,7 @@ module.exports = function (grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
     concat: {
-      dist: {
+      base: {
         src: [
           'src/export-top.js',
           'src/vars.js',
@@ -23,7 +23,21 @@ module.exports = function (grunt) {
           'src/table.js',
           'src/dealer.js',
           'src/poker.js',
+          'src/poker-constants.js'
+        ],
+        dest: 'dist/disbranded.poker.js'
+      },
+      test: {
+        src: [
+          'dist/disbranded.poker.js',
           'src/public-static.js',
+          'src/export-bot.js'
+        ],
+        dest: 'dist/disbranded.poker-test.js'
+      },
+      dist: {
+        src: [
+          'dist/disbranded.poker.js',
           'src/export-bot.js'
         ],
         dest: 'dist/disbranded.poker.js'
@@ -35,7 +49,7 @@ module.exports = function (grunt) {
     },
 
     jasmine: {
-      src: ['dist/disbranded.poker.js', 'dist/disbranded.poker.lingo.en.js'],
+      src: ['dist/disbranded.poker-test.js', 'dist/disbranded.poker.lingo.en.js'],
       options: {
         specs: 'spec/*.js'
       }

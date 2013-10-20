@@ -42,6 +42,11 @@
       'Deuce-to-seven Low',
       'Deuce-to-six Low'
     ],
+    card: [
+      'face down',
+      'face up',
+      'community'
+    ],
     action: [
       null,
       'fold',
@@ -49,7 +54,7 @@
       'call',
       'raise'
     ],
-    pot: [
+    limit: [
       'Fixed Limit',
       'Fpread Limit',
       'Pot Limit',

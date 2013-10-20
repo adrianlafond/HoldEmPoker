@@ -391,16 +391,16 @@ Hand.findSets = function () {
   // Determine type
   switch (sets[0].length) {
     case 4:
-      type = Hand.FOUR_OF_A_KIND
+      type = FOUR_OF_A_KIND
       break
     case 3:
-      type = (finalSets.length === 2) ? Hand.FULL_HOUSE : Hand.THREE_OF_A_KIND
+      type = (finalSets.length === 2) ? FULL_HOUSE : THREE_OF_A_KIND
       break
     case 2:
-      type = (finalSets.length === 2) ? Hand.TWO_PAIR : Hand.ONE_PAIR
+      type = (finalSets.length === 2) ? TWO_PAIR : ONE_PAIR
       break
     default:
-      type = Hand.HIGH_CARD
+      type = HIGH_CARD
   }
 
   if (finalSets.length) {

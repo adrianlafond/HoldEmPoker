@@ -1,6 +1,7 @@
 /**
  * Static classes and properties made accessible
  * via the public Poker API.
+ * USED ONLY FOR TESTING!!!
  */
 Poker.Card      = Card
 Poker.Deck      = Deck
@@ -16,14 +17,7 @@ Poker.util      = util
 
 
 
-/**
- * Constants global to Poker; correspond to lingo[lang].pot.
- */
-Poker.FIXED_LIMIT     = 0
-Poker.SPREAD_LIMIT    = 1
-Poker.POT_LIMIT       = 2
-Poker.NO_LIMIT        = 3
-Poker.CAP_LIMIT       = 4
+
 
 
 

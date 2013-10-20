@@ -51,12 +51,6 @@
     }
   }
 
-
-  // Constants that correspond with lingo[lang].action array.
-  Player.FOLD   = 1
-  Player.BET    = 2
-  Player.CALL   = 3
-  Player.RAISE  = 4
 }());
 
 
