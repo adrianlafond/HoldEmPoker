@@ -6,7 +6,12 @@
 
 
   var defaults = {
-    //
+
+    // Number of raises allowed per round:
+    maxRaises: 3,
+
+    // Poker.FIXED_LIMIT:
+    limit: 0
   }
 
 

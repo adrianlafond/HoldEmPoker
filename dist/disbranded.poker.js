@@ -1363,7 +1363,7 @@ Hand.suit = function (card) {
   /**
    * Validates calls/bets made into the pot.
    */
-  Bet = function (player, chops, allin) {
+  Bet = function (player, chips, allin) {
     if (!(this instanceof Pot.Bet)) {
       return new Pot.Bet(player, chips, allin)
     }
@@ -1372,6 +1372,7 @@ Hand.suit = function (card) {
     this.player = player
     this.chips = chips
     this.allin = allin === true
+    this.folded = false
   }
 }());
 
@@ -1383,25 +1384,91 @@ Hand.suit = function (card) {
   'use strict'
 
 
-  var defaults = {
-    maxRaises: 3,
-    limit: 0
-  }
-
-
   /**
    * A round of betting, before bets are added to the pot.
    */
   Round = function () {
-    this.options = util.extend({}, defaults, options || {})
     this.reset()
   }
 
 
   Round.prototype = {
 
+    /**
+     * Bet/call/add chips to the current betting round.
+     * Possible arguments formats:
+     * @param {Bet}
+     *   or
+     * @param {string} player The ID of the player making bet/call.
+     * @param {number} chips The amount of the bet/call.
+     * @param {boolean} allin Optional; necessary for determining when
+     *   to create new side pots; default false.
+     */
+    bet: function () {
+      var existBet,
+          bet = (arguments[0] instanceof Bet)
+            ? arguments[0]
+            : new Bet(arguments[0], arguments[1], arguments[2])
+      if (existBet = this.bets[bet.id]) {
+        existBet.chips += bet.chips
+        existBet.allin = !existBet.allin && bet.allin === true
+        existBet.folded = !existBen.folded && bet.folded === true
+      } else {
+        this.bets[bet.id] = bet
+      }
+    },
+
+
+    /**
+     * Fold a player who has already bet, so that allin vs fold
+     * can be more easily differentiated.
+     */
+    fold: function (player) {
+      var bet = this.betFor(player)
+        || (this.bets[player] = new Bet(player, 0, false))
+      bet.folded = true
+      bet.allin = false
+    },
+
+
+
+    /**
+     * If for some reason an all-in bet was made but the Bet
+     * was not marked as all-in, do it here.
+     */
+    allin: function (player) {
+      var bet = this.betFor(player)
+        || (this.bets[player] = new Bet(player, 0, false))
+      bet.folded = false
+      bet.allin = true
+    },
+
+
+    /**
+     * Return the accumulated Bet for player with id @param player.
+     */
+    betFor: function (player) {
+      return (player in this.bets) ? this.bets[player] : null
+    },
+
+
+    /**
+     * Return the total chips bet in this round.
+     */
+    chipsTotal: function () {
+      var n = 0
+      util.each(this.bets, function (bet, player) {
+        n += bet.chips
+      }, this)
+      return n
+    },
+
+
+    /**
+     * Reset all values.
+     */
     reset: function () {
-      this.bets = []
+      this.bets = {}
     }
   }
 }());
@@ -1416,20 +1483,25 @@ Hand.suit = function (card) {
    * A pot is actually a collection of side pots.
    */
   SidePot = function () {
-    this.total = 0
-    this.bets = []
-    this.call = 0
+    this.bets = {}
   }
 
   SidePot.prototype = {
+
     /**
-     * @param {Bet} bet
-     * TODO: figure out if/when new side pots should be created.
+     * @param {string} player The id of a Player.
+     * @param {chips}
      */
-    add: function (bet) {
-      bet.allin = bet.allin || (bet.chips < this.call)
-      this.bets.push(bet)
-      return null// or new Pot.SidePot
+    add: function (player, chips) {
+      this.bets[player] = chips
+    },
+
+    total: function () {
+      var n = 0
+      util.each(this.bets, function (chips) {
+        n += chips
+      })
+      return n
     }
   }
 }());
@@ -1491,22 +1563,54 @@ Hand.suit = function (card) {
 
 
     /**
-     * Add chips to the current pot.
-     * @param {string} player The ID of the player making bet/call.
-     * @param {number} chips The amount of the bet/call.
-     * @param {boolean} allin Optional; necessary for determining when
-     *   to create new side pots; default false.
+     * Add a round's worth of Bet objects.
+     * @param {Round} round
      */
-    add: function (player, chips, allin) {
-      var pot,
-          bet,
-          newPot
-      if ((pot = this.pot()) && (bet = Pot.Bet(player, chips, allin))) {
-        if (newPot = pot.add(bet)) {
-          this.pots.push(newPot)
-          // TODO: fire new side pot event
+    add: function (round) {
+      var bets = [],
+          n = 0,
+          sidepots = [{ pot: this.pot(), call: 0 }]
+
+      // Form an array, sorted ascending by chips.
+      util.each(round.bets, function (bet, id) {
+        bets[n++] = bet
+      })
+      bets.sort(function (a, b) {
+        return a.chips - b.chips
+      })
+
+      // Loop through the array, putting chips into current pot.
+      // If a player is all-in, note it, so that if a player
+      // bets more than the all-in, a new SidePot is created.
+      n = 0
+      util.each(bets, function (bet, i) {
+
+        // Include player in pot only if he has contributed to it.
+        if (bet.chips > 0) {
+
+          // Add chips to side pots, subtracting chips from the bet
+          // as it cascades up the side pots.
+          util.each(sidepots, function (side, i) {
+            var chips = bet.chips - side.call
+            side.pot.add(bet.id, chips)
+            if (side.pot === 0) {
+              side.call = chips
+            }
+            bet.chips -= chips
+          })
+
+          // If any chips are left in the bet, then add them to a new
+          // side pot.
+          if (bet.chips > 0) {
+            sidepots[n] = {
+              pot: new SidePot,
+              call: bet.chips - maxCall
+            }
+            this.pots.push(sidepots[n].pot)
+            n++
+          }
         }
-      }
+      })
     },
 
 
@@ -1518,18 +1622,6 @@ Hand.suit = function (card) {
       this.pots = [new SidePot]
     }
   }
-
-
-
-
-
-  // Constants correspond to lingo[lang].pot.
-  Pot.FIXED_LIMIT     = 0
-  Pot.SPREAD_LIMIT    = 1
-  Pot.POT_LIMIT       = 2
-  Pot.NO_LIMIT        = 3
-  Pot.CAP_LIMIT       = 4
-
 }());
 
 
@@ -1738,7 +1830,12 @@ Hand.suit = function (card) {
 
 
   var defaults = {
-    //
+
+    // Number of raises allowed per round:
+    maxRaises: 3,
+
+    // Poker.FIXED_LIMIT:
+    limit: 0
   }
 
 
@@ -1782,6 +1879,17 @@ Poker.Pot       = Pot
 Poker.Table     = Table
 Poker.Dealer    = Dealer
 Poker.util      = util
+
+
+
+/**
+ * Constants global to Poker; correspond to lingo[lang].pot.
+ */
+Poker.FIXED_LIMIT     = 0
+Poker.SPREAD_LIMIT    = 1
+Poker.POT_LIMIT       = 2
+Poker.NO_LIMIT        = 3
+Poker.CAP_LIMIT       = 4
 
 
 

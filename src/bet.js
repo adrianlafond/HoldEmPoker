@@ -4,7 +4,7 @@
   /**
    * Validates calls/bets made into the pot.
    */
-  Bet = function (player, chops, allin) {
+  Bet = function (player, chips, allin) {
     if (!(this instanceof Pot.Bet)) {
       return new Pot.Bet(player, chips, allin)
     }
@@ -13,6 +13,7 @@
     this.player = player
     this.chips = chips
     this.allin = allin === true
+    this.folded = false
   }
 }());
 

@@ -51,22 +51,54 @@
 
 
     /**
-     * Add chips to the current pot.
-     * @param {string} player The ID of the player making bet/call.
-     * @param {number} chips The amount of the bet/call.
-     * @param {boolean} allin Optional; necessary for determining when
-     *   to create new side pots; default false.
+     * Add a round's worth of Bet objects.
+     * @param {Round} round
      */
-    add: function (player, chips, allin) {
-      var pot,
-          bet,
-          newPot
-      if ((pot = this.pot()) && (bet = Pot.Bet(player, chips, allin))) {
-        if (newPot = pot.add(bet)) {
-          this.pots.push(newPot)
-          // TODO: fire new side pot event
+    add: function (round) {
+      var bets = [],
+          n = 0,
+          sidepots = [{ pot: this.pot(), call: 0 }]
+
+      // Form an array, sorted ascending by chips.
+      util.each(round.bets, function (bet, id) {
+        bets[n++] = bet
+      })
+      bets.sort(function (a, b) {
+        return a.chips - b.chips
+      })
+
+      // Loop through the array, putting chips into current pot.
+      // If a player is all-in, note it, so that if a player
+      // bets more than the all-in, a new SidePot is created.
+      n = 0
+      util.each(bets, function (bet, i) {
+
+        // Include player in pot only if he has contributed to it.
+        if (bet.chips > 0) {
+
+          // Add chips to side pots, subtracting chips from the bet
+          // as it cascades up the side pots.
+          util.each(sidepots, function (side, i) {
+            var chips = bet.chips - side.call
+            side.pot.add(bet.id, chips)
+            if (side.pot === 0) {
+              side.call = chips
+            }
+            bet.chips -= chips
+          })
+
+          // If any chips are left in the bet, then add them to a new
+          // side pot.
+          if (bet.chips > 0) {
+            sidepots[n] = {
+              pot: new SidePot,
+              call: bet.chips - maxCall
+            }
+            this.pots.push(sidepots[n].pot)
+            n++
+          }
         }
-      }
+      })
     },
 
 
@@ -78,18 +110,6 @@
       this.pots = [new SidePot]
     }
   }
-
-
-
-
-
-  // Constants correspond to lingo[lang].pot.
-  Pot.FIXED_LIMIT     = 0
-  Pot.SPREAD_LIMIT    = 1
-  Pot.POT_LIMIT       = 2
-  Pot.NO_LIMIT        = 3
-  Pot.CAP_LIMIT       = 4
-
 }());
 
 
