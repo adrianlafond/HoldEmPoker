@@ -67,6 +67,7 @@ describe('Poker.Pot', function () {
     s.add(D, 12)
     s.add(E, 20)
     expect(s.total()).toBe(60)
+    expect(s.bets[A]).toBe(10)
   })
 })
 
