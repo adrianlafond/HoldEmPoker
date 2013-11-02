@@ -6,12 +6,57 @@ describe('Poker.Pot', function () {
       Pot = Poker.Pot,
       SidePot = Poker.SidePot,
       Round = Poker.Round,
-      Bet = Poker.Bet
+      Bet = Poker.Bet,
+
+      A = 'playerA',
+      B = 'playerB',
+      C = 'playerC',
+      D = 'playerD',
+      E = 'playerE'
 
   it('should create a bet instance', function () {
-    expect(new Bet('id', 100).allin).toBe(false)
-    expect(new Bet('id', 100, true).allin).toBe(true)
-    expect(new Bet('id', 100).folded).toBe(false)
+    expect(new Bet(A, 100).allin).toBe(false)
+    expect(new Bet(B, 100, true).allin).toBe(true)
+    expect(Bet(C, 100).folded).toBe(false)
+  })
+
+  it('should store a round correctly', function () {
+    var r = new Round
+
+    // bet
+    r.bet(Bet(A, 10))
+    expect(r.chipsFor(A)).toBe(10)
+
+    // call
+    r.bet(B, 10)
+
+    // all in
+    r.bet(C, 8, true)
+    expect(r.chipsTotal()).toBe(28)
+
+    // all in
+    r.bet(D, 20, true)
+
+    // call
+    r.bet(E, 20)
+
+    // raise
+    r.bet(Bet(A, 20))
+    expect(r.chipsFor(A)).toBe(30)
+
+    // fold
+    r.fold(B)
+
+    // call
+    r.bet(E, 10)
+
+    expect(r.chipsFor(E)).toBe(r.chipsFor(A))
+    expect(r.chipsTotal()).toBe(98)
+    expect(r.chipsFor(A)).toBe(30)
+    expect(r.chipsFor(B)).toBe(10)
+    expect(r.chipsFor(C)).toBe(8)
+    expect(r.chipsFor(D)).toBe(20)
+    expect(r.chipsFor(E)).toBe(30)
   })
 })
 

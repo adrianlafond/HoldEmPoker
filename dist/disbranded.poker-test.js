@@ -1428,12 +1428,12 @@ Hand.suit = function (card) {
           bet = (arguments[0] instanceof Bet)
             ? arguments[0]
             : new Bet(arguments[0], arguments[1], arguments[2])
-      if (existBet = this.bets[bet.id]) {
+      if (existBet = this.bets[bet.player]) {
         existBet.chips += bet.chips
-        existBet.allin = !existBet.allin && bet.allin === true
-        existBet.folded = !existBen.folded && bet.folded === true
+        existBet.allin = !!!existBet.allin && bet.allin === true
+        existBet.folded = !!!existBet.folded && bet.folded === true
       } else {
-        this.bets[bet.id] = bet
+        this.bets[bet.player] = bet
       }
     },
 
@@ -1443,7 +1443,7 @@ Hand.suit = function (card) {
      * can be more easily differentiated.
      */
     fold: function (player) {
-      var bet = this.betFor(player)
+      var bet = this.chipsFor(player)
         || (this.bets[player] = new Bet(player, 0, false))
       bet.folded = true
       bet.allin = false
@@ -1464,10 +1464,10 @@ Hand.suit = function (card) {
 
 
     /**
-     * Return the accumulated Bet for player with id @param player.
+     * Return the accumulated chips bet by player with id @param player.
      */
-    betFor: function (player) {
-      return (player in this.bets) ? this.bets[player] : null
+    chipsFor: function (player) {
+      return (player in this.bets) ? this.bets[player].chips : null
     },
 
 
