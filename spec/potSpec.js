@@ -8,8 +8,10 @@ describe('Poker.Pot', function () {
       Round = Poker.Round,
       Bet = Poker.Bet
 
-  it('should...', function () {
-
+  it('should create a bet instance', function () {
+    expect(new Bet('id', 100).allin).toBe(false)
+    expect(new Bet('id', 100, true).allin).toBe(true)
+    expect(new Bet('id', 100).folded).toBe(false)
   })
 })
 
