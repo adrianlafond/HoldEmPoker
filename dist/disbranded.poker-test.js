@@ -1536,14 +1536,14 @@ Hand.suit = function (card) {
   'use strict'
 
 
-  var defaults = {}
+  // var defaults = {}
 
 
   /**
    * @constructor
    */
   Pot = function (options) {
-    this.options = util.extend({}, defaults, options || {})
+    // this.options = util.extend({}, defaults, options || {})
     this.reset()
   }
 
