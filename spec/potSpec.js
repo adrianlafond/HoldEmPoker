@@ -58,5 +58,15 @@ describe('Poker.Pot', function () {
     expect(r.chipsFor(D)).toBe(20)
     expect(r.chipsFor(E)).toBe(30)
   })
+
+  it('should should have the correct chips in a side pot', function () {
+    var s = new SidePot
+    s.add(A, 10)
+    s.add(B, 10)
+    s.add(C, 8)
+    s.add(D, 12)
+    s.add(E, 20)
+    expect(s.total()).toBe(60)
+  })
 })
 
