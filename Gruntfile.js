@@ -45,11 +45,19 @@ module.exports = function (grunt) {
       lingo: {
         src: ['src/lingo.en.js'],
         dest: 'dist/disbranded.poker.lingo.en.js'
+      },
+      game: {
+        src: ['src/game.holdem.js'],
+        dest: 'dist/disbranded.poker.game.holdem.js'
       }
     },
 
     jasmine: {
-      src: ['dist/disbranded.poker-test.js', 'dist/disbranded.poker.lingo.en.js'],
+      src: [
+        'dist/disbranded.poker-test.js',
+        'dist/disbranded.poker.lingo.en.js',
+        'dist/disbranded.poker.game.holdem.js'
+      ],
       options: {
         specs: 'spec/*.js'
       }
@@ -60,7 +68,8 @@ module.exports = function (grunt) {
         options: {},
         files: {
           'dist/disbranded.poker-min.js': ['dist/disbranded.poker.js'],
-          'dist/disbranded.poker.lingo.en-min.js': ['dist/disbranded.poker.lingo.en.js']
+          'dist/disbranded.poker.lingo.en-min.js': ['dist/disbranded.poker.lingo.en.js'],
+          'dist/disbranded.poker.game.holdem-min.js': ['dist/disbranded.poker.game.holdem.js']
         }
       }
     },
