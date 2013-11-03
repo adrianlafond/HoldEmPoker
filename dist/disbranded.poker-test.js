@@ -1862,15 +1862,29 @@ Hand.suit = function (card) {
 
   var defaults = {
 
+    // Game format.
+    game: null,
+
     // Number of raises allowed per round:
     maxRaises: 3,
 
     // Type of betting limit:
     limit: FIXED_LIMIT,
 
-    // If high hand, low hand, or both wins the pot.
+    // If high hand, low hand, or both wins/splits the pot.
     high: true,
     low: false
+  }
+
+
+
+  function validateOptions(options) {
+    if (util.isNada(options.game)) {
+      throw 'Game format not valid.'
+    }
+    if (util.isNada(options.game.maxPlayers)) {
+      throw 'Game format maximum players not set.'
+    }
   }
 
 
@@ -1878,11 +1892,37 @@ Hand.suit = function (card) {
    * @constructor
    */
   Poker = function (options) {
+    var options,
+        table,
+        dealer,
+        pot,
+        round
+
     if (!(this instanceof Poker)) {
       return new Poker(options)
     }
-    this.options = util.extend({}, defaults, options || {})
+
+    /*************************************************************************
+     * Public privileged (and therefor not prototype) methods.
+     *************************************************************************/
+    this.setOption = function (key, val) {
+      return this
+    }
+
+    this.getOption = function (key) {
+      return null
+    }
+
+    options = util.extend({}, defaults, options || {})
+    validateOptions(options)
+
+    table = new Table({ seats: options.game.maxPlayers })
+
+    util.each(options, function (val, key) {
+      this.setOption(key, val)
+    }, this)
   }
+
 
   Poker.prototype = {
     //
