@@ -1342,7 +1342,6 @@ Hand.suit = function (card) {
     this.options = util.extend({}, defaults, options || {})
     this.id = this.options.id || uid()
     this.chips = this.options.chips
-    this.bet = 0
     this.folded = false
     this.hand = new Hand
     this.cards = []
