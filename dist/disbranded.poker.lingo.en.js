@@ -61,10 +61,15 @@
       'No Limit',
       'Cap Limit'
     ],
-    dealer: [
+    game: [
       'shuffle',
       'deal',
-      'round'
+      'round',
+      'ante',
+      'blind',
+      'small blind',
+      'big blind',
+      'big bet'
     ]
   }
 }));

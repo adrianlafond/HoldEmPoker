@@ -19,6 +19,7 @@
 }(this, function (Poker) {
   'use strict'
 
+  var p = Poker
 
   return {
     game: [{
@@ -35,13 +36,11 @@
     // pre-flop
     }, {
       action: Poker.BETTING_ROUND,
-      round: [{
-        step: Poker.SMALL_BLIND
-      }, {
-        step: Poker.BIG_BLIND
-      }, {
-        step: Poker.BET
-      }]
+      round: [
+        Poker.SMALL_BLIND,
+        Poker.BIG_BLIND,
+        Poker.BET
+      ]
 
     // flop
     }, {
@@ -55,9 +54,7 @@
       face: Poker.COMMUNITY
     }, {
       action: Poker.BETTING_ROUND,
-      round: [{
-        step: Poker.BET
-      }]
+      round: [Poker.BET]
 
     // turn
     }, {
@@ -65,9 +62,7 @@
       face: Poker.COMMUNITY
     }, {
       action: Poker.BETTING_ROUND,
-      round: [{
-        step: Poker.BIG_BET
-      }]
+      round: [Poker.BIG_BET]
 
     // river
     }, {
@@ -75,9 +70,7 @@
       face: Poker.COMMUNITY
     }, {
       action: Poker.BETTING_ROUND,
-      round: [{
-        step: Poker.BIG_BET
-      }]
+      round: [Poker.BIG_BET]
     }]
   }
 }));

@@ -23,19 +23,61 @@
   return {
     game: [{
       action: Poker.SHUFFLE
+
+    // deal
     }, {
       action: Poker.DEAL,
       face: Poker.FACE_DOWN
     }, {
       action: Poker.DEAL,
       face: Poker.FACE_DOWN
+
+    // pre-flop
     }, {
-      action: Poker.BETTING_ROUND
+      action: Poker.BETTING_ROUND,
+      round: [{
+        step: Poker.SMALL_BLIND
+      }, {
+        step: Poker.BIG_BLIND
+      }, {
+        step: Poker.BET
+      }]
+
+    // flop
     }, {
       action: Poker.DEAL,
       face: Poker.COMMUNITY
     }, {
+      action: Poker.DEAL,
+      face: Poker.COMMUNITY
+    }, {
+      action: Poker.DEAL,
+      face: Poker.COMMUNITY
+    }, {
+      action: Poker.BETTING_ROUND,
+      round: [{
+        step: Poker.BET
+      }]
 
+    // turn
+    }, {
+      action: Poker.DEAL,
+      face: Poker.COMMUNITY
+    }, {
+      action: Poker.BETTING_ROUND,
+      round: [{
+        step: Poker.BIG_BET
+      }]
+
+    // river
+    }, {
+      action: Poker.DEAL,
+      face: Poker.COMMUNITY
+    }, {
+      action: Poker.BETTING_ROUND,
+      round: [{
+        step: Poker.BIG_BET
+      }]
     }]
   }
 }));

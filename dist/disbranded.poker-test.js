@@ -93,10 +93,17 @@ var Poker,
     CAP_LIMIT       = 4,
 
 
+    /**
+     * Constants matched to lingo[lang].game.
+     */
     SHUFFLE           = 0,
     DEAL              = 1,
     BETTING_ROUND     = 2,
-
+    ANTE              = 3,
+    BLIND             = 4,
+    SMALL_BLIND       = 5,
+    BIG_BLIND         = 6,
+    BIG_BET           = 7,
 
     BETTER  = -1,
     WORSE   = 1,
@@ -1857,8 +1864,8 @@ Hand.suit = function (card) {
     // Number of raises allowed per round:
     maxRaises: 3,
 
-    // Poker.FIXED_LIMIT:
-    limit: 0
+    // Type of betting limit:
+    limit: FIXED_LIMIT
   }
 
 
@@ -1944,6 +1951,11 @@ Poker.CAP_LIMIT       = CAP_LIMIT
 Poker.SHUFFLE         = SHUFFLE
 Poker.DEAL            = DEAL
 Poker.BETTING_ROUND   = BETTING_ROUND
+Poker.ANTE            = ANTE
+Poker.BLIND           = BLIND
+Poker.SMALL_BLIND     = SMALL_BLIND
+Poker.BIG_BLIND       = BIG_BLIND
+Poker.BIG_BET         = BIG_BET
 
 
 /**
