@@ -41,7 +41,7 @@
 
     /**
      * Return current/last pot and remove it from the pots array.
-     * example: while (sidepot = pot.next()) { ... }
+     * example: while (sidepot = pot.pop()) { ... }
      * Shorthand for dividing winning at the end of a hand;
      * obviously, don't call this method during a hand!
      */
@@ -71,34 +71,34 @@
       // If a player is all-in, note it, so that if a player
       // bets more than the all-in, a new SidePot is created.
       n = 0
-      util.each(bets, function (bet, i) {
+      util.each(bets, function (bet, b) {
 
         // Include player in pot only if he has contributed to it.
         if (bet.chips > 0) {
 
           // Add chips to side pots, subtracting chips from the bet
           // as it cascades up the side pots.
-          util.each(sidepots, function (side, i) {
-            var chips = bet.chips - side.call
-            side.pot.add(bet.id, chips)
-            if (side.pot === 0) {
-              side.call = chips
+          util.each(sidepots, function (side, s) {
+            if (side.call === 0) {
+              side.call = bet.chips
             }
-            bet.chips -= chips
+            side.pot.add(bet.player, side.call)
+            bet.chips -= side.call
           })
 
           // If any chips are left in the bet, then add them to a new
           // side pot.
           if (bet.chips > 0) {
+            n++
             sidepots[n] = {
               pot: new SidePot,
-              call: bet.chips - maxCall
+              call: bet.chips
             }
+            sidepots[n].pot.add(bet.player, bet.chips)
             this.pots.push(sidepots[n].pot)
-            n++
           }
         }
-      })
+      }, this)
     },
 
 
