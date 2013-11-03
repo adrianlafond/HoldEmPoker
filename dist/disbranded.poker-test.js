@@ -97,13 +97,14 @@ var Poker,
      * Constants matched to lingo[lang].game.
      */
     SHUFFLE           = 0,
-    DEAL              = 1,
-    BETTING_ROUND     = 2,
-    ANTE              = 3,
-    BLIND             = 4,
-    SMALL_BLIND       = 5,
-    BIG_BLIND         = 6,
-    BIG_BET           = 7,
+    BURN              = 1,
+    DEAL              = 2,
+    BETTING_ROUND     = 3,
+    ANTE              = 4,
+    BLIND             = 5,
+    SMALL_BLIND       = 6,
+    BIG_BLIND         = 7,
+    BIG_BET           = 8,
 
     BETTER  = -1,
     WORSE   = 1,
@@ -1953,6 +1954,7 @@ Poker.CAP_LIMIT       = CAP_LIMIT
  * Constants matched to lingo[lang].dealer.
  */
 Poker.SHUFFLE         = SHUFFLE
+Poker.BURN            = BURN
 Poker.DEAL            = DEAL
 Poker.BETTING_ROUND   = BETTING_ROUND
 Poker.ANTE            = ANTE

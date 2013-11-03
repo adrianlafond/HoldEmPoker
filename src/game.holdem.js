@@ -22,6 +22,8 @@
   var p = Poker
 
   return {
+    maxPlayers: 22,
+
     game: [{
       action: Poker.SHUFFLE
 
@@ -44,6 +46,8 @@
 
     // flop
     }, {
+      action: Poker.BURN
+    }, {
       action: Poker.DEAL,
       face: Poker.COMMUNITY
     }, {
@@ -58,6 +62,8 @@
 
     // turn
     }, {
+      action: Poker.BURN
+    }, {
       action: Poker.DEAL,
       face: Poker.COMMUNITY
     }, {
@@ -65,6 +71,8 @@
       round: [Poker.BIG_BET]
 
     // river
+    }, {
+      action: Poker.BURN
     }, {
       action: Poker.DEAL,
       face: Poker.COMMUNITY

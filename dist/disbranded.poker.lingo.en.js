@@ -63,6 +63,7 @@
     ],
     game: [
       'shuffle',
+      'burn',
       'deal',
       'round',
       'ante',

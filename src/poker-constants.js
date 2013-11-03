@@ -53,6 +53,7 @@ Poker.CAP_LIMIT       = CAP_LIMIT
  * Constants matched to lingo[lang].dealer.
  */
 Poker.SHUFFLE         = SHUFFLE
+Poker.BURN            = BURN
 Poker.DEAL            = DEAL
 Poker.BETTING_ROUND   = BETTING_ROUND
 Poker.ANTE            = ANTE
