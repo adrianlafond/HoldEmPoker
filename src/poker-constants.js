@@ -59,7 +59,7 @@ Poker.ANTE            = ANTE
 Poker.BLIND           = BLIND
 Poker.SMALL_BLIND     = SMALL_BLIND
 Poker.BIG_BLIND       = BIG_BLIND
-Poker.BETS            = BETS
+Poker.BIG_BET         = BIG_BET
 
 
 /**

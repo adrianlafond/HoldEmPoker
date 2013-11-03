@@ -40,7 +40,7 @@
       }, {
         step: Poker.BIG_BLIND
       }, {
-        step: Poker.BETS
+        step: Poker.BET
       }]
 
     // flop
@@ -56,7 +56,7 @@
     }, {
       action: Poker.BETTING_ROUND,
       round: [{
-        step: Poker.BETS
+        step: Poker.BET
       }]
 
     // turn
@@ -66,7 +66,7 @@
     }, {
       action: Poker.BETTING_ROUND,
       round: [{
-        step: Poker.BETS
+        step: Poker.BIG_BET
       }]
 
     // river
@@ -76,7 +76,7 @@
     }, {
       action: Poker.BETTING_ROUND,
       round: [{
-        step: Poker.BETS
+        step: Poker.BIG_BET
       }]
     }]
   }

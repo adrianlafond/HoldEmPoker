@@ -10,8 +10,8 @@
     // Number of raises allowed per round:
     maxRaises: 3,
 
-    // Poker.FIXED_LIMIT:
-    limit: 0
+    // Type of betting limit:
+    limit: FIXED_LIMIT
   }
 
 

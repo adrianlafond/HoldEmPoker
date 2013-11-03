@@ -79,8 +79,7 @@ var Poker,
     BLIND             = 4,
     SMALL_BLIND       = 5,
     BIG_BLIND         = 6,
-    BETS              = 7
-
+    BIG_BET           = 7,
 
     BETTER  = -1,
     WORSE   = 1,

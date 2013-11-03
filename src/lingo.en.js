@@ -69,7 +69,7 @@
       'blind',
       'small blind',
       'big blind',
-      'bets'
+      'big bet'
     ]
   }
 }));
