@@ -50,6 +50,19 @@ Poker.CAP_LIMIT       = CAP_LIMIT
 
 
 /**
+ * Constants matched to lingo[lang].dealer.
+ */
+Poker.SHUFFLE         = SHUFFLE
+Poker.DEAL            = DEAL
+Poker.BETTING_ROUND   = BETTING_ROUND
+Poker.ANTE            = ANTE
+Poker.BLIND           = BLIND
+Poker.SMALL_BLIND     = SMALL_BLIND
+Poker.BIG_BLIND       = BIG_BLIND
+Poker.BETS            = BETS
+
+
+/**
  * Constants for comparisons between hands.
  * They are "backwards" for purposes of array sorting
  * (better is closer to start of array).

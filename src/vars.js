@@ -69,6 +69,19 @@ var Poker,
     CAP_LIMIT       = 4,
 
 
+    /**
+     * Constants matched to lingo[lang].game.
+     */
+    SHUFFLE           = 0,
+    DEAL              = 1,
+    BETTING_ROUND     = 2,
+    ANTE              = 3,
+    BLIND             = 4,
+    SMALL_BLIND       = 5,
+    BIG_BLIND         = 6,
+    BETS              = 7
+
+
     BETTER  = -1,
     WORSE   = 1,
     EVEN    = 0

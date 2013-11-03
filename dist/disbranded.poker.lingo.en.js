@@ -60,6 +60,11 @@
       'Pot Limit',
       'No Limit',
       'Cap Limit'
+    ],
+    dealer: [
+      'shuffle',
+      'deal',
+      'round'
     ]
   }
 }));

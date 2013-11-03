@@ -60,6 +60,16 @@
       'Pot Limit',
       'No Limit',
       'Cap Limit'
+    ],
+    game: [
+      'shuffle',
+      'deal',
+      'round',
+      'ante',
+      'blind',
+      'small blind',
+      'big blind',
+      'bets'
     ]
   }
 }));

@@ -98,6 +98,11 @@ var Poker,
     CAP_LIMIT       = 4,
 
 
+    SHUFFLE           = 0,
+    DEAL              = 1,
+    BETTING_ROUND     = 2,
+
+
     BETTER  = -1,
     WORSE   = 1,
     EVEN    = 0
@@ -1936,6 +1941,14 @@ Poker.SPREAD_LIMIT    = SPREAD_LIMIT
 Poker.POT_LIMIT       = POT_LIMIT
 Poker.NO_LIMIT        = NO_LIMIT
 Poker.CAP_LIMIT       = CAP_LIMIT
+
+
+/**
+ * Constants matched to lingo[lang].dealer.
+ */
+Poker.SHUFFLE         = SHUFFLE
+Poker.DEAL            = DEAL
+Poker.BETTING_ROUND   = BETTING_ROUND
 
 
 /**
