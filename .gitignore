@@ -1,5 +1,6 @@
 *.tmproj
 
+.grunt
 node_modules
 _src
 _test
