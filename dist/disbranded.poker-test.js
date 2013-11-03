@@ -1865,7 +1865,11 @@ Hand.suit = function (card) {
     maxRaises: 3,
 
     // Type of betting limit:
-    limit: FIXED_LIMIT
+    limit: FIXED_LIMIT,
+
+    // If high hand, low hand, or both wins the pot.
+    high: true,
+    low: false
   }
 
 
