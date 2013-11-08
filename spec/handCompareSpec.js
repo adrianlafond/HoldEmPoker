@@ -1,7 +1,7 @@
 'use strict'
 
 describe('hand comparisons', function () {
-  var Poker = DISBRANDED.Poker,
+  var Poker = POKER,
       Hand = Poker.Hand
 
   it('should call the highest hand', function () {

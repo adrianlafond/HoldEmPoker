@@ -2,7 +2,7 @@
 
 
 describe('Poker.Table', function () {
-  var Poker = DISBRANDED.Poker,
+  var Poker = POKER,
       Table = Poker.Table,
       Player = Poker.Player
 

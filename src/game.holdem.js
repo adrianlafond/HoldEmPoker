@@ -13,8 +13,7 @@
     module.exports = factory(require('disbranded.poker'))
   } else {
     // Browser globals (root is window)
-    root.DISBRANDED.Poker.game = root.DISBRANDED.Poker.game || {}
-    root.DISBRANDED.Poker.game.holdem = factory(root.DISBRANDED.Poker)
+    root.POKER.holdem = factory(root.POKER)
   }
 }(this, function (Poker) {
   'use strict'

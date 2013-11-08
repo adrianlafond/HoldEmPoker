@@ -2,7 +2,7 @@
 
 
 describe('Poker.lingo.en', function () {
-  var lang = DISBRANDED.Poker.lingo.en
+  var lang = POKER.lingo.en
 
   expect(lang.cards[0]).toBe(null)
   expect(lang.cards.length).toBe(11)

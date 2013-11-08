@@ -2,7 +2,7 @@
 
 
 describe('Poker.Deck', function () {
-  var Deck = DISBRANDED.Poker.Deck
+  var Deck = POKER.Deck
 
   // no jokers
   it('should be a proper deck', function () {

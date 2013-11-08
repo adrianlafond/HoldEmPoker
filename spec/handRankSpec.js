@@ -1,7 +1,7 @@
 'use strict'
 
 describe('hand instance ranks', function () {
-  var Poker = DISBRANDED.Poker,
+  var Poker = POKER,
       Hand = Poker.Hand
 
   it('should return highest hand', function () {

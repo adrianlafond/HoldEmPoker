@@ -2,7 +2,7 @@
 
 
 describe('Poker', function () {
-  var Poker = DISBRANDED.Poker
+  var Poker = POKER
 
   beforeEach(function () {
     // Poker = new DISBRANDED.Poker

@@ -13,8 +13,7 @@
     module.exports = factory();
   } else {
     // Browser globals (root is window)
-    root.DISBRANDED = root.DISBRANDED || {}
-    root.DISBRANDED.Poker = factory();
+    root.POKER = factory();
   }
 }(this, function () {
   'use strict'

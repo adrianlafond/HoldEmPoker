@@ -2,7 +2,7 @@
 
 
 describe('Poker hand ranks', function () {
-  var Poker = DISBRANDED.Poker,
+  var Poker = POKER,
       Hand = Poker.Hand
 
   it('should find the correct rank of a card', function () {

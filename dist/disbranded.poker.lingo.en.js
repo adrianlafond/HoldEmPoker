@@ -12,11 +12,9 @@
     // like Node.
     module.exports = factory()
   } else {
-    // Browser globals (root is window)
-    root.DISBRANDED = root.DISBRANDED || {}
-    root.DISBRANDED.Poker = root.DISBRANDED.Poker || {}
-    root.DISBRANDED.Poker.lingo = root.DISBRANDED.Poker.lingo || {}
-    root.DISBRANDED.Poker.lingo.en = factory()
+    // Browser globals (root is window)}
+    root.POKER.lingo = root.POKER.lingo || {}
+    root.POKER.lingo.en = factory()
   }
 }(this, function () {
   'use strict'

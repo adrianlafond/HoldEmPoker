@@ -1,7 +1,7 @@
 'use strict'
 
 describe('Poker.util', function () {
-  var util = DISBRANDED.Poker.util
+  var util = POKER.util
 
   expect(util.isArray([])).toBe(true)
   expect(util.isNumber(123)).toBe(true)

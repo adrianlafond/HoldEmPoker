@@ -1,7 +1,7 @@
 'use strict'
 
 describe('test low hands', function () {
-  var Poker = DISBRANDED.Poker,
+  var Poker = POKER,
       Hand = Poker.Hand
 
   it('should find a straight when aces are low', function () {

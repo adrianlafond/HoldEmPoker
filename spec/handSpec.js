@@ -5,7 +5,7 @@ describe('Poker.Hand', function () {
   var hand
 
   beforeEach(function () {
-    hand = new DISBRANDED.Poker.Hand
+    hand = new POKER.Hand
   })
 
   it('should add a card to the hand', function () {
