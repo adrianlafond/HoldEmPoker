@@ -1,0 +1,28 @@
+{
+  "title": "Texas Hold'em",
+  "name": "holdem",
+  "players": {
+    "max": 22,
+    "min": 2
+  },
+  "game": [
+    { "action": "SHUFFLE" },
+    { "action": "SMALL_BLIND", "position": 1 },
+    { "action": "BIG_BLIND", "position": 2 },
+    { "action": "DEAL_FACEDOWN" },
+    { "action": "DEAL_FACEDOWN" },
+    { "action": "BETTING_ROUND" },
+    { "action": "BURN" },
+    { "action": "DEAL_COMMUNITY" },
+    { "action": "DEAL_COMMUNITY" },
+    { "action": "DEAL_COMMUNITY" },
+    { "action": "BETTING_ROUND" },
+    { "action": "BURN" },
+    { "action": "DEAL_COMMUNITY" },
+    { "action": "BETTING_ROUND_BIG" },
+    { "action": "BURN" },
+    { "action": "DEAL_COMMUNITY" },
+    { "action": "BETTING_ROUND_BIG" },
+    { "action": "SHOWDOWN" }
+  ]
+}
