@@ -1,5 +1,6 @@
 /**
  * The main Poker class and the returned API.
+ * A separate Dealer/Game class will instantiate a Poker instance.
  */
 ;(function () {
   'use strict'
@@ -39,7 +40,6 @@
   Poker = function (options) {
     var options,
         table,
-        dealer,
         pot,
         round
 
@@ -73,13 +73,3 @@
     //
   }
 }());
-
-
-
-
-
-
-
-
-
-

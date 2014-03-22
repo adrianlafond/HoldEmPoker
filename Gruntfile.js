@@ -3,6 +3,11 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
+    clean: {
+      dist: ['dist/'],
+      game: ['game/js/']
+    },
+
     concat: {
       base: {
         src: [
@@ -91,6 +96,16 @@ module.exports = function (grunt) {
       }
     },
 
+    copy: {
+      game: {
+        expand: true,
+        cwd: 'dist/',
+        src: ['**.js', '!*-test.js', '!*-min.js'],
+        dest: 'game/js/',
+        filter: 'isFile'
+      }
+    },
+
     watch: {
       build: {
         files: ['src/*.js'],
@@ -99,18 +114,32 @@ module.exports = function (grunt) {
       test: {
         files: ['spec/*.js'],
         tasks: ['test']
+      },
+      game: {
+        files: ['src/*.js'],
+        tasks: ['build', 'game']
+      }
+    },
+
+    shell: {
+      game: {
+        command: 'node www/www.js'
       }
     }
   })
 
   grunt.loadNpmTasks('grunt-banner')
+  grunt.loadNpmTasks('grunt-contrib-clean')
   grunt.loadNpmTasks('grunt-contrib-concat')
   grunt.loadNpmTasks('grunt-contrib-uglify')
+  grunt.loadNpmTasks('grunt-contrib-copy')
   grunt.loadNpmTasks('grunt-contrib-jasmine')
   grunt.loadNpmTasks('grunt-contrib-watch')
+  grunt.loadNpmTasks('grunt-shell')
 
   // grunt.registerTask('default', ['concat', 'uglify', 'usebanner', 'jasmine'])
-  grunt.registerTask('build', ['concat', 'uglify', 'usebanner'])
+  grunt.registerTask('build', ['clean', 'concat', 'uglify', 'usebanner', 'copy'])
   grunt.registerTask('test', ['jasmine'])
-  grunt.registerTask('default', ['build', 'test'])
+  grunt.registerTask('game', ['shell:game'])
+  grunt.registerTask('default', ['build'])
 };

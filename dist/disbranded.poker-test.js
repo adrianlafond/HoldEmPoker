@@ -1854,6 +1854,7 @@ Hand.suit = function (card) {
 
 /**
  * The main Poker class and the returned API.
+ * A separate Dealer/Game class will instantiate a Poker instance.
  */
 ;(function () {
   'use strict'
@@ -1893,7 +1894,6 @@ Hand.suit = function (card) {
   Poker = function (options) {
     var options,
         table,
-        dealer,
         pot,
         round
 
@@ -1927,16 +1927,6 @@ Hand.suit = function (card) {
     //
   }
 }());
-
-
-
-
-
-
-
-
-
-
 
 /**
  * Constants matched to lingo[lang].cards.
