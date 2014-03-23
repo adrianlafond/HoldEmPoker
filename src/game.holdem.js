@@ -27,6 +27,12 @@
     this.options = Poker.util.extend({}, defaults, options || {})
   }
 
+
+  Game.prototype = {
+    //
+  }
+
+
   return Game
 
   // return {
