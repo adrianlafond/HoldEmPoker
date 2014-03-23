@@ -90,11 +90,11 @@ var Poker,
     /**
      * Constants matched to lingo[lang].limit.
      */
-    FIXED_LIMIT     = 0,
-    SPREAD_LIMIT    = 1,
-    POT_LIMIT       = 2,
-    NO_LIMIT        = 3,
-    CAP_LIMIT       = 4,
+    FIXED_LIMIT     = 'fixedLimit',
+    SPREAD_LIMIT    = 'spreadLimit',
+    POT_LIMIT       = 'potLimit',
+    NO_LIMIT        = 'noLimit',
+    CAP_LIMIT       = 'capLimit',
 
 
     /**
@@ -113,10 +113,6 @@ var Poker,
     BETTER  = -1,
     WORSE   = 1,
     EVEN    = 0
-
-
-
-
 
 /**
  *

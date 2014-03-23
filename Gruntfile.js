@@ -5,7 +5,7 @@ module.exports = function (grunt) {
 
     clean: {
       dist: ['dist/'],
-      game: ['game/js/']
+      game: ['game/lib/']
     },
 
     concat: {
@@ -101,7 +101,7 @@ module.exports = function (grunt) {
         expand: true,
         cwd: 'dist/',
         src: ['**.js', '!*-test.js', '!*-min.js'],
-        dest: 'game/js/',
+        dest: 'game/lib/',
         filter: 'isFile'
       }
     },

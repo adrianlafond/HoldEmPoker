@@ -10,7 +10,10 @@
 </head>
 <body>
 
-  <div class="container">
+  <div
+    class="container"
+    ng-controller="CtrlApp">
+
     <div class="page-header">
       <h1>Hold 'em Poker</h1>
     </div>
@@ -20,32 +23,27 @@
 
       <!-- BETTING STRUCTURE -->
       <label>
-        Betting:
-        <select class="form-control">
-          <option>Limit</option>
-          <option>Spread</option>
-          <option>Pot Limit</option>
-          <option>No Limit</option>
+        Betting Limit:
+        <select
+          class="form-control"
+          ng-model="settings.limit"
+          ng-options="opt as opt.label for opt in options.limits">
         </select>
       </label>
 
       <!-- # OF PLAYERS -->
       <label>
         Players:
-        <select class="form-control">
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-          <option>6</option>
-          <option>7</option>
-          <option>8</option>
-          <option>9</option>
+        <select
+          class="form-control"
+          ng-model="settings.players"
+          ng-options="opt for opt in options.players">
         </select>
       </label>
 
       <button
-        class="btn btn-primary">
+        class="btn btn-primary"
+        ng-click="startGame()">
         Start Game
       </button>
     </div>
@@ -59,11 +57,12 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
-  <script src="js/disbranded.poker.js"></script>
-  <script src="js/disbranded.poker.lingo.en.js"></script>
-  <script src="js/disbranded.poker.game.holdem.js"></script>
+  <script src="lib/disbranded.poker.js"></script>
+  <script src="lib/disbranded.poker.lingo.en.js"></script>
+  <script src="lib/disbranded.poker.game.holdem.js"></script>
 
   <script src="js/game.js"></script>
+  <script src="js/game.ctrl.js"></script>
 
 </body>
 </html>
