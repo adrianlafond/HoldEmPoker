@@ -20,43 +20,43 @@ var Poker,
     /**
      * Constants matched to lingo[lang].cards.
      */
-    ROYAL_FLUSH     = 10,
-    STRAIGHT_FLUSH  = 9,
-    FOUR_OF_A_KIND  = 8,
-    FULL_HOUSE      = 7,
-    FLUSH           = 6,
-    STRAIGHT        = 5,
-    THREE_OF_A_KIND = 4,
-    TWO_PAIR        = 3,
-    ONE_PAIR        = 2,
-    HIGH_CARD       = 1,
+    ROYAL_FLUSH     = 'royalFlush',
+    STRAIGHT_FLUSH  = 'straightFlush',
+    FOUR_OF_A_KIND  = 'fourOfAKind',
+    FULL_HOUSE      = 'fullHouse',
+    FLUSH           = 'flush',
+    STRAIGHT        = 'straight',
+    THREE_OF_A_KIND = 'threeOfAKind',
+    TWO_PAIR        = 'twoPair',
+    ONE_PAIR        = 'onePair',
+    HIGH_CARD       = 'highCard',
 
 
     /**
      * Constants matched to lingo[lang].low.
      */
-    ACE_TO_FIVE_LOW    = 1,
-    ACE_TO_SIX_LOW     = 2,
-    DEUCE_TO_SEVEN_LOW = 3,
-    DEUCE_TO_SIX_LOW   = 4,
+    ACE_TO_FIVE_LOW    = 'aceToFiveLow',
+    ACE_TO_SIX_LOW     = 'aceToSixLow',
+    DEUCE_TO_SEVEN_LOW = 'deuceToSevenLow',
+    DEUCE_TO_SIX_LOW   = 'deuceToSixLow',
 
 
 
     /**
      * Cosntants matched lingo[lang].card.
      */
-    FACE_DOWN  = 0,
-    FACE_UP    = 1,
-    COMMUNITY  = 2,
+    FACE_DOWN  = 'faceDown',
+    FACE_UP    = 'faceUp',
+    COMMUNITY  = 'community',
 
 
     /**
      * Constants that correspond with lingo[lang].action.
      */
-    FOLD   = 1,
-    BET    = 2,
-    CALL   = 3,
-    RAISE  = 4,
+    FOLD   = 'fold',
+    BET    = 'bet',
+    CALL   = 'call',
+    RAISE  = 'raise',
 
 
     /**
@@ -72,15 +72,15 @@ var Poker,
     /**
      * Constants matched to lingo[lang].game.
      */
-    SHUFFLE           = 0,
-    BURN              = 1,
-    DEAL              = 2,
-    BETTING_ROUND     = 3,
-    ANTE              = 4,
-    BLIND             = 5,
-    SMALL_BLIND       = 6,
-    BIG_BLIND         = 7,
-    BIG_BET           = 8,
+    SHUFFLE           = 'shuffle',
+    BURN              = 'burn',
+    DEAL              = 'deal',
+    BETTING_ROUND     = 'bettingRound',
+    ANTE              = 'ante',
+    BLIND             = 'blind',
+    SMALL_BLIND       = 'smallBlind',
+    BIG_BLIND         = 'bigBlind',
+    BIG_BET           = 'bigBet',
 
     BETTER  = -1,
     WORSE   = 1,

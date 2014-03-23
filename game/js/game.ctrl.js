@@ -27,7 +27,9 @@
 
 
     $scope.startGame = function () {
-      console.log('startGame()')
+      console.log('startGame()',
+        $scope.settings.limit.value,
+        $scope.settings.players)
     }
   }
 
