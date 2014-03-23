@@ -1,7 +1,7 @@
 /*
  * poker-game-engine v0.0.1
  * by Adrian Lafond / adrian [at] disbranded.com
- * last updated 2014-03-22
+ * last updated 2014-03-23
 **/
 
 ;(function (root, factory) {
@@ -1818,34 +1818,6 @@ Hand.suit = function (card) {
       }, this)
       return this
     },
-  }
-}());
-
-
-
-
-
-/**
- * Poker.Dealer controls gameplay.
- */
-;(function () {
-  'use strict'
-
-
-  var defaults = {
-    //
-  }
-
-
-  /**
-   * @constructor
-   */
-  Dealer = function (options) {
-    this.options = util.extend({}, defaults, options || {})
-  }
-
-  Dealer.prototype = {
-    //
   }
 }());
 

@@ -26,7 +26,6 @@ module.exports = function (grunt) {
           'src/sidepot.js',
           'src/pot.js',
           'src/table.js',
-          'src/dealer.js',
           'src/poker.js',
           'src/poker-constants.js'
         ],

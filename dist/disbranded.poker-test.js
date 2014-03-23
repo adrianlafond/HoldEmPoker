@@ -1821,34 +1821,6 @@ Hand.suit = function (card) {
 
 
 /**
- * Poker.Dealer controls gameplay.
- */
-;(function () {
-  'use strict'
-
-
-  var defaults = {
-    //
-  }
-
-
-  /**
-   * @constructor
-   */
-  Dealer = function (options) {
-    this.options = util.extend({}, defaults, options || {})
-  }
-
-  Dealer.prototype = {
-    //
-  }
-}());
-
-
-
-
-
-/**
  * The main Poker class and the returned API.
  * A separate Dealer/Game class will instantiate a Poker instance.
  */
