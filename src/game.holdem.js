@@ -13,72 +13,80 @@
     module.exports = factory(require('disbranded.poker'))
   } else {
     // Browser globals (root is window)
-    root.POKER.holdem = factory(root.POKER)
+    root.POKER.games = root.POKER.games || {}
+    root.POKER.games.Holdem = factory(root.POKER)
   }
 }(this, function (Poker) {
   'use strict'
 
-  var p = Poker
+  var defaults = {}
 
-  return {
-    maxPlayers: 22,
 
-    game: [{
-      action: Poker.SHUFFLE
 
-    // deal
-    }, {
-      action: Poker.DEAL,
-      face: Poker.FACE_DOWN
-    }, {
-      action: Poker.DEAL,
-      face: Poker.FACE_DOWN
-
-    // pre-flop
-    }, {
-      action: Poker.BETTING_ROUND,
-      round: [
-        Poker.SMALL_BLIND,
-        Poker.BIG_BLIND,
-        Poker.BET
-      ]
-
-    // flop
-    }, {
-      action: Poker.BURN
-    }, {
-      action: Poker.DEAL,
-      face: Poker.COMMUNITY
-    }, {
-      action: Poker.DEAL,
-      face: Poker.COMMUNITY
-    }, {
-      action: Poker.DEAL,
-      face: Poker.COMMUNITY
-    }, {
-      action: Poker.BETTING_ROUND,
-      round: [Poker.BET]
-
-    // turn
-    }, {
-      action: Poker.BURN
-    }, {
-      action: Poker.DEAL,
-      face: Poker.COMMUNITY
-    }, {
-      action: Poker.BETTING_ROUND,
-      round: [Poker.BIG_BET]
-
-    // river
-    }, {
-      action: Poker.BURN
-    }, {
-      action: Poker.DEAL,
-      face: Poker.COMMUNITY
-    }, {
-      action: Poker.BETTING_ROUND,
-      round: [Poker.BIG_BET]
-    }]
+  function Game(options) {
+    this.options = Poker.util.extend({}, defaults, options || {})
   }
-}));
 
+  return Game
+
+  // return {
+  //   maxPlayers: 22,
+  //
+  //   game: [{
+  //     action: Poker.SHUFFLE
+  //
+  //   // deal
+  //   }, {
+  //     action: Poker.DEAL,
+  //     face: Poker.FACE_DOWN
+  //   }, {
+  //     action: Poker.DEAL,
+  //     face: Poker.FACE_DOWN
+  //
+  //   // pre-flop
+  //   }, {
+  //     action: Poker.BETTING_ROUND,
+  //     round: [
+  //       Poker.SMALL_BLIND,
+  //       Poker.BIG_BLIND,
+  //       Poker.BET
+  //     ]
+  //
+  //   // flop
+  //   }, {
+  //     action: Poker.BURN
+  //   }, {
+  //     action: Poker.DEAL,
+  //     face: Poker.COMMUNITY
+  //   }, {
+  //     action: Poker.DEAL,
+  //     face: Poker.COMMUNITY
+  //   }, {
+  //     action: Poker.DEAL,
+  //     face: Poker.COMMUNITY
+  //   }, {
+  //     action: Poker.BETTING_ROUND,
+  //     round: [Poker.BET]
+  //
+  //   // turn
+  //   }, {
+  //     action: Poker.BURN
+  //   }, {
+  //     action: Poker.DEAL,
+  //     face: Poker.COMMUNITY
+  //   }, {
+  //     action: Poker.BETTING_ROUND,
+  //     round: [Poker.BIG_BET]
+  //
+  //   // river
+  //   }, {
+  //     action: Poker.BURN
+  //   }, {
+  //     action: Poker.DEAL,
+  //     face: Poker.COMMUNITY
+  //   }, {
+  //     action: Poker.BETTING_ROUND,
+  //     round: [Poker.BIG_BET]
+  //   }]
+  // }
+}));
