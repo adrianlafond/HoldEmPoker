@@ -48,67 +48,67 @@ var Poker,
     /**
      * Constants matched to lingo[lang].cards.
      */
-    ROYAL_FLUSH     = 'royalFlush',
-    STRAIGHT_FLUSH  = 'straightFlush',
-    FOUR_OF_A_KIND  = 'fourOfAKind',
-    FULL_HOUSE      = 'fullHouse',
-    FLUSH           = 'flush',
-    STRAIGHT        = 'straight',
-    THREE_OF_A_KIND = 'threeOfAKind',
-    TWO_PAIR        = 'twoPair',
-    ONE_PAIR        = 'onePair',
-    HIGH_CARD       = 'highCard',
+    ROYAL_FLUSH     = 10,
+    STRAIGHT_FLUSH  = 9,
+    FOUR_OF_A_KIND  = 8,
+    FULL_HOUSE      = 7,
+    FLUSH           = 6,
+    STRAIGHT        = 5,
+    THREE_OF_A_KIND = 4,
+    TWO_PAIR        = 3,
+    ONE_PAIR        = 2,
+    HIGH_CARD       = 1,
 
 
     /**
      * Constants matched to lingo[lang].low.
      */
-    ACE_TO_FIVE_LOW    = 'aceToFiveLow',
-    ACE_TO_SIX_LOW     = 'aceToSixLow',
-    DEUCE_TO_SEVEN_LOW = 'deuceToSevenLow',
-    DEUCE_TO_SIX_LOW   = 'deuceToSixLow',
+    ACE_TO_FIVE_LOW    = 1,
+    ACE_TO_SIX_LOW     = 2,
+    DEUCE_TO_SEVEN_LOW = 3,
+    DEUCE_TO_SIX_LOW   = 4,
 
 
 
     /**
      * Cosntants matched lingo[lang].card.
      */
-    FACE_DOWN  = 'faceDown',
-    FACE_UP    = 'faceUp',
-    COMMUNITY  = 'community',
+    FACE_DOWN  = 0,
+    FACE_UP    = 1,
+    COMMUNITY  = 2,
 
 
     /**
      * Constants that correspond with lingo[lang].action.
      */
-    FOLD   = 'fold',
-    BET    = 'bet',
-    CALL   = 'call',
-    RAISE  = 'raise',
+    FOLD   = 1,
+    BET    = 2,
+    CALL   = 3,
+    RAISE  = 4,
 
 
     /**
      * Constants matched to lingo[lang].limit.
      */
-    FIXED_LIMIT     = 'fixedLimit',
-    SPREAD_LIMIT    = 'spreadLimit',
-    POT_LIMIT       = 'potLimit',
-    NO_LIMIT        = 'noLimit',
-    CAP_LIMIT       = 'capLimit',
+    FIXED_LIMIT     = 0,
+    SPREAD_LIMIT    = 1,
+    POT_LIMIT       = 2,
+    NO_LIMIT        = 3,
+    CAP_LIMIT       = 4,
 
 
     /**
      * Constants matched to lingo[lang].game.
      */
-    SHUFFLE           = 'shuffle',
-    BURN              = 'burn',
-    DEAL              = 'deal',
-    BETTING_ROUND     = 'bettingRound',
-    ANTE              = 'ante',
-    BLIND             = 'blind',
-    SMALL_BLIND       = 'smallBlind',
-    BIG_BLIND         = 'bigBlind',
-    BIG_BET           = 'bigBet',
+    SHUFFLE           = 0,
+    BURN              = 2,
+    DEAL              = 3,
+    BETTING_ROUND     = 4,
+    ANTE              = 5,
+    BLIND             = 6,
+    SMALL_BLIND       = 7,
+    BIG_BLIND         = 8,
+    BIG_BET           = 9,
 
     BETTER  = -1,
     WORSE   = 1,
@@ -1826,157 +1826,110 @@ Hand.suit = function (card) {
 
 
 /**
- * The main Poker class and the returned API.
- * A separate Dealer/Game class will instantiate a Poker instance.
+ * Poker is the API return for the module. It acts as a factory for all
+ * other classes for use by a separate Dealer/Game instance.
+ * Classes that will need to instantiated by a Dealer include: Table, Player,
+ * Pot, Bet, Round
  */
 ;(function () {
   'use strict'
 
 
-  var defaults = {
-
-    // Game format.
-    game: null,
-
-    // Number of raises allowed per round:
-    maxRaises: 3,
-
-    // Type of betting limit:
-    limit: FIXED_LIMIT,
-
-    // If high hand, low hand, or both wins/splits the pot.
-    high: true,
-    low: false
-  }
+  Poker = (function () {
+    return {
 
 
+      /**
+       * Constants matched to lingo[lang].cards.
+       */
+      ROYAL_FLUSH     : ROYAL_FLUSH,
+      STRAIGHT_FLUSH  : STRAIGHT_FLUSH,
+      FOUR_OF_A_KIND  : FOUR_OF_A_KIND,
+      FULL_HOUSE      : FULL_HOUSE,
+      FLUSH           : FLUSH,
+      STRAIGHT        : STRAIGHT,
+      THREE_OF_A_KIND : THREE_OF_A_KIND,
+      TWO_PAIR        : TWO_PAIR,
+      ONE_PAIR        : ONE_PAIR,
+      HIGH_CARD       : HIGH_CARD,
 
-  function validateOptions(options) {
-    if (util.isNada(options.game)) {
-      throw 'Game format not valid.'
+
+      /**
+       * Constants matched to lingo[lang].low.
+       */
+      ACE_TO_FIVE_LOW    : ACE_TO_FIVE_LOW,
+      ACE_TO_SIX_LOW     : ACE_TO_SIX_LOW,
+      DEUCE_TO_SEVEN_LOW : DEUCE_TO_SEVEN_LOW,
+      DEUCE_TO_SIX_LOW   : DEUCE_TO_SIX_LOW,
+
+
+      /**
+       * Cosntants matched lingo[lang].card.
+       */
+      FACE_DOWN  : FACE_DOWN,
+      FACE_UP    : FACE_UP,
+      COMMUNITY  : COMMUNITY,
+
+
+      /**
+       * Constants that correspond with lingo[lang].action.
+       */
+      FOLD   : FOLD,
+      BET    : BET,
+      CALL   : CALL,
+      RAISE  : RAISE,
+
+
+      /**
+       * Constants matched to lingo[lang].limit.
+       */
+      FIXED_LIMIT     : FIXED_LIMIT,
+      SPREAD_LIMIT    : SPREAD_LIMIT,
+      POT_LIMIT       : POT_LIMIT,
+      NO_LIMIT        : NO_LIMIT,
+      CAP_LIMIT       : CAP_LIMIT,
+
+
+      /**
+       * Constants matched to lingo[lang].dealer.
+       */
+      SHUFFLE         : SHUFFLE,
+      BURN            : BURN,
+      DEAL            : DEAL,
+      BETTING_ROUND   : BETTING_ROUND,
+      ANTE            : ANTE,
+      BLIND           : BLIND,
+      SMALL_BLIND     : SMALL_BLIND,
+      BIG_BLIND       : BIG_BLIND,
+      BIG_BET         : BIG_BET,
+
+
+      /**
+       * Constants for comparisons between hands.
+       * They are "backwards" for purposes of array sorting
+       * (better is closer to start of array).
+       */
+      BETTER  : BETTER,
+      WORSE   : WORSE,
+      EVEN    : EVEN,
+
+
+      /**
+       * Classes and utils.
+       */
+      Card    : Card,
+      Deck    : Deck,
+      Hand    : Hand,
+      Player  : Player,
+      Bet     : Bet,
+      Round   : Round,
+      SidePot : SidePot,
+      Pot     : Pot,
+      Table   : Table,
+      util    : util
     }
-    if (util.isNada(options.game.maxPlayers)) {
-      throw 'Game format maximum players not set.'
-    }
-  }
-
-
-  /**
-   * @constructor
-   */
-  Poker = function (options) {
-    var options,
-        table,
-        pot,
-        round
-
-    if (!(this instanceof Poker)) {
-      return new Poker(options)
-    }
-
-    /*************************************************************************
-     * Public privileged (and therefor not prototype) methods.
-     *************************************************************************/
-    this.setOption = function (key, val) {
-      return this
-    }
-
-    this.getOption = function (key) {
-      return null
-    }
-
-    options = util.extend({}, defaults, options || {})
-    validateOptions(options)
-
-    table = new Table({ seats: options.game.maxPlayers })
-
-    util.each(options, function (val, key) {
-      this.setOption(key, val)
-    }, this)
-  }
-
-
-  Poker.prototype = {
-    //
-  }
+  }())
 }());
-
-/**
- * Constants matched to lingo[lang].cards.
- */
-Poker.ROYAL_FLUSH     = ROYAL_FLUSH
-Poker.STRAIGHT_FLUSH  = STRAIGHT_FLUSH
-Poker.FOUR_OF_A_KIND  = FOUR_OF_A_KIND
-Poker.FULL_HOUSE      = FULL_HOUSE
-Poker.FLUSH           = FLUSH
-Poker.STRAIGHT        = STRAIGHT
-Poker.THREE_OF_A_KIND = THREE_OF_A_KIND
-Poker.TWO_PAIR        = TWO_PAIR
-Poker.ONE_PAIR        = ONE_PAIR
-Poker.HIGH_CARD       = HIGH_CARD
-
-
-/**
- * Constants matched to lingo[lang].low.
- */
-Poker.ACE_TO_FIVE_LOW    = ACE_TO_FIVE_LOW
-Poker.ACE_TO_SIX_LOW     = ACE_TO_SIX_LOW
-Poker.DEUCE_TO_SEVEN_LOW = DEUCE_TO_SEVEN_LOW
-Poker.DEUCE_TO_SIX_LOW   = DEUCE_TO_SIX_LOW
-
-
-/**
- * Cosntants matched lingo[lang].card.
- */
-Poker.FACE_DOWN  = FACE_DOWN
-Poker.FACE_UP    = FACE_UP
-Poker.COMMUNITY  = COMMUNITY
-
-
-/**
- * Constants that correspond with lingo[lang].action.
- */
-Poker.FOLD   = FOLD
-Poker.BET    = BET
-Poker.CALL   = CALL
-Poker.RAISE  = RAISE
-
-
-/**
- * Constants matched to lingo[lang].limit.
- */
-Poker.FIXED_LIMIT     = FIXED_LIMIT
-Poker.SPREAD_LIMIT    = SPREAD_LIMIT
-Poker.POT_LIMIT       = POT_LIMIT
-Poker.NO_LIMIT        = NO_LIMIT
-Poker.CAP_LIMIT       = CAP_LIMIT
-
-
-/**
- * Constants matched to lingo[lang].dealer.
- */
-Poker.SHUFFLE         = SHUFFLE
-Poker.BURN            = BURN
-Poker.DEAL            = DEAL
-Poker.BETTING_ROUND   = BETTING_ROUND
-Poker.ANTE            = ANTE
-Poker.BLIND           = BLIND
-Poker.SMALL_BLIND     = SMALL_BLIND
-Poker.BIG_BLIND       = BIG_BLIND
-Poker.BIG_BET         = BIG_BET
-
-
-/**
- * Constants for comparisons between hands.
- * They are "backwards" for purposes of array sorting
- * (better is closer to start of array).
- */
-Poker.BETTER  = BETTER
-Poker.WORSE   = WORSE
-Poker.EVEN    = EVEN
-
-
-
 
 
 

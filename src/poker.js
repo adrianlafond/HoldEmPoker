@@ -1,75 +1,105 @@
 /**
- * The main Poker class and the returned API.
- * A separate Dealer/Game class will instantiate a Poker instance.
+ * Poker is the API return for the module. It acts as a factory for all
+ * other classes for use by a separate Dealer/Game instance.
+ * Classes that will need to instantiated by a Dealer include: Table, Player,
+ * Pot, Bet, Round
  */
 ;(function () {
   'use strict'
 
 
-  var defaults = {
-
-    // Game format.
-    game: null,
-
-    // Number of raises allowed per round:
-    maxRaises: 3,
-
-    // Type of betting limit:
-    limit: FIXED_LIMIT,
-
-    // If high hand, low hand, or both wins/splits the pot.
-    high: true,
-    low: false
-  }
+  Poker = (function () {
+    return {
 
 
+      /**
+       * Constants matched to lingo[lang].cards.
+       */
+      ROYAL_FLUSH     : ROYAL_FLUSH,
+      STRAIGHT_FLUSH  : STRAIGHT_FLUSH,
+      FOUR_OF_A_KIND  : FOUR_OF_A_KIND,
+      FULL_HOUSE      : FULL_HOUSE,
+      FLUSH           : FLUSH,
+      STRAIGHT        : STRAIGHT,
+      THREE_OF_A_KIND : THREE_OF_A_KIND,
+      TWO_PAIR        : TWO_PAIR,
+      ONE_PAIR        : ONE_PAIR,
+      HIGH_CARD       : HIGH_CARD,
 
-  function validateOptions(options) {
-    if (util.isNada(options.game)) {
-      throw 'Game format not valid.'
+
+      /**
+       * Constants matched to lingo[lang].low.
+       */
+      ACE_TO_FIVE_LOW    : ACE_TO_FIVE_LOW,
+      ACE_TO_SIX_LOW     : ACE_TO_SIX_LOW,
+      DEUCE_TO_SEVEN_LOW : DEUCE_TO_SEVEN_LOW,
+      DEUCE_TO_SIX_LOW   : DEUCE_TO_SIX_LOW,
+
+
+      /**
+       * Cosntants matched lingo[lang].card.
+       */
+      FACE_DOWN  : FACE_DOWN,
+      FACE_UP    : FACE_UP,
+      COMMUNITY  : COMMUNITY,
+
+
+      /**
+       * Constants that correspond with lingo[lang].action.
+       */
+      FOLD   : FOLD,
+      BET    : BET,
+      CALL   : CALL,
+      RAISE  : RAISE,
+
+
+      /**
+       * Constants matched to lingo[lang].limit.
+       */
+      FIXED_LIMIT     : FIXED_LIMIT,
+      SPREAD_LIMIT    : SPREAD_LIMIT,
+      POT_LIMIT       : POT_LIMIT,
+      NO_LIMIT        : NO_LIMIT,
+      CAP_LIMIT       : CAP_LIMIT,
+
+
+      /**
+       * Constants matched to lingo[lang].dealer.
+       */
+      SHUFFLE         : SHUFFLE,
+      BURN            : BURN,
+      DEAL            : DEAL,
+      BETTING_ROUND   : BETTING_ROUND,
+      ANTE            : ANTE,
+      BLIND           : BLIND,
+      SMALL_BLIND     : SMALL_BLIND,
+      BIG_BLIND       : BIG_BLIND,
+      BIG_BET         : BIG_BET,
+
+
+      /**
+       * Constants for comparisons between hands.
+       * They are "backwards" for purposes of array sorting
+       * (better is closer to start of array).
+       */
+      BETTER  : BETTER,
+      WORSE   : WORSE,
+      EVEN    : EVEN,
+
+
+      /**
+       * Classes and utils.
+       */
+      Card    : Card,
+      Deck    : Deck,
+      Hand    : Hand,
+      Player  : Player,
+      Bet     : Bet,
+      Round   : Round,
+      SidePot : SidePot,
+      Pot     : Pot,
+      Table   : Table,
+      util    : util
     }
-    if (util.isNada(options.game.maxPlayers)) {
-      throw 'Game format maximum players not set.'
-    }
-  }
-
-
-  /**
-   * @constructor
-   */
-  Poker = function (options) {
-    var options,
-        table,
-        pot,
-        round
-
-    if (!(this instanceof Poker)) {
-      return new Poker(options)
-    }
-
-    /*************************************************************************
-     * Public privileged (and therefor not prototype) methods.
-     *************************************************************************/
-    this.setOption = function (key, val) {
-      return this
-    }
-
-    this.getOption = function (key) {
-      return null
-    }
-
-    options = util.extend({}, defaults, options || {})
-    validateOptions(options)
-
-    table = new Table({ seats: options.game.maxPlayers })
-
-    util.each(options, function (val, key) {
-      this.setOption(key, val)
-    }, this)
-  }
-
-
-  Poker.prototype = {
-    //
-  }
+  }())
 }());

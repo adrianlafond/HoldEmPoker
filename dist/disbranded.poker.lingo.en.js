@@ -54,7 +54,7 @@
     ],
     limit: [
       'Fixed Limit',
-      'Fpread Limit',
+      'Spread Limit',
       'Pot Limit',
       'No Limit',
       'Cap Limit'
@@ -72,4 +72,3 @@
     ]
   }
 }));
-

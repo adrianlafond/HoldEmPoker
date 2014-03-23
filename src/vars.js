@@ -20,67 +20,67 @@ var Poker,
     /**
      * Constants matched to lingo[lang].cards.
      */
-    ROYAL_FLUSH     = 'royalFlush',
-    STRAIGHT_FLUSH  = 'straightFlush',
-    FOUR_OF_A_KIND  = 'fourOfAKind',
-    FULL_HOUSE      = 'fullHouse',
-    FLUSH           = 'flush',
-    STRAIGHT        = 'straight',
-    THREE_OF_A_KIND = 'threeOfAKind',
-    TWO_PAIR        = 'twoPair',
-    ONE_PAIR        = 'onePair',
-    HIGH_CARD       = 'highCard',
+    ROYAL_FLUSH     = 10,
+    STRAIGHT_FLUSH  = 9,
+    FOUR_OF_A_KIND  = 8,
+    FULL_HOUSE      = 7,
+    FLUSH           = 6,
+    STRAIGHT        = 5,
+    THREE_OF_A_KIND = 4,
+    TWO_PAIR        = 3,
+    ONE_PAIR        = 2,
+    HIGH_CARD       = 1,
 
 
     /**
      * Constants matched to lingo[lang].low.
      */
-    ACE_TO_FIVE_LOW    = 'aceToFiveLow',
-    ACE_TO_SIX_LOW     = 'aceToSixLow',
-    DEUCE_TO_SEVEN_LOW = 'deuceToSevenLow',
-    DEUCE_TO_SIX_LOW   = 'deuceToSixLow',
+    ACE_TO_FIVE_LOW    = 1,
+    ACE_TO_SIX_LOW     = 2,
+    DEUCE_TO_SEVEN_LOW = 3,
+    DEUCE_TO_SIX_LOW   = 4,
 
 
 
     /**
      * Cosntants matched lingo[lang].card.
      */
-    FACE_DOWN  = 'faceDown',
-    FACE_UP    = 'faceUp',
-    COMMUNITY  = 'community',
+    FACE_DOWN  = 0,
+    FACE_UP    = 1,
+    COMMUNITY  = 2,
 
 
     /**
      * Constants that correspond with lingo[lang].action.
      */
-    FOLD   = 'fold',
-    BET    = 'bet',
-    CALL   = 'call',
-    RAISE  = 'raise',
+    FOLD   = 1,
+    BET    = 2,
+    CALL   = 3,
+    RAISE  = 4,
 
 
     /**
      * Constants matched to lingo[lang].limit.
      */
-    FIXED_LIMIT     = 'fixedLimit',
-    SPREAD_LIMIT    = 'spreadLimit',
-    POT_LIMIT       = 'potLimit',
-    NO_LIMIT        = 'noLimit',
-    CAP_LIMIT       = 'capLimit',
+    FIXED_LIMIT     = 0,
+    SPREAD_LIMIT    = 1,
+    POT_LIMIT       = 2,
+    NO_LIMIT        = 3,
+    CAP_LIMIT       = 4,
 
 
     /**
      * Constants matched to lingo[lang].game.
      */
-    SHUFFLE           = 'shuffle',
-    BURN              = 'burn',
-    DEAL              = 'deal',
-    BETTING_ROUND     = 'bettingRound',
-    ANTE              = 'ante',
-    BLIND             = 'blind',
-    SMALL_BLIND       = 'smallBlind',
-    BIG_BLIND         = 'bigBlind',
-    BIG_BET           = 'bigBet',
+    SHUFFLE           = 0,
+    BURN              = 2,
+    DEAL              = 3,
+    BETTING_ROUND     = 4,
+    ANTE              = 5,
+    BLIND             = 6,
+    SMALL_BLIND       = 7,
+    BIG_BLIND         = 8,
+    BIG_BET           = 9,
 
     BETTER  = -1,
     WORSE   = 1,

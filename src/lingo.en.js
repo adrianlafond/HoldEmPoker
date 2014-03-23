@@ -41,35 +41,34 @@
       'Deuce-to-six Low'
     ],
     card: [
-      'face down',
-      'face up',
-      'community'
+      'Face Down',
+      'Face Up',
+      'Community'
     ],
     action: [
       null,
-      'fold',
-      'bet',
-      'call',
-      'raise'
+      'Fold',
+      'Bet',
+      'Call',
+      'Raise'
     ],
     limit: [
       'Fixed Limit',
-      'Fpread Limit',
+      'Spread Limit',
       'Pot Limit',
       'No Limit',
       'Cap Limit'
     ],
     game: [
-      'shuffle',
-      'burn',
-      'deal',
-      'round',
-      'ante',
-      'blind',
-      'small blind',
-      'big blind',
-      'big bet'
+      'Shuffle',
+      'Burn',
+      'Deal',
+      'Round',
+      'Ante',
+      'Blind',
+      'Small Blind',
+      'Big Blind',
+      'Big Bet'
     ]
   }
 }));
-

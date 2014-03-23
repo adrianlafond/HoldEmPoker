@@ -9,7 +9,7 @@ module.exports = function (grunt) {
     },
 
     concat: {
-      base: {
+      dist: {
         src: [
           'src/export-top.js',
           'src/vars.js',
@@ -27,22 +27,8 @@ module.exports = function (grunt) {
           'src/pot.js',
           'src/table.js',
           'src/poker.js',
-          'src/poker-constants.js'
-        ],
-        dest: 'dist/disbranded.poker.js'
-      },
-      test: {
-        src: [
-          'dist/disbranded.poker.js',
-          'src/public-static.js',
           'src/export-bot.js'
-        ],
-        dest: 'dist/disbranded.poker-test.js'
-      },
-      dist: {
-        src: [
-          'dist/disbranded.poker.js',
-          'src/export-bot.js'
+
         ],
         dest: 'dist/disbranded.poker.js'
       },
@@ -58,7 +44,7 @@ module.exports = function (grunt) {
 
     jasmine: {
       src: [
-        'dist/disbranded.poker-test.js',
+        'dist/disbranded.poker.js',
         'dist/disbranded.poker.lingo.en.js',
         'dist/disbranded.poker.game.holdem.js'
       ],
