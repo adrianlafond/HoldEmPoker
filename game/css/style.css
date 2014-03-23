@@ -1,9 +1,46 @@
-.setup label {
-  display: block;
-  margin-bottom: 12px;
-}
 
 .setup select {
   display: inline;
   width: auto;
+}
+
+
+.table .player {
+  text-align: center;
+}
+
+.table .player h4 {
+  color: #ccc;
+}
+
+.table .player h4.seated {
+  color: #000;
+}
+
+.table .player h4.human {
+  color: #900;
+}
+
+.table .board {
+  text-align: center;
+}
+
+.table .board .community-cards .card {
+  display: inline-block;
+  width: 80px;
+  height: 112px;
+  background-size: 72px;
+  background-repeat: no-repeat;
+  background-position: 4px;
+/*  border: 1px solid black;*/
+  background-color: #eee;
+  border-radius: 6px;
+}
+
+.table .board .community-cards .card.a {
+  background-image: url(../cards/10_of_clubs.png);
+}
+
+.table .board .community-cards img {
+  width: 72px;
 }

@@ -1,40 +1,36 @@
 ;(function (ng, game, poker) {
   'use strict'
 
-  function CtrlApp($scope) {
+  function CtrlApp($scope, AIPlayers) {
     $scope.poker = poker
 
     $scope.options = {
       limits: [
-        { label: 'Fixed', value: poker.FIXED_LIMIT },
-        { label: 'Spread', value: poker.SPREAD_LIMIT },
-        { label: 'Pot', value: poker.POT_LIMIT },
-        { label: 'None', value: poker.NO_LIMIT }
-      ],
-      players: (function () {
-        var i = 2, n = 9, arr = []
-        while (i <= n) {
-          arr.push(i++)
-        }
-        return arr
-      }())
+        { label: 'Fixed Limit', value: poker.FIXED_LIMIT },
+        { label: 'Spread Limit', value: poker.SPREAD_LIMIT },
+        { label: 'Pot Limit', value: poker.POT_LIMIT },
+        { label: 'No Limit', value: poker.NO_LIMIT }
+      ]
     }
 
     $scope.settings = {
-      limit: $scope.options.limits[0],
-      players: 5
+      limit: $scope.options.limits[0]
     }
 
+    $scope.hand = {
+      active: false
+    }
 
     $scope.startGame = function () {
       console.log('startGame()',
-        $scope.settings.limit.value,
-        $scope.settings.players)
+        poker.lingo.en.limit[$scope.settings.limit.value],
+        AIPlayers)
     }
   }
 
 
 
-  game.controller('CtrlApp', ['$scope', CtrlApp])
+
+  game.controller('CtrlApp', ['$scope', 'AIPlayers', CtrlApp])
 
 }(angular, GAME, POKER));

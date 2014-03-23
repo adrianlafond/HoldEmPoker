@@ -18,40 +18,116 @@
       <h1>Hold 'em Poker</h1>
     </div>
 
-    <!-- GAME SETUP -->
-    <div class="setup">
 
-      <!-- BETTING STRUCTURE -->
-      <label>
-        Betting Limit:
-        <select
-          class="form-control"
-          ng-model="settings.limit"
-          ng-options="opt as opt.label for opt in options.limits">
-        </select>
-      </label>
 
-      <!-- # OF PLAYERS -->
-      <label>
-        Players:
-        <select
-          class="form-control"
-          ng-model="settings.players"
-          ng-options="opt for opt in options.players">
-        </select>
-      </label>
+    <!-- TABLE -->
+    <div class="table">
+      <div class="row">
+        <div class="col-md-2">
+          <!-- empty -->
+        </div>
+        <div class="col-md-2 player" computer-player="1">
+          1
+        </div>
+        <div class="col-md-2">
+          <!-- empty -->
+        </div>
+        <div class="col-md-2 player" computer-player="2">
+          2
+        </div>
+      </div>
 
-      <button
-        class="btn btn-primary"
-        ng-click="startGame()">
-        Start Game
-      </button>
+      <div class="row">
+        <div class="col-md-2 player" computer-player="9">
+          9
+        </div>
+        <div class="col-md-6">
+          <!-- empty -->
+        </div>
+        <div class="col-md-2 player" computer-player="3">
+          3
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-2">
+          <!-- empty -->
+        </div>
+        <div class="col-md-6 board">
+
+          <div class="community-cards">
+            <div class="card"></div>
+            <div class="card a"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+          </div>
+
+          <div class="setup" ng-if="!hand.active">
+            <select
+              class="form-control"
+              ng-model="settings.limit"
+              ng-options="opt as opt.label for opt in options.limits">
+            </select>
+
+            <button
+              class="btn btn-primary"
+              ng-click="startGame()">
+              Start Game
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-2 player" computer-player="8">
+          8
+        </div>
+        <div class="col-md-6">
+          <!-- empty -->
+        </div>
+        <div class="col-md-2 player" computer-player="9">
+          4
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-2">
+          <!-- empty -->
+        </div>
+        <div class="col-md-2 player" computer-player="7">
+          7
+        </div>
+        <div class="col-md-2 player">
+          <h4 class="human" contenteditable>Human</h4>
+        </div>
+        <div class="col-md-2 player" computer-player="5">
+          5
+        </div>
+      </div>
     </div>
-
-
-    <!-- GAME -->
-
   </div>
+
+
+  <!-- COMPUTER PLAYER TEMPLATE -->
+  <script id="computer-player.html" type="text/ng-template">
+    <h4
+      ng-class="{ seated: player.seated }">
+      {{player.seated ? player.name : '[empty]'}}
+    </h4>
+    <button
+      class="btn btn-default"
+      ng-if="!player.seated"
+      ng-click="addPlayer()">
+      Add Player
+    </button>
+    <button
+      class="btn btn-default"
+      ng-if="player.seated"
+      ng-click="removePlayer()">
+      Remove Player
+    </button>
+  </script>
 
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
@@ -63,6 +139,7 @@
 
   <script src="js/game.js"></script>
   <script src="js/game.ctrl.js"></script>
-
+  <script src="js/game.drtv.js"></script>
+  <script src="js/game.svc.js"></script>
 </body>
 </html>
