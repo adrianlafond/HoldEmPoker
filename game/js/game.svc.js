@@ -9,7 +9,7 @@
     { name: 'Bill', seated: 0, chips: 100 },
     { name: 'Bebop', seated: 0, chips: 100 },
     { name: 'Sophie', seated: 0, chips: 100 },
-    { name: 'Tulip', seated: 0 }
+    { name: 'Tulip', seated: 0, chips: 100 }
   ])
 
 }(angular, GAME));

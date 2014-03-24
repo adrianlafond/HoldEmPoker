@@ -1,3 +1,8 @@
+/* Angular ngCloak */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
 
 .setup select {
   display: inline;
@@ -39,7 +44,7 @@
 }
 
 .table .player h4.seated {
-  color: #000;
+  color: #666;
 }
 
 .table .player h4.human {
@@ -50,6 +55,7 @@
 /* BOARD */
 .table .board {
   text-align: center;
+  margin: 24px auto;
 }
 
 .table .board .community-cards .card {

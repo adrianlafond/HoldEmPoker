@@ -24,6 +24,8 @@
       active: false
     }
 
+
+
     $scope.deal = function () {
       var opts = {
             players: getSeatedPlayers()
@@ -32,8 +34,12 @@
 
       $scope.dealer = $scope.dealer || new poker.games.Holdem(opts)
       if ((startOutput = $scope.dealer.deal()).status === 200) {
+        // Hand started.
         $scope.status.error = null
+        $scope.status.active = true
+
       } else {
+        // Error
         $scope.status.error = startOutput.message
         $scope.dealer = null
       }

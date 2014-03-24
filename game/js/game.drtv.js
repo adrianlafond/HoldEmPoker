@@ -5,15 +5,16 @@
     return {
       restrict: 'A',
 
-      scope: {
-        seat: '=computerPlayer'
-      },
+      scope: true,
+      // scope: {
+      //   seat: '=computerPlayer'
+      // },
 
       templateUrl: 'computer-player.html',
 
+
       controller: function ($scope) {
         $scope.player = null
-
 
         $scope.addPlayer = function () {
           var i = 0,
@@ -28,22 +29,31 @@
             if (AIPlayers[indexes[r]].seated === 0) {
               $scope.player = AIPlayers[indexes[r]]
               $scope.player.seated = $scope.seat
+              $scope.player.chips = Math.floor(Math.random() * 100 + 50)
               break
             }
             indexes.splice(r, 1)
           }
         }
 
-
         $scope.removePlayer = function () {
           $scope.player.seated = 0
           $scope.player = null
         }
-        // AIPlayers[$scope.playerIndex]
       },
 
+
+
       link: function ($scope, $el, $attrs) {
-        //
+        $scope.seat = $attrs['computerPlayer']
+        $scope.visible = true
+
+        $scope.$watch('status.active', function (active) {
+          $scope.visible = (active
+            && $scope.player
+            && $scope.player.seated)
+            || !active
+        })
       }
     }
   }
