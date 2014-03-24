@@ -17,14 +17,35 @@
       limit: $scope.options.limits[0]
     }
 
-    $scope.hand = {
+    $scope.status = {
+      error: null,
       active: false
     }
 
     $scope.startGame = function () {
-      console.log('startGame()',
-        poker.lingo.en.limit[$scope.settings.limit.value],
-        AIPlayers)
+      // console.log('startGame()',
+      //   poker.lingo.en.limit[$scope.settings.limit.value],
+      //   AIPlayers)
+      if ($scope.numPlayers() < 2) {
+        $scope.status.error = 'There must be at least two players.'
+      }
+    }
+
+
+    $scope.closeError = function () {
+      $scope.status.error = null
+    }
+
+    /**
+     * Returns the number of seated players, starting at 1 to include the
+     * human player.
+     */
+    $scope.numPlayers = function () {
+      var n = 1
+      ng.forEach(AIPlayers, function (player, index) {
+        n += player.seated ? 1 : 0
+      })
+      return n
     }
   }
 

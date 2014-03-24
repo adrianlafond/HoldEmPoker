@@ -18,7 +18,17 @@
       <h1>Hold 'em Poker</h1>
     </div>
 
-
+    <div class="alert alert-danger alert-dismissable" ng-if="status.error">
+      <button
+        type="button"
+        class="close"
+        data-dismiss="alert"
+        aria-hidden="true"
+        ng-click="closeError()">
+        &times;
+      </button>
+      <p>{{status.error}}</p>
+    </div>
 
     <!-- TABLE -->
     <div class="table">
@@ -63,7 +73,7 @@
             <div class="card"></div>
           </div>
 
-          <div class="setup" ng-if="!hand.active">
+          <div class="setup" ng-if="!status.active">
             <select
               class="form-control"
               ng-model="settings.limit"
@@ -72,7 +82,8 @@
 
             <button
               class="btn btn-primary"
-              ng-click="startGame()">
+              ng-click="startGame()"
+              ng-disabled="">
               Start Game
             </button>
           </div>
