@@ -5,9 +5,34 @@
 }
 
 
+/* PLAYER */
 .table .player {
   text-align: center;
 }
+
+.table .player .hole-cards .card {
+  display: inline-block;
+  width: 40px;
+  height: 56px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-color: #eee;
+  border-radius: 6px;
+}
+
+.table .player .hole-cards .down {
+  background-image: url(../cards/down.png);
+  background-size: 100%;
+}
+
+.table .player .hole-cards .up {
+  background-image: url(../cards/10_of_clubs.png);
+  background-size: 120px;
+  border-width: 0 1px 1px 0;
+  border-style: solid;
+  border-color: black;
+}
+
 
 .table .player h4 {
   color: #ccc;
@@ -21,6 +46,8 @@
   color: #900;
 }
 
+
+/* BOARD */
 .table .board {
   text-align: center;
 }
@@ -32,7 +59,6 @@
   background-size: 72px;
   background-repeat: no-repeat;
   background-position: 4px;
-/*  border: 1px solid black;*/
   background-color: #eee;
   border-radius: 6px;
 }

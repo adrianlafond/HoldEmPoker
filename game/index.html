@@ -110,6 +110,11 @@
           7
         </div>
         <div class="col-md-2 player">
+          <!-- HUMAN -->
+          <div class="hole-cards">
+            <div class="card"></div>
+            <div class="card"></div>
+          </div>
           <h4 class="human" contenteditable>Human</h4>
         </div>
         <div class="col-md-2 player" computer-player="5">
@@ -122,6 +127,10 @@
 
   <!-- COMPUTER PLAYER TEMPLATE -->
   <script id="computer-player.html" type="text/ng-template">
+    <div class="hole-cards">
+      <div class="card"></div>
+      <div class="card"></div>
+    </div>
     <h4
       ng-class="{ seated: player.seated }">
       {{player.seated ? player.name : '[empty]'}}
@@ -141,6 +150,7 @@
   </script>
 
 
+  <!-- LIB FILES -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
@@ -148,6 +158,7 @@
   <script src="lib/disbranded.poker.lingo.en.js"></script>
   <script src="lib/disbranded.poker.game.holdem.js"></script>
 
+  <!-- APP FILES -->
   <script src="js/game.js"></script>
   <script src="js/game.ctrl.js"></script>
   <script src="js/game.drtv.js"></script>
