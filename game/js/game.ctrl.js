@@ -1,7 +1,8 @@
-;(function (ng, game, poker) {
+;(function (ng, app, poker) {
   'use strict'
 
   function CtrlApp($scope, AIPlayers) {
+    $scope.dealer = null
     $scope.poker = poker
 
     $scope.options = {
@@ -10,7 +11,8 @@
         { label: 'Spread Limit', value: poker.SPREAD_LIMIT },
         { label: 'Pot Limit', value: poker.POT_LIMIT },
         { label: 'No Limit', value: poker.NO_LIMIT }
-      ]
+      ],
+      human: { name: 'Human', seated: 6, chips: 100 }
     }
 
     $scope.settings = {
@@ -22,12 +24,18 @@
       active: false
     }
 
-    $scope.startGame = function () {
-      // console.log('startGame()',
-      //   poker.lingo.en.limit[$scope.settings.limit.value],
-      //   AIPlayers)
-      if ($scope.numPlayers() < 2) {
-        $scope.status.error = 'There must be at least two players.'
+    $scope.deal = function () {
+      var opts = {
+            players: getSeatedPlayers()
+          },
+          startOutput
+
+      $scope.dealer = $scope.dealer || new poker.games.Holdem(opts)
+      if ((startOutput = $scope.dealer.deal()).status === 200) {
+        $scope.status.error = null
+      } else {
+        $scope.status.error = startOutput.message
+        $scope.dealer = null
       }
     }
 
@@ -36,22 +44,25 @@
       $scope.status.error = null
     }
 
-    /**
-     * Returns the number of seated players, starting at 1 to include the
-     * human player.
-     */
-    $scope.numPlayers = function () {
-      var n = 1
+
+
+    function getSeatedPlayers() {
+      var players = [$scope.options.human]
       ng.forEach(AIPlayers, function (player, index) {
-        n += player.seated ? 1 : 0
+        if (player.seated) {
+          players.push(player)
+        }
       })
-      return n
+      players.sort(function (a, b) {
+        return a.seated - b.seated
+      })
+      return players
     }
   }
 
 
 
 
-  game.controller('CtrlApp', ['$scope', 'AIPlayers', CtrlApp])
+  app.controller('CtrlApp', ['$scope', 'AIPlayers', CtrlApp])
 
 }(angular, GAME, POKER));

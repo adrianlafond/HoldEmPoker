@@ -1,4 +1,4 @@
-;(function (ng, game) {
+;(function (ng, app) {
   'use strict'
 
   function computerPlayer(AIPlayers) {
@@ -20,11 +20,9 @@
               len = AIPlayers.length,
               indexes = [],
               r
-
           for (; i < len; i++) {
             indexes[i] = i
           }
-
           while ((len = indexes.length) > 0) {
             r = Math.floor(Math.random () * len)
             if (AIPlayers[indexes[r]].seated === 0) {
@@ -38,7 +36,7 @@
 
 
         $scope.removePlayer = function () {
-          $scope.player.seat = 0
+          $scope.player.seated = 0
           $scope.player = null
         }
         // AIPlayers[$scope.playerIndex]
@@ -52,6 +50,6 @@
 
 
 
-  game.directive('computerPlayer', ['AIPlayers', computerPlayer])
+  app.directive('computerPlayer', ['AIPlayers', computerPlayer])
 
 }(angular, GAME));

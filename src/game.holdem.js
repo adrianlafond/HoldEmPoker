@@ -25,11 +25,53 @@
 
   function Game(options) {
     this.options = Poker.util.extend({}, defaults, options || {})
+    this.active = false
   }
 
 
   Game.prototype = {
-    //
+
+
+    /**
+     * Starts a hand of poker.
+     * @returns {object} with "status" and "message" properties.
+     */
+    deal: function () {
+      var valid
+      if (valid = this.validate()) {
+        this.active = true
+      }
+      return valid
+    },
+
+
+    /**
+     * Resets entirely, destroyed knowledge of the table, players, etc.
+     */
+    reset: function () {
+      //
+    },
+
+
+    /**
+     * Ensures that options are valid before dealing a new hand.
+     * @api private
+     */
+    validate: function () {
+      var valid = {
+        status: 200,
+        message: null
+      }
+      if (this.active) {
+        valid.status = 500
+        valid.message = 'A hand is already in progress.'
+      }
+      if (this.options.players.length < 2) {
+        valid.status = 501
+        valid.message = 'There must be at least two players.'
+      }
+      return valid
+    },
   }
 
 
