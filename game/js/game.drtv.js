@@ -26,7 +26,7 @@
   }
 
 
-  function playerCards() {
+  function playerCards(cardfiles) {
     return function ($scope, $el, $attrs) {
       var $cards = $el.find('.card')
 
@@ -51,7 +51,9 @@
 
       function drawCard(index) {
         if ($scope.type === 'ai') {
-          // $cards[index].css('backgroundImage')
+          console.log($scope.cards[index].value, cardfiles[$scope.cards[index].value])
+          $cards[index].css('backgroundImage',
+            'url(cards/' + cardfiles[$scope.cards[index].value] +')')
           $cards[index].addClass('up')
         } else {
 
@@ -63,6 +65,6 @@
 
 
   app.directive('computerPlayer', ['players', computerPlayer])
-  app.directive('playerCards', [playerCards])
+  app.directive('playerCards', ['cardfiles', playerCards])
 
 }(angular, GAME));
