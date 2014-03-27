@@ -37,6 +37,7 @@
 
       $scope.$watch('player.cards[0]', function (card) {
         if ($scope.player) {
+          console.log($scope.player.id)
           $scope.cards[0] = card
           drawCard(0)
         }
@@ -50,7 +51,7 @@
       })
 
       function drawCard(index) {
-        if ($scope.type === 'ai') {
+        if ($scope.type) {// === 'ai') {
           console.log($scope.cards[index].value, cardfiles[$scope.cards[index].value])
           $cards[index].css('backgroundImage',
             'url(cards/' + cardfiles[$scope.cards[index].value] +')')
