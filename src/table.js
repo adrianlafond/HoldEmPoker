@@ -138,6 +138,44 @@
       return null
     },
 
+
+    smallBlind: function () {
+      var n = 0
+      if (this.players().length === 2) {
+        return this.button()
+      }
+      while (n++ < this.seats.length) {
+        if (this.seats[n]) {
+          return this.seats[n]
+        }
+      }
+    },
+
+    bigBlind: function () {
+      var n = 0,
+          sb = this.smallBlind()
+      while (n++ < this.seats.length) {
+        if (this.seats[n] === null || this.seats[n].id === sb.id) {
+          continue
+        } else {
+          return this.seats[n]
+        }
+      }
+    },
+
+
+    /**
+     * Returns number of seated players.
+     */
+    players: function () {
+      var n = 0
+      this.seats.forEach(function (player, index) {
+        n += player ? 1 : 0
+      })
+      return n;
+    },
+
+
     /**
      * Push the button to next player, before the start of a new hand.
      */
@@ -159,7 +197,3 @@
     },
   }
 }());
-
-
-
-

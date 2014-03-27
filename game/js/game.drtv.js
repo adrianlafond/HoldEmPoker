@@ -1,51 +1,18 @@
 ;(function (ng, app) {
   'use strict'
 
-  function computerPlayer(AIPlayers) {
+  function computerPlayer(players) {
     return {
       restrict: 'A',
 
       scope: true,
-      // scope: {
-      //   seat: '=computerPlayer'
-      // },
 
       templateUrl: 'computer-player.html',
 
-
-      controller: function ($scope) {
-        $scope.player = null
-
-        $scope.addPlayer = function () {
-          var i = 0,
-              len = AIPlayers.length,
-              indexes = [],
-              r
-          for (; i < len; i++) {
-            indexes[i] = i
-          }
-          while ((len = indexes.length) > 0) {
-            r = Math.floor(Math.random () * len)
-            if (AIPlayers[indexes[r]].seated === 0) {
-              $scope.player = AIPlayers[indexes[r]]
-              $scope.player.seated = $scope.seat
-              $scope.player.chips = Math.floor(Math.random() * 100 + 50)
-              break
-            }
-            indexes.splice(r, 1)
-          }
-        }
-
-        $scope.removePlayer = function () {
-          $scope.player.seated = 0
-          $scope.player = null
-        }
-      },
-
-
+      controller: 'CtrlAIPlayer',
 
       link: function ($scope, $el, $attrs) {
-        $scope.seat = $attrs['computerPlayer']
+        $scope.seat = +$attrs['computerPlayer']
         $scope.visible = true
 
         $scope.$watch('status.active', function (active) {
@@ -59,7 +26,43 @@
   }
 
 
+  function playerCards() {
+    return function ($scope, $el, $attrs) {
+      var $cards = $el.find('.card')
 
-  app.directive('computerPlayer', ['AIPlayers', computerPlayer])
+      $scope.type = $attrs['playerCards'] || 'ai'
+      $scope.cards = [null, null]
+      $cards[0] = $($cards[0])
+      $cards[1] = $($cards[1])
+
+      $scope.$watch('player.cards[0]', function (card) {
+        if ($scope.player) {
+          $scope.cards[0] = card
+          drawCard(0)
+        }
+      })
+
+      $scope.$watch('player.cards[1]', function (card) {
+        if ($scope.player) {
+          $scope.cards[1] = card
+          drawCard(1)
+        }
+      })
+
+      function drawCard(index) {
+        if ($scope.type === 'ai') {
+          // $cards[index].css('backgroundImage')
+          $cards[index].addClass('up')
+        } else {
+
+        }
+      }
+    }
+  }
+
+
+
+  app.directive('computerPlayer', ['players', computerPlayer])
+  app.directive('playerCards', [playerCards])
 
 }(angular, GAME));

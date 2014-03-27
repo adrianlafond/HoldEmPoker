@@ -109,7 +109,7 @@
       this.cardsIn = []
       while ((cardsLen = cards.length) > 0) {
         r = Math.floor(Math.random() * cardsLen)
-        this.cardsIn.push(cards.splice(r, 1))
+        this.cardsIn.push(cards.splice(r, 1)[0])
       }
       this.isShuffled = true
       this.isNew = false
@@ -132,7 +132,3 @@
     }
   }
 }());
-
-
-
-

@@ -19,13 +19,20 @@
 }(this, function (Poker) {
   'use strict'
 
-  var defaults = {}
+  var each = Poker.util.each,
+
+      defaults = {
+        action: null,
+        seats: 5
+      }
 
 
 
   function Game(options) {
     this.options = Poker.util.extend({}, defaults, options || {})
     this.active = false
+    this.deck = new Poker.Deck
+    this.table = new Poker.Table({ seats: this.options.seats })
   }
 
 
@@ -37,16 +44,91 @@
      * @returns {object} with "status" and "message" properties.
      */
     deal: function () {
-      var valid
-      if (valid = this.validate()) {
+      var valid = this.validate()
+      if (valid.status === 200) {
         this.active = true
+        this.deck.shuffle()
+        this.addPlayersToTable()
+        this.broadcast('button', { player: this.table.button().id })
+        this.dealHoleCard()
+        this.dealHoleCard()
       }
       return valid
     },
 
 
+
     /**
-     * Resets entirely, destroyed knowledge of the table, players, etc.
+     * @api private
+     */
+    broadcast: function (type, data) {
+      this.options.action({
+        target: this,
+        type: type,
+        data: data
+      })
+    },
+
+
+    /**
+     * @api private
+     */
+    addPlayersToTable: function () {
+      each(this.options.players, function (player, i) {
+        this.table.add({
+          seat: player.seated,
+          player: new Poker.Player({
+            id: player.id,
+            chips: player.chips
+          })
+        })
+      }, this)
+    },
+
+
+    /**
+     * Deals a hole card face down to each player.
+     * @api private
+     */
+    dealHoleCard: function () {
+      each(this.options.players, function (player, i) {
+        var card = this.deck.deal()
+        card.face = Poker.FACE_DOWN
+        this.broadcast('deal:hole', {
+          to: player.id,
+          card: card
+        })
+      }, this)
+    },
+
+
+    /**
+     * Returns the status of the table for use by players.
+     */
+    summary: function () {
+      var seats = []
+      this.table.seats.forEach(function (player, index) {
+        if (player) {
+          seats[index] = {
+            id: player.id,
+            chips: player.chips,
+            folded: player.folded
+          }
+        } else {
+          seats[index] = null
+        }
+      })
+      return {
+        seats: seats,
+        button: this.table.button().id,
+        smallBlind: this.table.smallBlind().id,
+        bigBlind: this.table.bigBlind().id
+      }
+    },
+
+
+    /**
+     * Resets entirely, destroys knowledge of the table, players, etc.
      */
     reset: function () {
       //
@@ -69,6 +151,10 @@
       if (this.options.players.length < 2) {
         valid.status = 501
         valid.message = 'There must be at least two players.'
+      }
+      if (typeof this.options.action !== 'function') {
+        valid.status = 502
+        valid.message = 'An "action" callback function was not defined.'
       }
       return valid
     },

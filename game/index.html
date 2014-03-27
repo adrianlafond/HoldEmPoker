@@ -50,7 +50,7 @@
           <div class="board">
             <div class="community-cards">
               <div class="card"></div>
-              <div class="card a"></div>
+              <div class="card"></div>
               <div class="card"></div>
               <div class="card"></div>
               <div class="card"></div>
@@ -78,13 +78,20 @@
       <div class="row">
         <div class="col-md-2 player" computer-player="9"></div>
         <div class="col-md-2 player" computer-player="8"></div>
-        <div class="col-md-4 player">
+        <div class="col-md-4 player" ng-controller="CtrlHuman">
           <!-- HUMAN -->
-          <div class="hole-cards">
+          <div class="hole-cards" player-cards="human">
             <div class="card"></div>
             <div class="card"></div>
           </div>
-          <h4 class="human" contenteditable>Human</h4>
+          <h4 class="human" contenteditable>
+            Human
+            <span
+              class="label label-info"
+              ng-if="status.button === player.id">
+              D
+            </span>
+          </h4>
           <h5>$100</h5>
         </div>
         <div class="col-md-2 player" computer-player="6"></div>
@@ -98,13 +105,18 @@
   <!-- COMPUTER PLAYER TEMPLATE -->
   <script id="computer-player.html" type="text/ng-template">
     <div ng-if="visible">
-      <div class="hole-cards">
+      <div class="hole-cards" player-cards>
         <div class="card"></div>
         <div class="card"></div>
       </div>
       <h4
         ng-class="{ seated: player.seated }">
         {{player.seated ? player.name : '[empty]'}}
+        <span
+          class="label label-info"
+          ng-if="status.button === player.id">
+          D
+        </span>
       </h4>
       <h5>
         ${{player ? player.chips : 0}}
