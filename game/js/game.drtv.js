@@ -31,33 +31,31 @@
       var $cards = $el.find('.card')
 
       $scope.type = $attrs['playerCards'] || 'ai'
-      $scope.cards = [null, null]
+      $scope.cards = []
       $cards[0] = $($cards[0])
       $cards[1] = $($cards[1])
 
       $scope.$watch('player.cards[0]', function (card) {
-        if ($scope.player) {
-          console.log($scope.player.id)
+        if ($scope.player && card) {
           $scope.cards[0] = card
           drawCard(0)
         }
       })
 
       $scope.$watch('player.cards[1]', function (card) {
-        if ($scope.player) {
+        if ($scope.player && card) {
           $scope.cards[1] = card
           drawCard(1)
         }
       })
 
       function drawCard(index) {
-        if ($scope.type) {// === 'ai') {
-          console.log($scope.cards[index].value, cardfiles[$scope.cards[index].value])
+        if ($scope.type === 'human') {
           $cards[index].css('backgroundImage',
             'url(cards/' + cardfiles[$scope.cards[index].value] +')')
-          $cards[index].addClass('up')
+          $cards[index].removeClass('down').addClass('up')
         } else {
-
+          $cards[index].removeClass('up').addClass('down')
         }
       }
     }

@@ -4,7 +4,7 @@
 ;(function () {
   'use strict'
 
-  // If a PLayer is not instantiated with an id,
+  // If a Player is not instantiated with an id,
   // one will be created for it.
   var uid = (function () {
     var u = 0
@@ -51,6 +51,3 @@
   }
 
 }());
-
-
-

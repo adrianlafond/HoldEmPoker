@@ -81,6 +81,7 @@ var Poker,
     SMALL_BLIND       = 7,
     BIG_BLIND         = 8,
     BIG_BET           = 9,
+    BUTTON            = 10,
 
     BETTER  = -1,
     WORSE   = 1,

@@ -1,7 +1,7 @@
 /*
  * poker-game-engine v0.0.1
  * by Adrian Lafond / adrian [at] disbranded.com
- * last updated 2014-03-26
+ * last updated 2014-03-27
 **/
 
 ;(function (root, factory) {
@@ -109,6 +109,7 @@ var Poker,
     SMALL_BLIND       = 7,
     BIG_BLIND         = 8,
     BIG_BET           = 9,
+    BUTTON            = 10,
 
     BETTER  = -1,
     WORSE   = 1,
@@ -1329,7 +1330,7 @@ Hand.suit = function (card) {
 ;(function () {
   'use strict'
 
-  // If a PLayer is not instantiated with an id,
+  // If a Player is not instantiated with an id,
   // one will be created for it.
   var uid = (function () {
     var u = 0
@@ -1376,9 +1377,6 @@ Hand.suit = function (card) {
   }
 
 }());
-
-
-
 
 ;(function () {
   'use strict'
@@ -1932,6 +1930,7 @@ Hand.suit = function (card) {
       SMALL_BLIND     : SMALL_BLIND,
       BIG_BLIND       : BIG_BLIND,
       BIG_BET         : BIG_BET,
+      BUTTON          : BUTTON,
 
 
       /**

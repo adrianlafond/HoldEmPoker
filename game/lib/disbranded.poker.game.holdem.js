@@ -23,7 +23,9 @@
 
       defaults = {
         action: null,
-        seats: 5
+        seats: 5,
+        limit: Poker.FIXED_LIMIT,
+        bets: [10, 20]
       }
 
 
@@ -33,6 +35,12 @@
     this.active = false
     this.deck = new Poker.Deck
     this.table = new Poker.Table({ seats: this.options.seats })
+    this.rounds = {
+      preflop: null,
+      flop: null,
+      turn: null,
+      river: null
+    }
   }
 
 
@@ -49,11 +57,45 @@
         this.active = true
         this.deck.shuffle()
         this.addPlayersToTable()
+
         this.broadcast('button', { player: this.table.button().id })
+        this.rounds.preflop = new Poker.Round
+        this.smallBlind()
+        this.bigBlind()
+
         this.dealHoleCard()
         this.dealHoleCard()
+        console.log(this.summary())
       }
       return valid
+    },
+
+
+    smallBlind: function () {
+      var player = this.table.smallBlind(),
+          bet$ = Math.min(player.chips, this.options.bets[0] / 2),
+          bet = new Poker.Bet(player.id, bet$, player.chips === bet$),
+          data = {
+            player: player.id,
+            chips: bet$
+          }
+      player.chips -= bet$
+      this.rounds.preflop.bet(bet)
+      this.broadcast('smallblind', data)
+    },
+
+
+    bigBlind: function () {
+      var player = this.table.bigBlind(),
+          bet$ = Math.min(player.chips, this.options.bets[0]),
+          bet = new Poker.Bet(player.id, bet$, player.chips === bet$),
+          data = {
+            player: player.id,
+            chips: bet$
+          }
+      player.chips -= bet$
+      this.rounds.preflop.bet(bet)
+      this.broadcast('bigblind', data)
     },
 
 

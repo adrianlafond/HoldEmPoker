@@ -35,7 +35,9 @@
       var opts = {
             players: getSeatedPlayers(),
             action: onAction,
-            seats: 9
+            seats: $scope.settings.seats,
+            limit: $scope.settings.limit.value,
+            bets: [2, 4]
           },
           startOutput
 

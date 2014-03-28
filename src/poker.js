@@ -75,6 +75,7 @@
       SMALL_BLIND     : SMALL_BLIND,
       BIG_BLIND       : BIG_BLIND,
       BIG_BET         : BIG_BET,
+      BUTTON          : BUTTON,
 
 
       /**
