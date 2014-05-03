@@ -41,6 +41,7 @@
       turn: null,
       river: null
     }
+    this.pot = null
   }
 
 
@@ -60,6 +61,9 @@
 
         this.broadcast('button', { player: this.table.button().id })
         this.rounds.preflop = new Poker.Round
+        this.pot = new Poker.Pot
+        this.broadcast('newBettingRound', { pot: this.pot })
+
         this.smallBlind()
         this.bigBlind()
 

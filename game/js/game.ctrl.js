@@ -61,7 +61,7 @@
 
 
     function onAction(event) {
-      console.log(event)
+      console.dir(event)
       switch (event.type) {
         case 'button':
           $scope.status.button = event.data.player
