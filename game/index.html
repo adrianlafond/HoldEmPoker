@@ -100,7 +100,7 @@
           </h4>
           <h5>
             $100
-            <span ng-if="player.hasOwnProperty('bet')">
+            <span class="bet" ng-if="player.hasOwnProperty('bet')">
               ${{player.bet}}
             </span>
           </h5>
@@ -131,7 +131,7 @@
       </h4>
       <h5>
         ${{player ? player.chips : 0}}
-        <span ng-if="player.hasOwnProperty('bet')">
+        <span class="bet" ng-if="player.hasOwnProperty('bet')">
           ${{player.bet}}
         </span>
       </h5>
