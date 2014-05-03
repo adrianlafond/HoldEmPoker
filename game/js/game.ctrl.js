@@ -26,7 +26,8 @@
     $scope.status = {
       error: null,
       active: false,
-      button: null
+      button: null,
+      pots: [100, 50]
     }
 
 

@@ -72,3 +72,18 @@
 .table .board .community-cards img {
   width: 72px;
 }
+
+
+
+/* POTS */
+.table .pots {
+  white-space: nowrap;
+}
+
+.table .pots span {
+  margin-right: 12px;
+}
+
+.table .pots span:last-child {
+  margin-right: 0;
+}

@@ -56,6 +56,12 @@
               <div class="card"></div>
             </div>
 
+            <div class="pots" ng-if="status.active">
+              <span ng-repeat="chips in status.pots">
+                ${{chips}}
+              </span>
+            </div>
+
             <div class="setup" ng-if="!status.active">
               <select
                 class="form-control"
