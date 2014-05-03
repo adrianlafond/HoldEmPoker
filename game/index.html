@@ -98,7 +98,12 @@
               D
             </span>
           </h4>
-          <h5>$100</h5>
+          <h5>
+            $100
+            <span ng-if="player.hasOwnProperty('bet')">
+              ${{player.bet}}
+            </span>
+          </h5>
         </div>
         <div class="col-md-2 player" computer-player="6"></div>
         <div class="col-md-2 player" computer-player="5"></div>
@@ -126,6 +131,9 @@
       </h4>
       <h5>
         ${{player ? player.chips : 0}}
+        <span ng-if="player.hasOwnProperty('bet')">
+          ${{player.bet}}
+        </span>
       </h5>
       <div ng-if="!status.active">
         <button

@@ -27,7 +27,7 @@
       error: null,
       active: false,
       button: null,
-      pots: [100, 50]
+      pots: [0]
     }
 
 
@@ -43,6 +43,7 @@
           startOutput
 
       $scope.dealer = $scope.dealer || new poker.games.Holdem(opts)
+
       if ((startOutput = $scope.dealer.deal()).status === 200) {
         // Hand started.
         $scope.status.error = null
@@ -62,13 +63,33 @@
 
 
     function onAction(event) {
-      console.dir(event)
+      console.log(event.type)
       switch (event.type) {
         case 'button':
           $scope.status.button = event.data.player
           break
+        case 'startRound':
+          startBettingRound(event.data.round)
+          break
+        case 'smallBlind':
+        case 'bigBlind':
+          $scope.$broadcast('bet:' + event.data.player, event.data.chips)
+          // getPlayerById(event.data.player).bet = event.data.chips
+          // $scope.$apply()
+          // event.data.chips
+          // event.data.player
+          break
         case 'deal:hole':
           getPlayerById(event.data.to).cards.push(event.data.card)
+          break
+      }
+    }
+
+
+    function startBettingRound(round) {
+      switch (round) {
+        case 'preflop':
+          $scope.status.pots = [0]
           break
       }
     }
@@ -101,18 +122,36 @@
   }
 
 
+  function CtrlBasePlayer($scope) {
+    var self = this
+
+    $scope.player = null
+
+    $scope.listenForEvents = function () {
+      $scope.$on('bet:' + $scope.player.id, self.onBet)
+    }
+
+    this.onBet = function (event, chips) {
+      $scope.player.bet = chips
+    }
+  }
+
+
 
   /**
    * AI player controller.
    */
-  function CtrlAIPlayer($scope, players) {
-    $scope.player = null
+  function CtrlAIPlayer($injector, $scope, players) {
+    $injector.invoke(CtrlBasePlayer, this, { $scope: $scope })
 
     $scope.addPlayer = function () {
       var i = 0,
           len = players.length,
           indexes = [],
           r
+
+      var self = this
+
       this.removePlayer()
       for (; i < len; i++) {
         indexes[i] = i
@@ -123,6 +162,7 @@
           $scope.player = players[indexes[r]]
           $scope.player.seated = $scope.seat
           $scope.player.chips = Math.floor(Math.random() * 100 + 50)
+          $scope.listenForEvents()
           break
         }
         indexes.splice(r, 1)
@@ -142,14 +182,18 @@
   /**
    * Human controller.
    */
-  function CtrlHuman($scope, players) {
+  function CtrlHuman($injector, $scope, players) {
+    $injector.invoke(CtrlBasePlayer, this, { $scope: $scope })
     $scope.player = players[0]
+    $scope.listenForEvents()
   }
 
 
 
+
   app.controller('CtrlApp', ['$scope', 'players', CtrlApp])
-  app.controller('CtrlAIPlayer', ['$scope', 'players', CtrlAIPlayer])
-  app.controller('CtrlHuman', ['$scope', 'players', CtrlHuman])
+  app.controller('CtrlBasePlayer', ['$scope', CtrlBasePlayer])
+  app.controller('CtrlAIPlayer', ['$injector', '$scope', 'players', CtrlAIPlayer])
+  app.controller('CtrlHuman', ['$injector', '$scope', 'players', CtrlHuman])
 
 }(angular, GAME, POKER));

@@ -62,7 +62,7 @@
         this.broadcast('button', { player: this.table.button().id })
         this.rounds.preflop = new Poker.Round
         this.pot = new Poker.Pot
-        this.broadcast('newBettingRound')
+        this.broadcast('startRound', { round: 'preflop' })
 
         this.smallBlind()
         this.bigBlind()
@@ -85,7 +85,7 @@
           }
       player.chips -= bet$
       this.rounds.preflop.bet(bet)
-      this.broadcast('smallblind', data)
+      this.broadcast('smallBlind', data)
     },
 
 
@@ -99,7 +99,7 @@
           }
       player.chips -= bet$
       this.rounds.preflop.bet(bet)
-      this.broadcast('bigblind', data)
+      this.broadcast('bigBlind', data)
     },
 
 
