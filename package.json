@@ -8,6 +8,9 @@
   },
   "description": "A poker game engine.",
   "keywords": [],
+  "scripts": {
+    "web": "http-server ./game -c-1"
+  },
   "homepage": "",
   "license": {
     "type": "MIT",
@@ -27,6 +30,7 @@
     "express": "~3.5.0",
     "grunt-contrib-copy": "~0.5.0",
     "grunt-contrib-clean": "~0.5.0",
-    "grunt-shell": "~0.6.4"
+    "grunt-shell": "~0.6.4",
+    "http-server": "~0.8.0"
   }
 }

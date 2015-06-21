@@ -104,12 +104,6 @@ module.exports = function (grunt) {
         files: ['src/*.js'],
         tasks: ['build', 'game']
       }
-    },
-
-    shell: {
-      game: {
-        command: 'node www/www.js'
-      }
     }
   })
 
