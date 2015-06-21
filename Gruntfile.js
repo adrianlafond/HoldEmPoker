@@ -43,13 +43,21 @@ module.exports = function (grunt) {
     },
 
     jasmine: {
+      // src: [
+      //   'dist/disbranded.poker.js',
+      //   'dist/disbranded.poker.lingo.en.js',
+      //   'dist/disbranded.poker.game.holdem.js'
+      // ],
+      // options: {
+      //   specs: 'spec/*.js',
+      // }
       src: [
-        'dist/disbranded.poker.js',
-        'dist/disbranded.poker.lingo.en.js',
-        'dist/disbranded.poker.game.holdem.js'
+        './src/deck.js'
       ],
       options: {
-        specs: 'spec/*.js'
+        specs: 'spec/deckSpec.js',
+        helpers: ['./src/card.js'],
+        vendor: ['./game/lib/lodash.min.js']
       }
     },
 
