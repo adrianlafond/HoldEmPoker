@@ -5,16 +5,44 @@ function Deck(options) {
   if (!(this instanceof Deck)) {
     return new Deck(options);
   }
-  this.isShuffled = false;
-  this.isNew = true;
-  this.jokers = 0;
+  var cardsIn = [];
+  var cardsOut = [];
+  var jokers = 0;
 
-  if (options && typeof options === 'object') {
-    if (options.hasOwnProperty('jokers')) {
-      this.addJokers(parseInt(options.jokers, 10));
+  _.forEach(Deck.CARDS, function (card, i) {
+    cardsIn[i] = new Card({ value: card });
+  }, this);
+
+  if (options && _.isPlainObject(options)) {
+    if (_.has(options, 'jokers')) {
+      jokers = parseInt(options.jokers, 10);
+      if (isNaN(jokers)) {
+        jokers = 0;
+      }
+      jokers = Math.max(0, Math.min(Deck.MAX_JOKERS));
+      _.times(jokers, function (n) {
+        cardsIn[Deck.SIZE + n] = new Card({ value: 'W' + (n + 1) });
+      }, this);
     }
   }
-  this.reset();
+
+  Object.defineProperties(this, {
+    cardsIn: {
+      get: function () {
+        return cardsIn;
+      }
+    },
+    cardsOut: {
+      get: function () {
+        return cardsOut;
+      }
+    },
+    jokers: {
+      get: function () {
+        return jokers;
+      }
+    }
+  });
 }
 
 
@@ -49,63 +77,51 @@ Deck.prototype = {
   /**
    * @returns number of cards in the deck.
    */
-  count: function () {
+  size: function () {
     return Deck.SIZE + this.jokers;
   },
 
-  /**
-   * Remove all jokers from the deck.
-   */
-  removeJokers: function () {
-    this.jokers = 0;
-    this.reset();
-    return this;
-  },
-
-  /**
-   * Add up to 4 jokers to the deck.
-   * @param {number} num Number of jokers to add.
-   */
-  addJokers: function (num) {
-    num = parseInt(num, 10);
-    if (!isNaN(num)) {
-      num = Math.max(0, Math.min(num, Deck.MAX_JOKERS - this.jokers));
-      this.jokers += num;
-      this.reset();
-    }
-    return this;
-  },
-
-
-  /**
-   * Reset the deck to its original unshuffled order.
-   */
-  reset: function () {
-    this.cardsIn = [];
-    this.cardsOut = [];
-    _.forEach(Deck.CARDS, function (card, i) {
-      this.cardsIn[i] = Card({ value: card });
-    }, this);
-    for (var n = 0; n < this.jokers; n++) {
-      this.cardsIn[Deck.SIZE + n] = new Card({ value: 'W' + (n + 1) });
-    }
-    this.isShuffled = false;
-    this.isNew = true;
-    return this;
-  },
-
-
-  /**
+  /*
    * Shuffle/randomize the deck.
    */
   shuffle: function () {
-    this.reset();
-    this.cardsIn = _.shuffle(this.cardsIn);
-    this.isShuffled = true;
-    this.isNew = false;
+    while (!this.isShuffled()) {
+      var shuffled = _.shuffle(this.cardsIn);
+      for (var i = 0; i < this.cardsIn.length; i++) {
+        this.cardsIn[i] = shuffled[i];
+      }
+    }
     return this;
   },
 
+  /**
+   * @returns TRUE is the deck has been shuffled.
+   */
+  isShuffled: function () {
+    var shuffled = false;
+    _.forEach(this.cardsIn, function (card, index) {
+      if (index < Deck.SIZE) {
+        if (card.value !== Deck.CARDS[index]) {
+          shuffled = true;
+          return false;
+        }
+      } else {
+        var n = index - Deck.SIZE + 1;
+        if (card.value !== 'W' + n) {
+          shuffled = true;
+          return false;
+        }
+      }
+    }, this);
+    return shuffled;
+  },
+
+  /**
+   * @returns TRUE if deck is unshuffled and no cards have been dealth.
+   */
+  isImmaculate: function () {
+    return !(this.cardsIn.length < this.size() || this.isShuffled());
+  },
 
   /**
    * Deal next card in the deck.
@@ -116,7 +132,6 @@ Deck.prototype = {
     if (this.cardsIn.length) {
       card = this.cardsIn.pop();
       this.cardsOut.push(card);
-      this.isNew = false;
     }
     return card;
   }
