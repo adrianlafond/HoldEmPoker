@@ -46,8 +46,16 @@ function Card(options) {
   });
 }
 
-Card.FACE_UP    = 'faceUp';
-Card.FACE_DOWN  = 'faceDown';
+Object.defineProperties(Card, {
+  FACE_UP: {
+    value: 'faceUp',
+    enumerable: true
+  },
+  FACE_DOWN: {
+    value: 'faceDown',
+    enumerable: true
+  }
+});
 
 Card.prototype.clone = function () {
   return new Card({
