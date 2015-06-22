@@ -5,21 +5,58 @@ function Card(options) {
   if (!(this instanceof Card)) {
     return new Card(options);
   }
-  this.value = options.value;
-  this.rank = this.value.charAt(0);
-  this.suit = this.value.charAt(1);
-  this.face = (options.face === Card.FACE_UP) ? Card.FACE_UP : Card.FACE_DOWN;
-  this.community = options.hasOwnProperty('community') ?
+
+  var face = (options.face === Card.FACE_UP) ? Card.FACE_UP : Card.FACE_DOWN;
+  var community = options.hasOwnProperty('community') ?
     !!options.community : false;
+
+  Object.defineProperties(this, {
+    value: {
+      value: options.value,
+      enumerable: true
+    },
+    rank: {
+      value: options.value.charAt(0),
+      enumerable: true
+    },
+    suit: {
+      value: options.value.charAt(1),
+      enumerable: true
+    },
+    face: {
+      get: function () {
+        return face;
+      },
+      set: function (value) {
+        if (value === Card.FACE_UP || value === Card.FACE_DOWN) {
+          face = value;
+        }
+      },
+      enumerable: true
+    },
+    community: {
+      get: function () {
+        return community;
+      },
+      set: function (value) {
+        community = !!value;
+      },
+      enumerable: true
+    },
+    clone: {
+      value: function () {
+        return new Card({
+          value: this.value,
+          face: this.face,
+          community: this.community
+        });
+      },
+      enumerable: true
+    }
+  });
 }
 
 Card.FACE_UP    = 'faceUp';
 Card.FACE_DOWN  = 'faceDown';
 
-Card.prototype.clone = function () {
-  return Card({
-    value: this.value,
-    face: this.face,
-    community: this.community
-  });
-};
+

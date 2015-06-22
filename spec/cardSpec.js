@@ -20,6 +20,24 @@ describe('Poker.Card', function () {
     expect(card.community).toBe(false);
   });
 
+  it('should have a constant value', function () {
+    var card = new Card({ value: '9S' });
+    expect(function () {
+      card.value = 'AC';
+    }).toThrow();
+  });
+
+  it('should have correct enumerable values', function () {
+    var card = new Card({ value: '9S' });
+    var keys = _.keys(card);
+    expect(keys.indexOf('value')).not.toBe(-1);
+    expect(keys.indexOf('rank')).not.toBe(-1);
+    expect(keys.indexOf('suit')).not.toBe(-1);
+    expect(keys.indexOf('face')).not.toBe(-1);
+    expect(keys.indexOf('community')).not.toBe(-1);
+    expect(keys.indexOf('clone')).not.toBe(-1);
+  });
+
   it('should clone a new card', function () {
     var card = new Card({ value: '9S' });
     var copy = card.clone();
