@@ -42,21 +42,19 @@ function Card(options) {
         community = !!value;
       },
       enumerable: true
-    },
-    clone: {
-      value: function () {
-        return new Card({
-          value: this.value,
-          face: this.face,
-          community: this.community
-        });
-      },
-      enumerable: true
     }
   });
 }
 
 Card.FACE_UP    = 'faceUp';
 Card.FACE_DOWN  = 'faceDown';
+
+Card.prototype.clone = function () {
+  return new Card({
+    value: this.value,
+    face: this.face,
+    community: this.community
+  });
+};
 
 

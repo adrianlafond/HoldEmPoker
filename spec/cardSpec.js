@@ -29,7 +29,7 @@ describe('Poker.Card', function () {
 
   it('should have correct enumerable values', function () {
     var card = new Card({ value: '9S' });
-    var keys = _.keys(card);
+    var keys = _.keysIn(card);
     expect(keys.indexOf('value')).not.toBe(-1);
     expect(keys.indexOf('rank')).not.toBe(-1);
     expect(keys.indexOf('suit')).not.toBe(-1);
