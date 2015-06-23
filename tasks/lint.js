@@ -8,7 +8,7 @@ gulp.task('lint-src', function () {
     .pipe(jshint.reporter('default'));
 });
 gulp.task('lint-spec', function () {
-  return gulp.src('./spec/deckSpec.js')
+  return gulp.src('./spec/*Spec.js')
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });

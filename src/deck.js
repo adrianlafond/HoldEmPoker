@@ -5,44 +5,25 @@ function Deck(options) {
   if (!(this instanceof Deck)) {
     return new Deck(options);
   }
-  var cardsIn = [];
-  var cardsOut = [];
-  var jokers = 0;
+  this.cards = [];
+  this.jokers = 0;
 
   _.forEach(Deck.CARDS, function (card, i) {
-    cardsIn[i] = new Card({ value: card });
+    this.cards[i] = new Card({ value: card });
   }, this);
 
   if (options && _.isPlainObject(options)) {
     if (_.has(options, 'jokers')) {
-      jokers = parseInt(options.jokers, 10);
-      if (isNaN(jokers)) {
-        jokers = 0;
+      this.jokers = parseInt(options.jokers, 10);
+      if (isNaN(this.jokers)) {
+        this.jokers = 0;
       }
-      jokers = Math.max(0, Math.min(Deck.MAX_JOKERS));
-      _.times(jokers, function (n) {
-        cardsIn[Deck.SIZE + n] = new Card({ value: 'W' + (n + 1) });
+      this.jokers = Math.max(0, Math.min(Deck.MAX_JOKERS, this.jokers));
+      _.times(this.jokers, function (n) {
+        this.cards[Deck.SIZE + n] = new Card({ value: 'W' + (n + 1) });
       }, this);
     }
   }
-
-  Object.defineProperties(this, {
-    cardsIn: {
-      get: function () {
-        return cardsIn;
-      }
-    },
-    cardsOut: {
-      get: function () {
-        return cardsOut;
-      }
-    },
-    jokers: {
-      get: function () {
-        return jokers;
-      }
-    }
-  });
 }
 
 
@@ -67,29 +48,12 @@ Object.defineProperty(Deck, 'MAX_JOKERS', {
 
 Deck.prototype = {
 
-  /**
-   * @returns undealt cards remaining in deck.
-   */
-  cards: function () {
-    return this.cardsIn.slice();
-  },
-
-  /**
-   * @returns number of cards in the deck.
-   */
-  size: function () {
-    return Deck.SIZE + this.jokers;
-  },
-
   /*
    * Shuffle/randomize the deck.
    */
   shuffle: function () {
     while (!this.isShuffled()) {
-      var shuffled = _.shuffle(this.cardsIn);
-      for (var i = 0; i < this.cardsIn.length; i++) {
-        this.cardsIn[i] = shuffled[i];
-      }
+      this.cards = _.shuffle(this.cards);
     }
     return this;
   },
@@ -99,7 +63,7 @@ Deck.prototype = {
    */
   isShuffled: function () {
     var shuffled = false;
-    _.forEach(this.cardsIn, function (card, index) {
+    _.forEach(this.cards, function (card, index) {
       if (index < Deck.SIZE) {
         if (card.value !== Deck.CARDS[index]) {
           shuffled = true;
@@ -120,7 +84,8 @@ Deck.prototype = {
    * @returns TRUE if deck is unshuffled and no cards have been dealth.
    */
   isImmaculate: function () {
-    return !(this.cardsIn.length < this.size() || this.isShuffled());
+    return !(this.cards.length < (Deck.SIZE + this.jokers) ||
+      this.isShuffled());
   },
 
   /**
@@ -128,12 +93,7 @@ Deck.prototype = {
    * @returns the card dealt.
    */
   deal: function () {
-    var card = null;
-    if (this.cardsIn.length) {
-      card = this.cardsIn.pop();
-      this.cardsOut.push(card);
-    }
-    return card;
+    return this.cards.length ? this.cards.pop() : null;
   }
 };
 
