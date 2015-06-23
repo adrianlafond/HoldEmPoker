@@ -1,6 +1,13 @@
 describe('Poker.Card', function () {
   'use strict';
 
+  it('should instantiate from a string value', function () {
+    var card = new Card('9S');
+    expect(card.value).toBe('9S');
+    expect(card.rank).toBe('9');
+    expect(card.suit).toBe('S');
+  });
+
   it('should have the correct rank and suit', function () {
     var card = new Card({ value: '9S' });
     expect(card.value).toBe('9S');

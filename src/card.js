@@ -6,6 +6,9 @@ function Card(options) {
     return new Card(options);
   }
 
+  if (_.isString(options)) {
+    options = { value: options };
+  }
   var face = (options.face === Card.FACE_UP) ? Card.FACE_UP : Card.FACE_DOWN;
   var community = options.hasOwnProperty('community') ?
     !!options.community : false;

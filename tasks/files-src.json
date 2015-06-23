@@ -1,4 +1,5 @@
 [
   "./src/card.js",
-  "./src/deck.js"
+  "./src/deck.js",
+  "./src/hand.js"
 ]
