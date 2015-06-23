@@ -67,9 +67,16 @@ describe('Poker.Deck', function () {
   it('should shuffle a deck', function () {
     var deck = new Deck();
     expect(deck.isShuffled()).toBe(false);
-    expect(_.pluck(deck.cards, 'value')).toEqual(Deck.CARDS);
+    expect(pluck(deck.cards, 'value')).toEqual(Deck.CARDS);
     deck.shuffle();
     expect(deck.isShuffled()).toBe(true);
-    expect(_.pluck(deck.cards, 'value')).not.toEqual(Deck.CARDS);
+    expect(pluck(deck.cards, 'value')).not.toEqual(Deck.CARDS);
   });
+
+  function pluck(array, key) {
+    var arr = array.map(function (obj) {
+      return obj[key];
+    });
+    return arr;
+  }
 });

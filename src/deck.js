@@ -5,23 +5,21 @@ function Deck(options) {
   if (!(this instanceof Deck)) {
     return new Deck(options);
   }
-  this.cards = [];
-  this.jokers = 0;
-
-  _.forEach(Deck.CARDS, function (card, i) {
-    this.cards[i] = new Card({ value: card });
+  this.cards = Deck.CARDS.map(function (card) {
+    return new Card({ value: card });
   }, this);
 
-  if (options && _.isPlainObject(options)) {
-    if (_.has(options, 'jokers')) {
+  this.jokers = 0;
+  if (options && typeof options === 'object') {
+    if (options.hasOwnProperty('jokers')) {
       this.jokers = parseInt(options.jokers, 10);
       if (isNaN(this.jokers)) {
         this.jokers = 0;
       }
       this.jokers = Math.max(0, Math.min(Deck.MAX_JOKERS, this.jokers));
-      _.times(this.jokers, function (n) {
-        this.cards[Deck.SIZE + n] = new Card({ value: 'W' + (n + 1) });
-      }, this);
+      for (var i = 0; i < this.jokers; i++) {
+        this.cards[Deck.SIZE + i] = new Card({ value: 'W' + (i + 1) });
+      }
     }
   }
 }
@@ -52,8 +50,14 @@ Deck.prototype = {
    * Shuffle/randomize the deck.
    */
   shuffle: function () {
-    while (!this.isShuffled()) {
-      this.cards = _.shuffle(this.cards);
+    var shuffled = [];
+    while (this.cards.length) {
+      var n = Math.floor(Math.random() * this.cards.length);
+      shuffled.push(this.cards[n]);
+      this.cards.splice(n, 1);
+    }
+    if (!this.isShuffled()) {
+      this.shuffle();
     }
     return this;
   },
@@ -63,7 +67,7 @@ Deck.prototype = {
    */
   isShuffled: function () {
     var shuffled = false;
-    _.forEach(this.cards, function (card, index) {
+    this.cards.forEach(function (card, index) {
       if (index < Deck.SIZE) {
         if (card.value !== Deck.CARDS[index]) {
           shuffled = true;
