@@ -1,5 +1,7 @@
 [
   "./src/card.js",
   "./src/deck.js",
-  "./src/hand.js"
+  "./src/hand.js",
+  "./src/hand-constants.js",
+  "./src/hand-static.js"
 ]

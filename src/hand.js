@@ -17,41 +17,26 @@ function Hand(options) {
   this.lowType = null;
   this.cards = [];
   this.rank = Hand.NOTHING;
-  if (options && _.isPlainObject(options)) {
-    if (_.isArray(options.cards)) {
+  this.rankLow = Hand.NOTHING;
+  this.cardsHigh = [];
+  this.cardsLow = [];
+  if (options && typeof options === 'object') {
+    if (Array.isArray(options.cards)) {
       this.add(options.cards);
     }
     if (options.low) {
       this.configLow(options.lowType);
     }
+  } else if (arguments.length) {
+    var args = Array.prototype.slice.call(arguments);
+    var isCard = function (card) {
+      return typeof card === 'string' || card instanceof Card;
+    }
+    if (args.every(isCard)) {
+      this.add.apply(this, args);
+    }
   }
 }
-
-
-Object.defineProperties(Hand, {
-  // Hand ranks.
-  ROYAL_FLUSH: { value: 10, enumerable: true },
-  STRAIGHT_FLUSH: { value: 10, enumerable: true },
-  FOUR_OF_A_KIND: { value: 10, enumerable: true },
-  FULL_HOUSE: { value: 10, enumerable: true },
-  FLUSH: { value: 10, enumerable: true },
-  STRAIGHT: { value: 10, enumerable: true },
-  THREE_OF_A_KIND: { value: 10, enumerable: true },
-  TWO_PAIR: { value: 10, enumerable: true },
-  ONE_PAIR: { value: 10, enumerable: true },
-  HIGH_CARD: { value: 10, enumerable: true },
-  NOTHING: { value: 0, enumerable: true },
-
-  // Low hand types.
-  ACE_TO_FIVE_LOW: { value: 'aceToFiveLow', enumerable: true },
-  ACE_TO_SIX_LOW: { value: 'aceToSizeLow', enumerable: true },
-  DEUCE_TO_SEVEN_LOW: { value: 'deuceToSevenLow', enumerable: true },
-  DEUCE_TO_SIX_LOW: { value: 'deuceToSixLow', enumerable: true },
-
-  // For sorting.
-  RANKS: { value: 'WAKQJT98765432', enumerable: true },
-  SUITS: { value: 'SHDC', enumerable: true }
-});
 
 
 Hand.prototype = {
@@ -61,36 +46,65 @@ Hand.prototype = {
    * @returns {boolean}
    */
   has: function (value) {
-    return !!_.filter(this.cards, function (card) {
+    return this.cards.some(function (card) {
       return card.value === value;
-    }, this).length;
+    });
   },
 
   /**
    * Adds a single card or an array of cards. Card values can either be a
    * string value (e.g., 'AS' or '9C') or a Card instance.
+   * NEVER update this.cards directly; always use this method!
    * @param {string|array} cards
    */
-  add: function (card) {
-    if (_.isString(card)) {
-      card = new Card(card);
-    } else if (_.isArray(card)) {
-      _.forEach(card, this.add, this);
-    } else if (!(card instanceof Card)) {
-      throw 'Attempt to add card of an invalid type.';
-    }
-    if (!this.has(card.value)) {
-      this.cards.push(card);
-      this.updateRank();
+  add: function () {
+    var args = Array.prototype.slice.call(arguments);
+    if (args.length === 1 && args[0] instanceof Card) {
+      if (!this.has(args[0].value)) {
+        this.cards.push(args[0]);
+        this.updateRank();
+      }
+    } else {
+      args.forEach(function (card) {
+        if (card instanceof Card) {
+          this.add(card);
+        } else if (typeof card === 'string') {
+          this.add(new Card(card));
+        } else if (Array.isArray(card)) {
+          card.forEach(this.add, this);
+        } else if (!(card instanceof Card)) {
+          throw new Error('Card value is an invalid type.');
+        }
+      }, this);
     }
     return this;
   },
 
-  /**
-   *
-   */
   updateRank: function () {
-    //
+    this.updateHigh();
+    this.updateLow();
+  },
+
+  updateHigh: function () {
+    if (this.high) {
+      var result = Hand.rank(this.cards);
+      this.rank = result.rank;
+      this.cardsHigh = result.cards;
+    } else {
+      this.rank = Hand.NOTHING;
+      this.cardsHigh = [];
+    }
+  },
+
+  updateLow: function () {
+    if (this.low) {
+      var result = Hand.rankLow(this.cards);
+      this.rank = result.rank;
+      this.cardsLow = result.cards;
+    } else {
+      this.rank = Hand.NOTHING;
+      this.cardsLow = [];
+    }
   }
 };
 

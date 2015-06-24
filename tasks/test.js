@@ -26,8 +26,22 @@ gulp.task('test-deck', function () {
     }));
 });
 
+gulp.task('test-hand', function () {
+  return gulp.src('./spec/hand*Spec.js')
+    .pipe(jasmine({
+      integration: true,
+      vendor: [
+        './src/card.js',
+        './src/hand.js',
+        './src/hand-constants.js',
+        './src/hand-static.js'
+      ],
+      keepRunner: true
+    }));
+});
+
 
 gulp.task('test', function () {
-  sequence('test-card', 'test-deck');
+  sequence('test-card', 'test-deck', 'test-hand');
 });
 
