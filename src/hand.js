@@ -31,7 +31,7 @@ function Hand(options) {
     var args = Array.prototype.slice.call(arguments);
     var isCard = function (card) {
       return typeof card === 'string' || card instanceof Card;
-    }
+    };
     if (args.every(isCard)) {
       this.add.apply(this, args);
     }
@@ -99,13 +99,11 @@ Hand.prototype = {
   updateLow: function () {
     if (this.low) {
       var result = Hand.rankLow(this.cards);
-      this.rank = result.rank;
+      this.rankLow = result.rank;
       this.cardsLow = result.cards;
     } else {
-      this.rank = Hand.NOTHING;
+      this.rankLow = Hand.NOTHING;
       this.cardsLow = [];
     }
   }
 };
-
-

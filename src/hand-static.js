@@ -4,12 +4,95 @@
  * @returns {number} Number between 0 (no rank) and 10 (royal flush).
  */
 Hand.rank = function (cards) {
+  var rank = Hand.NOTHING;
+  var result;
+  var resultTmp;
+  var i;
+
   if (cards.length >= 5) {
-    // if (Hand.findRoyalFlush(cards)) {
-    //   return Hand.ROYAL_FLUSH
-    // }
+    result = Hand.findFlush(cards);
+    if (result) {
+      rank = Hand.FLUSH;
+      resultTmp = Hand.findStraightFlush(result, true);
+      if (resultTmp) {
+        rank = Hand.STRAIGHT_FLUSH;
+        result = resultTmp;
+        resultTmp = Hand.findRoyalFlush(result, true);
+        if (resultTmp) {
+          rank = Hand.ROYAL_FLUSH;
+          result = resultTmp;
+        }
+      }
+    }
   }
-  return { rank: Hand.NOTHING, cards: [] };
+  if (rank < Hand.FOUR_OF_A_KIND) {
+    var sets = Hand.findSets(cards);
+    var setsLen = sets.length;
+    if (setsLen) {
+      switch (sets[0].length) {
+
+        case 4:
+          rank = Hand.FOUR_OF_A_KIND;
+          result = sets[0];
+          for (i = 1; i < setsLen; i++) {
+            if (result.length === 4) {
+              result.push(sets[i][0]);
+            } else if (Hand.RANKS.indexOf(sets[i][0].rank) < Hand.RANKS.indexOf(result[4].rank))  {
+              result[4] = sets[i][0];
+            }
+          }
+          break;
+
+        // case 3:
+        //   result = sets[0];
+        //   if (setsLen >= 2) {
+        //     if (sets[1].length >= 2) {
+        //       rank = Hand.FULL_HOUSE;
+        //       result = result.concat(sets[1].slice(0, 2));
+        //     } else {
+        //       rank = Hand.THREE_OF_A_KIND;
+        //       result.push(sets[1][0]);
+        //       if (setsLen >= 3) {
+        //         result.push(sets[2][0]);
+        //       }
+        //     }
+        //   } else {
+        //     rank = Hand.THREE_OF_A_KIND;
+        //   }
+        //   break;
+        //
+        // case 2:
+        //   rank = Hand.ONE_PAIR;
+        //   result = sets[0];
+        //   if (setsLen >= 2) {
+        //     if (sets[1].length >= 2) {
+        //       rank = Hand.TWO_PAIR;
+        //       result = result.concat(sets[1]);
+        //       if (setsLen >= 3) {
+        //         result.push(sets[2][0]);
+        //       }
+        //     } else {
+        //       var n = 1;
+        //       while (n < setsLen - 1) {
+        //         result.push(sets[n][0]);
+        //       }
+        //     }
+        //   }
+        //   break;
+        //
+        // case 1:
+        //   rank = Hand.HIGH_CARD;
+        //   result = [];
+        //   var n = 0;
+        //   while (n < setsLen) {
+        //     result.push(sets[n][0]);
+        //     ++n;
+        //   }
+        //   break;
+      }
+    }
+  }
+  return { rank: rank, cards: result || [] };
 };
 
 /**
@@ -82,26 +165,19 @@ Hand.findFlush = function (cards) {
  * @param {array<Card} cards
  * @returns {array<Card>|null}
  */
-Hand.findFourOfAKind = function (cards) {
-  var sets = Hand.findSets(cards);
-  var result = null;
-  for (var i = 0; i < sets.length; i++) {
-    if (sets[i].length === 4) {
-      result = sets[i];
-    } else if (result) {
-      result.push(sets[i][0]);
-      return result;
-    }
-  }
-  return null;
+Hand.findHighCard = function (cards) {
+  return Hand.sortHigh2Low(cards.slice()).slice(0, 5);
 };
 
 
+/**
+ * @returns {array<array<Card>>}
+ */
 Hand.findSets = function (cards) {
   var sets = [];
   var ranks = [];
   var cardsLen = cards.length;
-  Hand.sortHigh2Low(cards);
+  Hand.sortHigh2Low(cards.slice());
   for (var i = 0; i < cardsLen; i++) {
     if (ranks.indexOf(cards[i].rank) === -1) {
       var set = [cards[i]];
@@ -114,16 +190,10 @@ Hand.findSets = function (cards) {
       sets.push(set);
     }
   }
+  sets.sort(function (a, b) {
+    return b.length - a.length;
+  });
   return sets;
-};
-
-
-/**
- * @param {array<Card} cards
- * @returns {array<Card>|null}
- */
-Hand.findHighCard = function (cards) {
-  return Hand.sortHigh2Low(cards);
 };
 
 

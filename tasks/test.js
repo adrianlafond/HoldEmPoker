@@ -49,4 +49,3 @@ gulp.task('test-hand', function () {
 gulp.task('test', function () {
   sequence('test-card', 'test-deck', 'test-hand');
 });
-

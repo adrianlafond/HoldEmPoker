@@ -36,12 +36,46 @@ describe('Poker.Hand (high ranks)', function () {
 
   it('should find four of a kind', function () {
     var hand = new Hand('9S', '3H', '8C', '9D', '9C', '9H');
-    var result = Hand.findFourOfAKind(hand.cards);
-    var values = pluck(result, 'value');
+    var values = pluck(hand.cardsHigh, 'value');
+    expect(hand.rank).toBe(Hand.FOUR_OF_A_KIND);
     expect(values.indexOf('9S')).not.toBe(-1);
     expect(values.indexOf('9D')).not.toBe(-1);
     expect(values.indexOf('9C')).not.toBe(-1);
     expect(values.indexOf('9H')).not.toBe(-1);
-    expect(result[4].value).toBe('8C');
+    expect(hand.cardsHigh[4].value).toBe('8C');
   });
+  //
+  // it('should find a full house', function () {
+  //   var hand = new Hand('9S', '3H', '8C', '9D', '9C', '3D');
+  //   var result = Hand.findFullHouse(hand.cards);
+  //   var values = pluck(result, 'value');
+  //   var ranks = pluck(result, 'rank');
+  //   expect(values.indexOf('9S')).not.toBe(-1);
+  //   expect(values.indexOf('9D')).not.toBe(-1);
+  //   expect(values.indexOf('9C')).not.toBe(-1);
+  //   expect(values.indexOf('3H')).not.toBe(-1);
+  //   expect(values.indexOf('3D')).not.toBe(-1);
+  //   expect(ranks.indexOf('9')).toBe(0);
+  //   expect(ranks[1]).toBe('9');
+  //   expect(ranks.lastIndexOf('9')).toBe(2);
+  //   expect(ranks.indexOf('3')).toBe(3);
+  //   expect(ranks.lastIndexOf('3')).toBe(4);
+  // });
+  //
+  // it('should find three of a kind', function () {
+  //   var hand = new Hand('9S', '3H', '8C', '9D', '9C', '3D');
+  //   var result = Hand.findFullHouse(hand.cards);
+  //   var values = pluck(result, 'value');
+  //   var ranks = pluck(result, 'rank');
+  //   console.log(values);
+  //   expect(values.indexOf('9S')).not.toBe(-1);
+  //   expect(values.indexOf('9D')).not.toBe(-1);
+  //   expect(values.indexOf('9C')).not.toBe(-1);
+  //   expect(values.indexOf('8C')).toBe(3);
+  //   expect(ranks.indexOf('3')).toBe(4);
+  //   expect(ranks.indexOf('9')).toBe(0);
+  //   expect(ranks[1]).toBe('9');
+  //   expect(ranks.lastIndexOf('9')).toBe(2);
+  //   expect(ranks.indexOf('3')).toBe(4);
+  // });
 });
