@@ -4,11 +4,10 @@
  * @returns {number} Number between 0 (no rank) and 10 (royal flush).
  */
 Hand.rank = function (cards) {
-  cards = Hand.sortHigh2Low(cards.slice());
   if (cards.length >= 5) {
-    if (Hand.findRoyalFlush(cards)) {
-      return Hand.ROYAL_FLUSH
-    }
+    // if (Hand.findRoyalFlush(cards)) {
+    //   return Hand.ROYAL_FLUSH
+    // }
   }
   return { rank: Hand.NOTHING, cards: [] };
 };
@@ -28,33 +27,55 @@ Hand.rankLow = function (cards, type) {
 
 /**
  * @param {array<Card>} cards
+ * @param {boolean=} alreadyStraightFlush True if @param cards can be assumed
+ *   to be a straight flush.
  * @returns {array<Card>|null}
  */
-Hand.findRoyalFlush = function (cards) {
-  var aces = cards.filter(function (card) {
-    return card.rank === 'A';
-  });
-  while (aces.length) {
-    var ace = aces.shift();
-    var suit = cards.filter(function (card) {
-      return card.suit === ace.suit;
-    });
-    Hand.sortHigh2Low(suit);
-    if (suit.length >= 5) {
-      var result = [];
-      for (var i = 0; i < 5; i++) {
-        if (suit[i].rank === Hand.RANKS[i + 1]) {
-          result.push(suit[i]);
-        } else {
-          break;
-        }
+Hand.findRoyalFlush = function (cards, alreadyStraightFlush) {
+  var flush = Hand.findStraightFlush(cards);
+  return (flush && flush[0].rank === 'A') ? flush : null;
+};
+
+/**
+ * @param {array<Card>} cards
+ * @param {boolean=} alreadyFlush True if @param cards can be assumed to be a
+ *   flush.
+ * @returns {array<Card>|null}
+ */
+Hand.findStraightFlush = function (cards, alreadyFlush) {
+  var flush = alreadyFlush ? cards : Hand.findFlush(cards);
+  if (flush) {
+    var result = [flush[0]];
+    var index = Hand.RANKS.indexOf(flush[0].rank);
+    for (var i = 1; i < 5; i++) {
+      if (flush[i].rank === Hand.RANKS[++index]) {
+        result.push(flush[i]);
+      } else {
+        break;
       }
-      if (result.length === 5) {
-        return result;
-      }
+    }
+    if (result.length === 5) {
+      return result;
     }
   }
   return null;
+};
+
+/**
+ * @param {array<Card>} cards
+ * @returns {array<Card>|null}
+ */
+Hand.findFlush = function (cards) {
+  var result = null;
+  Hand.SUITS.split('').forEach(function (suit) {
+    var suits = cards.filter(function (card) {
+      return card.suit === suit;
+    });
+    if (suits.length >= 5) {
+      result = Hand.sortHigh2Low(suits);
+    }
+  });
+  return result || null;
 };
 
 
