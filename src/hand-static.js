@@ -83,30 +83,38 @@ Hand.findFlush = function (cards) {
  * @returns {array<Card>|null}
  */
 Hand.findFourOfAKind = function (cards) {
-  var cardsLen = cards.length;
-  if (cardsLen >= 4) {
-    cards = Hand.sortHigh2Low(cards);
-    for (var i = 0; i < cardsLen; i++) {
-      var result = [cards[i]];
-      for (var j = 0; j < cardsLen; j++) {
-        if (i !== j) {
-          if (cards[j].rank === cards[i].rank) {
-            result.push(cards[j]);
-          }
-        }
-      }
-      if (result.length === 4) {
-        for (j = 0; j < cardsLen; j++) {
-          if (cards[j].rank !== result[0].rank) {
-            result.push(cards[j]);
-            break;
-          }
-        }
-        return result;
-      }
+  var sets = Hand.findSets(cards);
+  var result = null;
+  for (var i = 0; i < sets.length; i++) {
+    if (sets[i].length === 4) {
+      result = sets[i];
+    } else if (result) {
+      result.push(sets[i][0]);
+      return result;
     }
   }
   return null;
+};
+
+
+Hand.findSets = function (cards) {
+  var sets = [];
+  var ranks = [];
+  var cardsLen = cards.length;
+  Hand.sortHigh2Low(cards);
+  for (var i = 0; i < cardsLen; i++) {
+    if (ranks.indexOf(cards[i].rank) === -1) {
+      var set = [cards[i]];
+      ranks.push(cards[i].rank);
+      for (var j = 0; j < cardsLen; j++) {
+        if (i !== j && cards[j].rank === cards[i].rank) {
+          set.push(cards[j]);
+        }
+      }
+      sets.push(set);
+    }
+  }
+  return sets;
 };
 
 
