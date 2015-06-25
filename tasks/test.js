@@ -19,6 +19,7 @@ gulp.task('test-deck', function () {
     .pipe(jasmine({
       integration: true,
       vendor: [
+        './src/util.js',
         './src/card.js',
         './src/deck.js'
       ],
@@ -27,10 +28,14 @@ gulp.task('test-deck', function () {
 });
 
 gulp.task('test-hand', function () {
-  return gulp.src('./spec/hand*Spec.js')
+  return gulp.src([
+      './spec/handSpec.js',
+      './spec/handHighSpec.js'
+    ])
     .pipe(jasmine({
       integration: true,
       vendor: [
+        './src/util.js',
         './src/card.js',
         './src/hand.js',
         './src/hand-constants.js',

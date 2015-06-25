@@ -56,6 +56,7 @@ Deck.prototype = {
       shuffled.push(this.cards[n]);
       this.cards.splice(n, 1);
     }
+    this.cards = shuffled;
     if (!this.isShuffled()) {
       this.shuffle();
     }
@@ -66,22 +67,20 @@ Deck.prototype = {
    * @returns TRUE is the deck has been shuffled.
    */
   isShuffled: function () {
-    var shuffled = false;
-    this.cards.forEach(function (card, index) {
-      if (index < Deck.SIZE) {
-        if (card.value !== Deck.CARDS[index]) {
-          shuffled = true;
-          return false;
+    for (var i = 0; i < this.cards.length; i++) {
+      var card = this.cards[i];
+      if (i < Deck.SIZE) {
+        if (card.value !== Deck.CARDS[i]) {
+          return true;
         }
       } else {
-        var n = index - Deck.SIZE + 1;
+        var n = i - Deck.SIZE + 1;
         if (card.value !== 'W' + n) {
-          shuffled = true;
-          return false;
+          return true;
         }
       }
-    }, this);
-    return shuffled;
+    }
+    return false;
   },
 
   /**

@@ -72,11 +72,4 @@ describe('Poker.Deck', function () {
     expect(deck.isShuffled()).toBe(true);
     expect(pluck(deck.cards, 'value')).not.toEqual(Deck.CARDS);
   });
-
-  function pluck(array, key) {
-    var arr = array.map(function (obj) {
-      return obj[key];
-    });
-    return arr;
-  }
 });

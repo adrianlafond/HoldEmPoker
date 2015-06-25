@@ -33,4 +33,15 @@ describe('Poker.Hand high ranks', function () {
     expect(result[4].value).toBe('TS');
     expect(result[5]).toBe(undefined);
   });
+
+  it('should find four of a kind', function () {
+    var hand = new Hand('9S', '8C', '3H', '9D', '9C', '9H');
+    var result = Hand.findFourOfAKind(hand.cards);
+    var values = pluck(result, 'value');
+    expect(values.indexOf('9S')).not.toBe(-1);
+    expect(values.indexOf('9D')).not.toBe(-1);
+    expect(values.indexOf('9C')).not.toBe(-1);
+    expect(values.indexOf('9H')).not.toBe(-1);
+    expect(result[4].rank).not.toBe('9');
+  });
 });

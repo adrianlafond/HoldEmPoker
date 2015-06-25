@@ -78,6 +78,46 @@ Hand.findFlush = function (cards) {
   return result || null;
 };
 
+/**
+ * @param {array<Card} cards
+ * @returns {array<Card>|null}
+ */
+Hand.findFourOfAKind = function (cards) {
+  var cardsLen = cards.length;
+  if (cardsLen >= 4) {
+    cards = Hand.sortHigh2Low(cards);
+    for (var i = 0; i < cardsLen; i++) {
+      var result = [cards[i]];
+      for (var j = 0; j < cardsLen; j++) {
+        if (i !== j) {
+          if (cards[j].rank === cards[i].rank) {
+            result.push(cards[j]);
+          }
+        }
+      }
+      if (result.length === 4) {
+        for (j = 0; j < cardsLen; j++) {
+          if (cards[j].rank !== result[0].rank) {
+            result.push(cards[j]);
+            break;
+          }
+        }
+        return result;
+      }
+    }
+  }
+  return null;
+};
+
+
+/**
+ * @param {array<Card} cards
+ * @returns {array<Card>|null}
+ */
+Hand.findHighCard = function (cards) {
+  return Hand.sortHigh2Low(cards);
+};
+
 
 /**
  * @param {array<Card>} cards
