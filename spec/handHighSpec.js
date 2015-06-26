@@ -3,35 +3,32 @@ describe('Poker.Hand (high ranks)', function () {
 
   it('should find a flush', function () {
     var hand = new Hand('AC', '2S', 'QS', 'QC', 'KS', 'AS', 'JS');
-    var result = Hand.findFlush(hand.cards);
-    expect(result[0].value).toBe('AS');
-    expect(result[1].value).toBe('KS');
-    expect(result[2].value).toBe('QS');
-    expect(result[3].value).toBe('JS');
-    expect(result[4].value).toBe('2S');
-    expect(result[5]).toBe(undefined);
+    expect(hand.cardsHigh[0].value).toBe('AS');
+    expect(hand.cardsHigh[1].value).toBe('KS');
+    expect(hand.cardsHigh[2].value).toBe('QS');
+    expect(hand.cardsHigh[3].value).toBe('JS');
+    expect(hand.cardsHigh[4].value).toBe('2S');
+    expect(hand.cardsHigh[5]).toBe(undefined);
   });
 
   it('should find a straight flush', function () {
     var hand = new Hand('AC', 'TS', 'QS', 'QC', 'KS', 'AS', 'JS');
-    var result = Hand.findFlush(hand.cards);
-    expect(result[0].value).toBe('AS');
-    expect(result[1].value).toBe('KS');
-    expect(result[2].value).toBe('QS');
-    expect(result[3].value).toBe('JS');
-    expect(result[4].value).toBe('TS');
-    expect(result[5]).toBe(undefined);
+    expect(hand.cardsHigh[0].value).toBe('AS');
+    expect(hand.cardsHigh[1].value).toBe('KS');
+    expect(hand.cardsHigh[2].value).toBe('QS');
+    expect(hand.cardsHigh[3].value).toBe('JS');
+    expect(hand.cardsHigh[4].value).toBe('TS');
+    expect(hand.cardsHigh[5]).toBe(undefined);
   });
 
   it('should find a royal flush', function () {
     var hand = new Hand('AC', 'TS', 'QS', 'QC', 'KS', 'AS', 'JS');
-    var result = Hand.findRoyalFlush(hand.cards);
-    expect(result[0].value).toBe('AS');
-    expect(result[1].value).toBe('KS');
-    expect(result[2].value).toBe('QS');
-    expect(result[3].value).toBe('JS');
-    expect(result[4].value).toBe('TS');
-    expect(result[5]).toBe(undefined);
+    expect(hand.cardsHigh[0].value).toBe('AS');
+    expect(hand.cardsHigh[1].value).toBe('KS');
+    expect(hand.cardsHigh[2].value).toBe('QS');
+    expect(hand.cardsHigh[3].value).toBe('JS');
+    expect(hand.cardsHigh[4].value).toBe('TS');
+    expect(hand.cardsHigh[5]).toBe(undefined);
   });
 
   it('should find four of a kind', function () {
@@ -44,38 +41,61 @@ describe('Poker.Hand (high ranks)', function () {
     expect(values.indexOf('9H')).not.toBe(-1);
     expect(hand.cardsHigh[4].value).toBe('8C');
   });
-  //
-  // it('should find a full house', function () {
-  //   var hand = new Hand('9S', '3H', '8C', '9D', '9C', '3D');
-  //   var result = Hand.findFullHouse(hand.cards);
-  //   var values = pluck(result, 'value');
-  //   var ranks = pluck(result, 'rank');
-  //   expect(values.indexOf('9S')).not.toBe(-1);
-  //   expect(values.indexOf('9D')).not.toBe(-1);
-  //   expect(values.indexOf('9C')).not.toBe(-1);
-  //   expect(values.indexOf('3H')).not.toBe(-1);
-  //   expect(values.indexOf('3D')).not.toBe(-1);
-  //   expect(ranks.indexOf('9')).toBe(0);
-  //   expect(ranks[1]).toBe('9');
-  //   expect(ranks.lastIndexOf('9')).toBe(2);
-  //   expect(ranks.indexOf('3')).toBe(3);
-  //   expect(ranks.lastIndexOf('3')).toBe(4);
-  // });
-  //
-  // it('should find three of a kind', function () {
-  //   var hand = new Hand('9S', '3H', '8C', '9D', '9C', '3D');
-  //   var result = Hand.findFullHouse(hand.cards);
-  //   var values = pluck(result, 'value');
-  //   var ranks = pluck(result, 'rank');
-  //   console.log(values);
-  //   expect(values.indexOf('9S')).not.toBe(-1);
-  //   expect(values.indexOf('9D')).not.toBe(-1);
-  //   expect(values.indexOf('9C')).not.toBe(-1);
-  //   expect(values.indexOf('8C')).toBe(3);
-  //   expect(ranks.indexOf('3')).toBe(4);
-  //   expect(ranks.indexOf('9')).toBe(0);
-  //   expect(ranks[1]).toBe('9');
-  //   expect(ranks.lastIndexOf('9')).toBe(2);
-  //   expect(ranks.indexOf('3')).toBe(4);
-  // });
+
+  it('should find a full house', function () {
+    var hand = new Hand('9S', '3H', '8C', '9D', '9C', '3D');
+    var values = pluck(hand.cardsHigh, 'value');
+    var ranks = pluck(hand.cardsHigh, 'rank');
+    expect(values.indexOf('9S')).not.toBe(-1);
+    expect(values.indexOf('9D')).not.toBe(-1);
+    expect(values.indexOf('9C')).not.toBe(-1);
+    expect(values.indexOf('3H')).not.toBe(-1);
+    expect(values.indexOf('3D')).not.toBe(-1);
+    expect(ranks.indexOf('9')).toBe(0);
+    expect(ranks[1]).toBe('9');
+    expect(ranks.lastIndexOf('9')).toBe(2);
+    expect(ranks.indexOf('3')).toBe(3);
+    expect(ranks.lastIndexOf('3')).toBe(4);
+  });
+
+  it('should find three of a kind', function () {
+    var hand = new Hand('9S', '3H', '8C', '9D', '9C', '4D');
+    var values = pluck(hand.cardsHigh, 'value');
+    var ranks = pluck(hand.cardsHigh, 'rank');
+    expect(values.indexOf('9S')).not.toBe(-1);
+    expect(values.indexOf('9D')).not.toBe(-1);
+    expect(values.indexOf('9C')).not.toBe(-1);
+    expect(values.indexOf('8C')).toBe(3);
+    expect(values.indexOf('4D')).toBe(4);
+    expect(ranks.indexOf('9')).toBe(0);
+    expect(ranks[1]).toBe('9');
+    expect(ranks.lastIndexOf('9')).toBe(2);
+  });
+
+  it('should find two pair', function () {
+    var hand = new Hand('9S', '3H', '8C', '9D', 'KH', '3D');
+    var values = pluck(hand.cardsHigh, 'value');
+    var ranks = pluck(hand.cardsHigh, 'rank');
+    expect(values.indexOf('9S')).not.toBe(-1);
+    expect(values.indexOf('9D')).not.toBe(-1);
+    expect(values.indexOf('3H')).not.toBe(-1);
+    expect(values.indexOf('3D')).not.toBe(-1);
+    expect(values.indexOf('KH')).toBe(4);
+    expect(ranks).toEqual(['9', '9', '3', '3', 'K']);
+  });
+
+  it('should find one pair', function () {
+    var hand = new Hand('9S', '3H', '8C', '9D', 'KH', '4D');
+    var values = pluck(hand.cardsHigh, 'value');
+    var ranks = pluck(hand.cardsHigh, 'rank');
+    expect(values.indexOf('9S')).not.toBe(-1);
+    expect(values.indexOf('9D')).not.toBe(-1);
+    expect(ranks).toEqual(['9', '9', 'K', '8', '4']);
+  });
+
+  it('should find a high card', function () {
+    var hand = new Hand('9S', '3H', '8C', 'QD', 'KH', '4D');
+    var values = pluck(hand.cardsHigh, 'value');
+    expect(values).toEqual(['KH', 'QD', '9S', '8C', '4D']);
+  });
 });

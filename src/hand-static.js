@@ -43,52 +43,59 @@ Hand.rank = function (cards) {
           }
           break;
 
-        // case 3:
-        //   result = sets[0];
-        //   if (setsLen >= 2) {
-        //     if (sets[1].length >= 2) {
-        //       rank = Hand.FULL_HOUSE;
-        //       result = result.concat(sets[1].slice(0, 2));
-        //     } else {
-        //       rank = Hand.THREE_OF_A_KIND;
-        //       result.push(sets[1][0]);
-        //       if (setsLen >= 3) {
-        //         result.push(sets[2][0]);
-        //       }
-        //     }
-        //   } else {
-        //     rank = Hand.THREE_OF_A_KIND;
-        //   }
-        //   break;
-        //
-        // case 2:
-        //   rank = Hand.ONE_PAIR;
-        //   result = sets[0];
-        //   if (setsLen >= 2) {
-        //     if (sets[1].length >= 2) {
-        //       rank = Hand.TWO_PAIR;
-        //       result = result.concat(sets[1]);
-        //       if (setsLen >= 3) {
-        //         result.push(sets[2][0]);
-        //       }
-        //     } else {
-        //       var n = 1;
-        //       while (n < setsLen - 1) {
-        //         result.push(sets[n][0]);
-        //       }
-        //     }
-        //   }
-        //   break;
-        //
-        // case 1:
-        //   rank = Hand.HIGH_CARD;
-        //   result = [];
-        //   var n = 0;
-        //   while (n < setsLen) {
-        //     result.push(sets[n][0]);
-        //     ++n;
-        //   }
-        //   break;
+        case 3:
+          if (rank < Hand.FULL_HOUSE) {
+            result = sets[0];
+            if (setsLen >= 2) {
+              if (sets[1].length >= 2) {
+                rank = Hand.FULL_HOUSE;
+                result = result.concat(sets[1].slice(0, 2));
+              } else if (rank < Hand.THREE_OF_A_KIND) {
+                rank = Hand.THREE_OF_A_KIND;
+                result.push(sets[1][0]);
+                if (setsLen >= 3) {
+                  result.push(sets[2][0]);
+                }
+              }
+            } else if (rank < Hand.THREE_OF_A_KIND) {
+              rank = Hand.THREE_OF_A_KIND;
+            }
+          }
+          break;
+
+        case 2:
+          if (rank < Hand.TWO_PAIR) {
+            rank = Hand.ONE_PAIR;
+            result = sets[0];
+            if (setsLen >= 2) {
+              if (sets[1].length >= 2) {
+                rank = Hand.TWO_PAIR;
+                result = result.concat(sets[1]);
+                if (setsLen >= 3) {
+                  result.push(sets[2][0]);
+                }
+              } else {
+                var n = 1;
+                while (n < setsLen - 1) {
+                  result.push(sets[n][0]);
+                  ++n;
+                }
+              }
+            }
+          }
+          break;
+
+        case 1:
+          if (rank < Hand.HIGH_CARD) {
+            rank = Hand.HIGH_CARD;
+            result = [];
+            var n = 0;
+            while (n < setsLen && result.length < 5) {
+              result.push(sets[n][0]);
+              ++n;
+            }
+          }
+          break;
       }
     }
   }
@@ -177,7 +184,7 @@ Hand.findSets = function (cards) {
   var sets = [];
   var ranks = [];
   var cardsLen = cards.length;
-  Hand.sortHigh2Low(cards.slice());
+  cards = Hand.sortHigh2Low(cards.slice());
   for (var i = 0; i < cardsLen; i++) {
     if (ranks.indexOf(cards[i].rank) === -1) {
       var set = [cards[i]];
