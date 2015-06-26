@@ -98,4 +98,10 @@ describe('Poker.Hand (high ranks)', function () {
     var values = pluck(hand.cardsHigh, 'value');
     expect(values).toEqual(['KH', 'QD', '9S', '8C', '4D']);
   });
+
+  it('should find a straight', function () {
+    var hand = new Hand('4H', '7H', '6S', '5D', 'AC', '8C', '2D');
+    var values = pluck(hand.cardsHigh, 'value');
+    expect(values).toEqual(['8C', '7H', '6S', '5D', '4H']);
+  });
 });

@@ -84,21 +84,23 @@ Hand.rank = function (cards) {
             }
           }
           break;
-
-        case 1:
-          if (rank < Hand.HIGH_CARD) {
-            rank = Hand.HIGH_CARD;
-            result = [];
-            var n = 0;
-            while (n < setsLen && result.length < 5) {
-              result.push(sets[n][0]);
-              ++n;
-            }
-          }
-          break;
       }
     }
   }
+
+  if (rank < Hand.STRAIGHT) {
+    resultTmp = Hand.findStraight(cards);
+    if (resultTmp) {
+      rank = Hand.STRAIGHT;
+      result = resultTmp;
+    }
+  }
+
+  if (rank < Hand.HIGH_CARD) {
+    rank = Hand.HIGH_CARD;
+    result = Hand.findHighCard(cards);
+  }
+
   return { rank: rank, cards: result || [] };
 };
 
@@ -166,6 +168,33 @@ Hand.findFlush = function (cards) {
     }
   });
   return result || null;
+};
+
+/**
+ * @param {array<Card>} cards
+ * @returns {array<Card>|null}
+ */
+Hand.findStraight = function (cards) {
+  var result = null;
+  var cardsLen = cards.length;
+  var rank = 0;
+  cards = Hand.sortHigh2Low(cards.slice());
+  for (var i = 0; i <= cardsLen - 5; i++) {
+    result = [cards[i]];
+    rank = Hand.RANKS.indexOf(cards[i].rank);
+    for (var j = i + 1; j < cardsLen; j++, rank++) {
+      var delta = Hand.RANKS.indexOf(cards[j].rank) - rank;
+      if (delta === 1) {
+        result.push(cards[j]);
+        if (result.length === 5) {
+          return result;
+        }
+      } else if (delta > 1) {
+        break;
+      }
+    }
+  }
+  return null;
 };
 
 /**
