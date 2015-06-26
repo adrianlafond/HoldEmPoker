@@ -4,7 +4,7 @@
  * @returns {number} Number between 0 (no rank) and 10 (royal flush).
  */
 Hand.rank = function (cards) {
-  var rank = Hand.NOTHING;
+  var rank = Poker.NOTHING;
   var result;
   var resultTmp;
   var i;
@@ -12,64 +12,64 @@ Hand.rank = function (cards) {
   if (cards.length >= 5) {
     result = Hand.findFlush(cards);
     if (result) {
-      rank = Hand.FLUSH;
+      rank = Poker.FLUSH;
       resultTmp = Hand.findStraightFlush(result, true);
       if (resultTmp) {
-        rank = Hand.STRAIGHT_FLUSH;
+        rank = Poker.STRAIGHT_FLUSH;
         result = resultTmp;
         resultTmp = Hand.findRoyalFlush(result, true);
         if (resultTmp) {
-          rank = Hand.ROYAL_FLUSH;
+          rank = Poker.ROYAL_FLUSH;
           result = resultTmp;
         }
       }
     }
   }
-  if (rank < Hand.FOUR_OF_A_KIND) {
+  if (rank < Poker.FOUR_OF_A_KIND) {
     var sets = Hand.findSets(cards);
     var setsLen = sets.length;
     if (setsLen) {
       switch (sets[0].length) {
 
         case 4:
-          rank = Hand.FOUR_OF_A_KIND;
+          rank = Poker.FOUR_OF_A_KIND;
           result = sets[0];
           for (i = 1; i < setsLen; i++) {
             if (result.length === 4) {
               result.push(sets[i][0]);
-            } else if (Hand.RANKS.indexOf(sets[i][0].rank) < Hand.RANKS.indexOf(result[4].rank))  {
+            } else if (Poker.RANKS.indexOf(sets[i][0].rank) < Poker.RANKS.indexOf(result[4].rank))  {
               result[4] = sets[i][0];
             }
           }
           break;
 
         case 3:
-          if (rank < Hand.FULL_HOUSE) {
+          if (rank < Poker.FULL_HOUSE) {
             result = sets[0];
             if (setsLen >= 2) {
               if (sets[1].length >= 2) {
-                rank = Hand.FULL_HOUSE;
+                rank = Poker.FULL_HOUSE;
                 result = result.concat(sets[1].slice(0, 2));
-              } else if (rank < Hand.THREE_OF_A_KIND) {
-                rank = Hand.THREE_OF_A_KIND;
+              } else if (rank < Poker.THREE_OF_A_KIND) {
+                rank = Poker.THREE_OF_A_KIND;
                 result.push(sets[1][0]);
                 if (setsLen >= 3) {
                   result.push(sets[2][0]);
                 }
               }
-            } else if (rank < Hand.THREE_OF_A_KIND) {
-              rank = Hand.THREE_OF_A_KIND;
+            } else if (rank < Poker.THREE_OF_A_KIND) {
+              rank = Poker.THREE_OF_A_KIND;
             }
           }
           break;
 
         case 2:
-          if (rank < Hand.TWO_PAIR) {
-            rank = Hand.ONE_PAIR;
+          if (rank < Poker.TWO_PAIR) {
+            rank = Poker.ONE_PAIR;
             result = sets[0];
             if (setsLen >= 2) {
               if (sets[1].length >= 2) {
-                rank = Hand.TWO_PAIR;
+                rank = Poker.TWO_PAIR;
                 result = result.concat(sets[1]);
                 if (setsLen >= 3) {
                   result.push(sets[2][0]);
@@ -88,16 +88,16 @@ Hand.rank = function (cards) {
     }
   }
 
-  if (rank < Hand.STRAIGHT) {
+  if (rank < Poker.STRAIGHT) {
     resultTmp = Hand.findStraight(cards);
     if (resultTmp) {
-      rank = Hand.STRAIGHT;
+      rank = Poker.STRAIGHT;
       result = resultTmp;
     }
   }
 
-  if (rank < Hand.HIGH_CARD) {
-    rank = Hand.HIGH_CARD;
+  if (rank < Poker.HIGH_CARD) {
+    rank = Poker.HIGH_CARD;
     result = Hand.findHighCard(cards);
   }
 
@@ -108,12 +108,12 @@ Hand.rank = function (cards) {
  * Returns the low rank of an array of cards. Lower is better. The minimum
  * (winningest) value is 0. The maximum value depends on the type of low game.
  * @param {array<Card>} cards
- * @param {string=} type The type of low hand; default is Hand.ACE_TO_FIVE_LOW.
+ * @param {string=} type The type of low hand; default is Poker.ACE_TO_FIVE_LOW.
  * @returns {number}
  */
 Hand.rankLow = function (cards, type) {
   cards = Hand.sortLow2High(cards.slice());
-  return { rank: Hand.NOTHING, cards: [] };
+  return { rank: Poker.NOTHING, cards: [] };
 };
 
 
@@ -138,9 +138,9 @@ Hand.findStraightFlush = function (cards, alreadyFlush) {
   var flush = alreadyFlush ? cards : Hand.findFlush(cards);
   if (flush) {
     var result = [flush[0]];
-    var index = Hand.RANKS.indexOf(flush[0].rank);
+    var index = Poker.RANKS.indexOf(flush[0].rank);
     for (var i = 1; i < 5; i++) {
-      if (flush[i].rank === Hand.RANKS[++index]) {
+      if (flush[i].rank === Poker.RANKS[++index]) {
         result.push(flush[i]);
       } else {
         break;
@@ -159,7 +159,7 @@ Hand.findStraightFlush = function (cards, alreadyFlush) {
  */
 Hand.findFlush = function (cards) {
   var result = null;
-  Hand.SUITS.split('').forEach(function (suit) {
+  Poker.SUITS.split('').forEach(function (suit) {
     var suits = cards.filter(function (card) {
       return card.suit === suit;
     });
@@ -181,9 +181,9 @@ Hand.findStraight = function (cards) {
   cards = Hand.sortHigh2Low(cards.slice());
   for (var i = 0; i <= cardsLen - 5; i++) {
     result = [cards[i]];
-    rank = Hand.RANKS.indexOf(cards[i].rank);
+    rank = Poker.RANKS.indexOf(cards[i].rank);
     for (var j = i + 1; j < cardsLen; j++, rank++) {
-      var delta = Hand.RANKS.indexOf(cards[j].rank) - rank;
+      var delta = Poker.RANKS.indexOf(cards[j].rank) - rank;
       if (delta === 1) {
         result.push(cards[j]);
         if (result.length === 5) {
@@ -239,8 +239,8 @@ Hand.findSets = function (cards) {
  */
 Hand.sortHigh2Low = function (cards) {
   cards.sort(function (a, b) {
-    var valA = Hand.RANKS.indexOf(a.rank);
-    var valB = Hand.RANKS.indexOf(b.rank);
+    var valA = Poker.RANKS.indexOf(a.rank);
+    var valB = Poker.RANKS.indexOf(b.rank);
     return valA - valB;
   });
   return cards;
@@ -252,8 +252,8 @@ Hand.sortHigh2Low = function (cards) {
  */
 Hand.sortLow2High = function (cards) {
   cards.sort(function (a, b) {
-    var valA = Hand.RANKS.indexOf(a.rank);
-    var valB = Hand.RANKS.indexOf(b.rank);
+    var valA = Poker.RANKS.indexOf(a.rank);
+    var valB = Poker.RANKS.indexOf(b.rank);
     return valB - valA;
   });
   return cards;

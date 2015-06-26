@@ -16,8 +16,8 @@ function Hand(options) {
   this.low = false;
   this.lowType = null;
   this.cards = [];
-  this.rank = Hand.NOTHING;
-  this.rankLow = Hand.NOTHING;
+  this.rank = Poker.NOTHING;
+  this.rankLow = Poker.NOTHING;
   this.cardsHigh = [];
   this.cardsLow = [];
   if (options && typeof options === 'object') {
@@ -91,7 +91,7 @@ Hand.prototype = {
       this.rank = result.rank;
       this.cardsHigh = result.cards;
     } else {
-      this.rank = Hand.NOTHING;
+      this.rank = Poker.NOTHING;
       this.cardsHigh = [];
     }
   },
@@ -102,7 +102,7 @@ Hand.prototype = {
       this.rankLow = result.rank;
       this.cardsLow = result.cards;
     } else {
-      this.rankLow = Hand.NOTHING;
+      this.rankLow = Poker.NOTHING;
       this.cardsLow = [];
     }
   }

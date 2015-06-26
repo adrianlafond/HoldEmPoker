@@ -17,9 +17,9 @@ describe('Poker.Card', function () {
 
   it('should face up or down correctly', function () {
     var card = new Card({ value: '9S' });
-    expect(card.face).toBe(Card.FACE_DOWN);
-    card.face = Card.FACE_UP;
-    expect(card.face).toBe(Card.FACE_UP);
+    expect(card.face).toBe(Poker.FACE_DOWN);
+    card.face = Poker.FACE_UP;
+    expect(card.face).toBe(Poker.FACE_UP);
   });
 
   it('should not be a community card by default', function () {
@@ -49,7 +49,7 @@ describe('Poker.Card', function () {
     var card = new Card({ value: '9S' });
     var copy = card.clone();
     expect(card.value).toBe(copy.value);
-    copy.face = Card.FACE_UP;
+    copy.face = Poker.FACE_UP;
     expect(card.face).not.toBe(copy.face);
   });
 });

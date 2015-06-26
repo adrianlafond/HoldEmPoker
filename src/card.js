@@ -9,7 +9,7 @@ function Card(options) {
   if (typeof options === 'string') {
     options = { value: options };
   }
-  var face = (options.face === Card.FACE_UP) ? Card.FACE_UP : Card.FACE_DOWN;
+  var face = (options.face === Poker.FACE_UP) ? Poker.FACE_UP : Poker.FACE_DOWN;
   var community = options.hasOwnProperty('community') ?
     !!options.community : false;
 
@@ -31,7 +31,7 @@ function Card(options) {
         return face;
       },
       set: function (value) {
-        if (value === Card.FACE_UP || value === Card.FACE_DOWN) {
+        if (value === Poker.FACE_UP || value === Poker.FACE_DOWN) {
           face = value;
         }
       },
@@ -49,17 +49,6 @@ function Card(options) {
   });
 }
 
-Object.defineProperties(Card, {
-  FACE_UP: {
-    value: 'faceUp',
-    enumerable: true
-  },
-  FACE_DOWN: {
-    value: 'faceDown',
-    enumerable: true
-  }
-});
-
 Card.prototype.clone = function () {
   return new Card({
     value: this.value,
@@ -67,5 +56,3 @@ Card.prototype.clone = function () {
     community: this.community
   });
 };
-
-

@@ -2,14 +2,15 @@ var gulp      = require('gulp');
 var jasmine   = require('gulp-jasmine-phantom');
 var sequence  = require('run-sequence');
 
+var poker = ['./spec/pluck.js', './src/poker.js', './src/poker-constants.js'];
 
 gulp.task('test-card', function () {
   return gulp.src('./spec/cardSpec.js')
     .pipe(jasmine({
       integration: true,
-      vendor: [
+      vendor: poker.concat([
         './src/card.js'
-      ],
+      ]),
       keepRunner: true
     }));
 });
@@ -18,11 +19,10 @@ gulp.task('test-deck', function () {
   return gulp.src('./spec/deckSpec.js')
     .pipe(jasmine({
       integration: true,
-      vendor: [
-        './src/util.js',
+      vendor: poker.concat([
         './src/card.js',
         './src/deck.js'
-      ],
+      ]),
       keepRunner: true
     }));
 });
@@ -34,13 +34,11 @@ gulp.task('test-hand', function () {
     ])
     .pipe(jasmine({
       integration: true,
-      vendor: [
-        './src/util.js',
+      vendor: poker.concat([
         './src/card.js',
         './src/hand.js',
-        './src/hand-constants.js',
         './src/hand-static.js'
-      ],
+      ]),
       keepRunner: true
     }));
 });
