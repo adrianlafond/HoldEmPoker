@@ -30,7 +30,8 @@ gulp.task('test-deck', function () {
 gulp.task('test-hand', function () {
   return gulp.src([
       './spec/handSpec.js',
-      './spec/handHighSpec.js'
+      './spec/handHighSpec.js',
+      './spec/handCompareHighSpec.js'
     ])
     .pipe(jasmine({
       integration: true,

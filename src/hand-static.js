@@ -1,4 +1,15 @@
 /**
+ * Unique ID generator for Hand instances.
+ */
+Hand.uid = (function () {
+  var uid = 0;
+  return function () {
+    return uid++;
+  };
+}());
+
+
+/**
  * Returns the rank of an array of cards.
  * @param {array<Card>} cards
  * @returns {number} Number between 0 (no rank) and 10 (royal flush).
@@ -230,6 +241,80 @@ Hand.findSets = function (cards) {
     return b.length - a.length;
   });
   return sets;
+};
+
+
+/**
+ * @param {Card} cardA
+ * @param {Card} cardB
+ * @returns 'id' property of highest ranked card or null is even.
+ */
+Hand.highest = function (handA, handB) {
+  // Compare ranks.
+  if (handA.rank > handB.rank) {
+    return handA.id;
+  } else if (handA.rank < handB.rank) {
+    return handB.id;
+  } if (handA.rank === Hand.ROYAL_FLUSH) {
+    return null;
+  }
+
+  var cmprRanks = function () {
+    for (var i = 0; i < arguments.length; i++) {
+      var rankA = Poker.RANKS.indexOf(handA.cardsHigh[arguments[i]].rank);
+      var rankB = Poker.RANKS.indexOf(handB.cardsHigh[arguments[i]].rank);
+      if (rankA < rankB) {
+        return handA.id;
+      } else if (rankA > rankB) {
+        return handB.id;
+      }
+    }
+    return null;
+  };
+
+  // Compare first/highest cards.
+  var comparison;
+  if ((comparison = cmprRanks(0))) {
+    return comparison;
+  }
+
+  // Highest cards are the same so more complex comparisons necessary.
+  switch (handA.rank) {
+    case Hand.STRAIGHT_FLUSH:
+    case Hand.STRAIGHT:
+      return null;
+    // Realized that -- obviously! -- these cases are impossible:
+    // case Hand.FOUR_OF_A_KIND:
+    //   if ((comparison = cmprRanks(4))) {
+    //     return comparison;
+    //   }
+    //   break;
+    // case Hand.FULL_HOUSE:
+    //   if ((comparison = cmprRanks(3))) {
+    //     return comparison;
+    //   }
+    //   break;
+    // case Hand.THREE_OF_A_KIND:
+    //   if ((comparison = cmprRanks(3, 4))) {
+    //     return comparison;
+    //   }
+    //   break;
+    case Hand.TWO_PAIR:
+      if ((comparison = cmprRanks(2, 4))) {
+        return comparison;
+      }
+      break;
+    case Hand.ONE_PAIR:
+      if ((comparison = cmprRanks(2, 3, 4))) {
+        return comparison;
+      }
+      break;
+    case Hand.HIGH_CARD:
+      if ((comparison = cmprRanks(1, 2, 3, 4))) {
+        return comparison;
+      }
+  }
+  return null;
 };
 
 

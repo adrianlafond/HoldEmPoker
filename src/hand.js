@@ -12,6 +12,7 @@
  *   {array=} cards Array of Card instances to start the hand with.
  */
 function Hand(options) {
+  this.id = Hand.uid();
   this.high = true;
   this.low = false;
   this.lowType = null;
