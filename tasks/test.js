@@ -80,5 +80,11 @@ gulp.task('test-pot', function () {
 
 
 gulp.task('test', function () {
-  sequence('test-card', 'test-deck', 'test-hand');
+  sequence(
+    'test-card',
+    'test-deck',
+    'test-hand',
+    'test-player',
+    'test-sidepot',
+    'test-pot');
 });

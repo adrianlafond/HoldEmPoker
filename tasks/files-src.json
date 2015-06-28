@@ -6,5 +6,6 @@
   "./src/hand-static.js",
   "./src/player.js",
   "./src/sidepot.js",
-  "./src/pot.js"
+  "./src/pot.js",
+  "./src/poker.js"
 ]
