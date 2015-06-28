@@ -54,6 +54,19 @@ gulp.task('test-player', function () {
     }));
 });
 
+gulp.task('test-sidepot', function () {
+  return gulp.src('./spec/sidepotSpec.js')
+    .pipe(jasmine({
+      integration: true,
+      vendor: poker.concat(hand, [
+        './src/card.js',
+        './src/player.js',
+        './src/sidepot.js'
+      ]),
+      keepRunner: true
+    }));
+});
+
 
 gulp.task('test', function () {
   sequence('test-card', 'test-deck', 'test-hand');
