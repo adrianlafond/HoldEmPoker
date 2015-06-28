@@ -7,7 +7,6 @@ Poker
   Game -> GameHoldEm
     Deck
     Pot
-      BettingRound
       [SidePot]
     [Player]
       Hand
