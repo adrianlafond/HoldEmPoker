@@ -4,5 +4,7 @@
   "./src/hand.js",
   "./src/hand-constants.js",
   "./src/hand-static.js",
-  "./src/player.js"
+  "./src/player.js",
+  "./src/sidepot.js",
+  "./src/pot.js"
 ]

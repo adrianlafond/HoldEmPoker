@@ -1,20 +1,12 @@
 /**
  * Poker.Player
  */
-function Player(options) {
-  options = options || {};
-  this.id = (options.id || Player.uid()) + '';
-  this.chips = Math.max(0, +options.chips || 0);
+function Player(id, chips) {
+  this.id = id;
+  this.chips = Math.max(0, +chips || 0);
   this.folded = false;
   this.hand = new Hand();
+  if (!this.id) {
+    throw 'Player "id" is not valid.';
+  }
 }
-
-/**
- * Unique ID generator for Player instances.
- */
-Player.uid = (function () {
-  var uid = 0;
-  return function () {
-    return 'player-' + uid++;
-  };
-}());

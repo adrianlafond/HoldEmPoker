@@ -4,11 +4,11 @@ HoldEmPoker
 A hold'em poker engine built in JavaScript. Just because.
 
 Poker
-  Dealer -> DealerHoldEm
+  Game -> GameHoldEm
     Deck
     Pot
+      BettingRound
       [SidePot]
-    Table
-      [Player]
-        Hand
-          Card
+    [Player]
+      Hand
+        Card

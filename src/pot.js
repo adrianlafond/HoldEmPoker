@@ -1,117 +1,74 @@
 /**
  * Poker.Pot
  */
-;(function () {
-  'use strict'
+function Pot() {
+  this.bets = [];
+  this.sidePots = [];
+}
 
-
-  // var defaults = {}
-
+Pot.prototype = {
 
   /**
-   * @constructor
+   * Place a bet into the current betting round.
+   * @param {Player} player
+   * @param {number} amount
    */
-  Pot = function (options) {
-    // this.options = util.extend({}, defaults, options || {})
-    this.reset()
-  }
+  bet: function (player, amount) {
+    for (var i = 0; i < this.bets.length; i++) {
+      if (this.bets[i].player.id === player.id) {
+        this.bets[i].amount += amount;
+        return this;
+      }
+    }
+    this.bets.push({ player: player, amount: amount });
+    return this;
+  },
 
-  Pot.prototype = {
+  /**
+   * Sort the players and bets into side pots.
+   */
+  endRound: function () {
+    // Filter out the players who have folded.
+    var bets = this.bets.filter(function (bet) {
+      return !bet.player.folded;
+    });
 
-    /**
-     * Return a pot. If no arguments, returns current pot.
-     * If first argument is the index number of a specific pot,
-     * returns that pot.
-     */
-    pot: function () {
-      var argLen = arguments.length,
-          potsLen = this.pots.length
-      if (potsLen > 0) {
-        if (argLen === 0) {
-          return this.pots[potsLen - 1]
-        } else if (util.isInteger(arguments[0])) {
-          if (potsLen <= arguments[0]) {
-            return this.pots[arguments[0]]
-          }
+    // Sort the bets in ascending order.
+    bets.sort(function (a, b) {
+      return b.amount - c.amount;
+    });
+
+    // Sort the bets into side pots.
+    var pots = [];
+    while (bets.length) {
+      pots.push(Pot.createSidePot(bets[0].amount, bets));
+      for (var i = bets.length - 1; i >= 0; i--) {
+        bets[i].amount -= amount;
+        if (bets[i].amount <= 0) {
+          bets.splice(i, 1);
         }
       }
-      return null
-    },
-
-
-    /**
-     * Return current/last pot and remove it from the pots array.
-     * example: while (sidepot = pot.pop()) { ... }
-     * Shorthand for dividing winning at the end of a hand;
-     * obviously, don't call this method during a hand!
-     */
-    pop: function () {
-      return (this.pots.length > 0) ? this.pots.pop() : null
-    },
-
-
-    /**
-     * Add a round's worth of Bet objects.
-     * @param {Round} round
-     */
-    add: function (round) {
-      var bets = [],
-          n = 0,
-          sidepots = [{ pot: this.pot(), call: 0 }]
-
-      // Form an array, sorted ascending by chips.
-      util.each(round.bets, function (bet, id) {
-        bets[n++] = bet
-      })
-      bets.sort(function (a, b) {
-        return a.chips - b.chips
-      })
-
-      // Loop through the array, putting chips into current pot.
-      // If a player is all-in, note it, so that if a player
-      // bets more than the all-in, a new SidePot is created.
-      n = 0
-      util.each(bets, function (bet, b) {
-
-        // Include player in pot only if he has contributed to it.
-        if (bet.chips > 0) {
-
-          // Add chips to side pots, subtracting chips from the bet
-          // as it cascades up the side pots.
-          util.each(sidepots, function (side, s) {
-            if (side.call === 0) {
-              side.call = bet.chips
-            }
-            side.pot.add(bet.player, side.call)
-            bet.chips -= side.call
-          })
-
-          // If any chips are left in the bet, then add them to a new
-          // side pot.
-          if (bet.chips > 0) {
-            n++
-            sidepots[n] = {
-              pot: new SidePot,
-              call: bet.chips
-            }
-            sidepots[n].pot.add(bet.player, bet.chips)
-            this.pots.push(sidepots[n].pot)
-          }
-        }
-      }, this)
-    },
-
-
-    /**
-     * Reset all. Empties side pots and creates a new empty main pot.
-     * Each pot inside a Pot instance is an instance of a SidePot.
-     */
-    reset: function () {
-      this.pots = [new SidePot]
     }
+
+    // If first new side pot contains same players as existing side pot, then
+    // merge them together.
+    var potsLen = this.sidePots.length;
+    var lastPot = potsLen ? this.sidePots[potsLen - 1] : null;
+    if (lastPot && lastPot.merge(pots[0])) {
+      pots.splice(0, 1);
+    }
+    this.sidePots = this.sidePots.concat(pots);
   }
-}());
+};
 
 
-
-
+/**
+ *
+ */
+Pot.createSidePot = function (amount, bets) {
+  var players = [];
+  for (var i = 0; i < bets.length; i++) {
+    players[i] = bets[i].player;
+  }
+  return new SidePot(amount, players);
+};
