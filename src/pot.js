@@ -13,14 +13,14 @@ Pot.prototype = {
    * @param {Player} player
    * @param {number} amount
    */
-  bet: function (player, amount) {
+  bet: function (player, chips) {
     for (var i = 0; i < this.bets.length; i++) {
       if (this.bets[i].player.id === player.id) {
-        this.bets[i].amount += amount;
+        this.bets[i].chips += chips;
         return this;
       }
     }
-    this.bets.push({ player: player, amount: amount });
+    this.bets.push({ player: player, chips: chips });
     return this;
   },
 
@@ -28,24 +28,20 @@ Pot.prototype = {
    * Sort the players and bets into side pots.
    */
   endRound: function () {
-    // Filter out the players who have folded.
-    var bets = this.bets.filter(function (bet) {
-      return !bet.player.folded;
-    });
-
     // Sort the bets in ascending order.
-    bets.sort(function (a, b) {
-      return b.amount - c.amount;
+    this.bets.sort(function (a, b) {
+      return a.chips - b.chips;
     });
 
     // Sort the bets into side pots.
     var pots = [];
-    while (bets.length) {
-      pots.push(Pot.createSidePot(bets[0].amount, bets));
-      for (var i = bets.length - 1; i >= 0; i--) {
-        bets[i].amount -= amount;
-        if (bets[i].amount <= 0) {
-          bets.splice(i, 1);
+    while (this.bets.length) {
+      var chips = this.bets[0].chips;
+      pots.push(Pot.createSidePot(chips, this.bets));
+      for (var i = this.bets.length - 1; i >= 0; i--) {
+        this.bets[i].chips -= chips;
+        if (this.bets[i].chips <= 0) {
+          this.bets.splice(i, 1);
         }
       }
     }
@@ -65,10 +61,14 @@ Pot.prototype = {
 /**
  *
  */
-Pot.createSidePot = function (amount, bets) {
+Pot.createSidePot = function (chips, bets) {
   var players = [];
+  var total = 0;
   for (var i = 0; i < bets.length; i++) {
-    players[i] = bets[i].player;
+    total += chips;
+    if (!bets[i].player.folded) {
+      players.push(bets[i].player);
+    }
   }
-  return new SidePot(amount, players);
+  return new SidePot(total, players);
 };

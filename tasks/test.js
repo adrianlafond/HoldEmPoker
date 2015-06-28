@@ -3,7 +3,7 @@ var jasmine   = require('gulp-jasmine-phantom');
 var sequence  = require('run-sequence');
 
 var poker = ['./spec/pluck.js', './src/poker.js', './src/poker-constants.js'];
-var hand = ['./src/hand.js', './src/hand-static.js'];
+var hand = ['./src/card.js', './src/hand.js', './src/hand-static.js'];
 
 gulp.task('test-card', function () {
   return gulp.src('./spec/cardSpec.js')
@@ -36,9 +36,7 @@ gulp.task('test-hand', function () {
     ])
     .pipe(jasmine({
       integration: true,
-      vendor: poker.concat([
-        './src/card.js',
-      ], hand),
+      vendor: poker.concat(hand),
       keepRunner: true
     }));
 });
@@ -59,9 +57,22 @@ gulp.task('test-sidepot', function () {
     .pipe(jasmine({
       integration: true,
       vendor: poker.concat(hand, [
-        './src/card.js',
         './src/player.js',
         './src/sidepot.js'
+      ]),
+      keepRunner: true
+    }));
+});
+
+gulp.task('test-pot', function () {
+  return gulp.src('./spec/potSpec.js')
+    .pipe(jasmine({
+      integration: true,
+      vendor: poker.concat(hand, [
+        './src/card.js',
+        './src/player.js',
+        './src/sidepot.js',
+        './src/pot.js'
       ]),
       keepRunner: true
     }));
