@@ -7,7 +7,7 @@ function GameHoldem(options) {
   Game.call(this, options);
 
   var players = [];
-  Game.addPlayerGetters(this, players, options.players);
+  Game.addPlayers(this, players, options.players);
 }
 
 GameHoldem.prototype = Object.create(Game.prototype);

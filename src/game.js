@@ -13,7 +13,6 @@
  *   an event occurred and (most often) requires an action to be performed.
  */
 function Game(options) {
-  var options = Object(options);
   var id = options.id;
   var type = options.type;
   var action = options.action;
@@ -49,7 +48,7 @@ function Game(options) {
     id: { get: function () { return id; }, enumerable: true },
     type: { get: function () { return type; }, enumerable: true },
     action: { get: function () { return action; }, enumerable: true }
-  };
+  });
 }
 
 
@@ -59,7 +58,7 @@ function Game(options) {
  * @param {array<Player>} players
  * @param {array<object>} optionsPlayers
  */
-Game.addPlayerGetters = function (instance, players, optionsPlayers) {
+Game.addPlayers = function (instance, players, optionsPlayers) {
   for (var i = 0; i < optionsPlayers.length; i++) {
     players[i] = new Player(optionsPlayers[i].id, optionsPlayers[i].chips);
   }
@@ -70,7 +69,7 @@ Game.addPlayerGetters = function (instance, players, optionsPlayers) {
     players: function () {
       var p = [];
       for (var i = 0; i < players.length; i++) {
-        p[i] = players[i].data()
+        p[i] = players[i].data();
       }
       return p;
     },

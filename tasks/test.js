@@ -80,10 +80,10 @@ gulp.task('test-pot', function () {
 });
 
 gulp.task('test-game', function () {
-  return gulp.src('./spec/game.holdemSpec.js')
+  return gulp.src('./spec/game.Spec.js')
     .pipe(jasmine({
       integration: true,
-      vendor: src.concat(['./spec/pluck.js', './src/game.js', './src/game.holdem.js']),
+      vendor: src.concat(['./spec/pluck.js']),
       keepRunner: true
     }));
 });

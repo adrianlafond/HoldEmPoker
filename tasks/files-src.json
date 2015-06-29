@@ -7,6 +7,8 @@
   "./src/player.js",
   "./src/sidepot.js",
   "./src/pot.js",
+  "./src/game.js",
+  "./src/game.holdem.js",
   "./src/poker.js",
   "./src/poker-constants.js"
 ]
