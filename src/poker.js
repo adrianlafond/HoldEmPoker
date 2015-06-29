@@ -10,7 +10,17 @@ var Poker = (function () {
   }
 
   function game(options) {
-    return null;
+    var GameClass;
+    options = Object(options);
+    switch (options.type) {
+      case Poker.HOLDEM:
+        options.id = uniqueId();
+        GameClass = GameHoldem;
+        break;
+      default:
+        throw 'Poker game type is not identified.';
+    }
+    return (games[options.id] = new GameClass(options));
   }
 
 

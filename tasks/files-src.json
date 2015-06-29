@@ -7,5 +7,6 @@
   "./src/player.js",
   "./src/sidepot.js",
   "./src/pot.js",
-  "./src/poker.js"
+  "./src/poker.js",
+  "./src/poker-constants.js"
 ]

@@ -106,5 +106,23 @@ Hand.prototype = {
       this.rankLow = Poker.NOTHING;
       this.cardsLow = [];
     }
+  },
+
+  /**
+   * @returns {object} for sharing information about a player without sharing
+   *   the original Player instance.
+   */
+  data: function () {
+    return {
+      id: this.id,
+      high: this.high,
+      low: this.low,
+      lowType: this.lowType,
+      rank: this.rank,
+      rankLow: this.rankLow,
+      cards: Hand.values(this.cards),
+      cardsHigh: Hand.values(this.cardsHigh),
+      cardsLow: Hand.values(this.cardsLow)
+    };
   }
 };

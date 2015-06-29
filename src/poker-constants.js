@@ -6,6 +6,13 @@ var DEFAULT_DECK = [
 ];
 
 Object.defineProperties(Poker, {
+  // Games.
+  HOLDEM: { value: 'holdem', enumerable: true },
+
+  // Actions.
+  FOLD: { value: 'fold', enumerable: true },
+  BET: { value: 'bet', enumerable: true },
+  CHECK: { value: 'check', enumerable: true },
 
   // Card.
   FACE_UP: { value: 'faceUp', enumerable: true },

@@ -4,6 +4,7 @@ var sequence  = require('run-sequence');
 
 var poker = ['./spec/pluck.js', './src/poker.js', './src/poker-constants.js'];
 var hand = ['./src/card.js', './src/hand.js', './src/hand-static.js'];
+var src = require('./files-src.json');
 
 gulp.task('test-card', function () {
   return gulp.src('./spec/cardSpec.js')
@@ -74,6 +75,15 @@ gulp.task('test-pot', function () {
         './src/sidepot.js',
         './src/pot.js'
       ]),
+      keepRunner: true
+    }));
+});
+
+gulp.task('test-game', function () {
+  return gulp.src('./spec/game.holdemSpec.js')
+    .pipe(jasmine({
+      integration: true,
+      vendor: src.concat(['./spec/pluck.js', './src/game.js', './src/game.holdem.js']),
       keepRunner: true
     }));
 });

@@ -10,6 +10,22 @@ Hand.uid = (function () {
 
 
 /**
+ * Plucks the "value" from each of an array of Card instances.
+ * @param {array<Card>} cards
+ * @returns {array<string>}
+ */
+Hand.values = function (cards) {
+  if (Array.isArray(cards)) {
+    var values = [];
+    for (var i = 0; i < cards.length; i++) {
+      values[i] = cards[i].value;
+    }
+    return values;
+  }
+  return null;
+};
+
+/**
  * Returns the rank of an array of cards.
  * @param {array<Card>} cards
  * @returns {number} Number between 0 (no rank) and 10 (royal flush).
