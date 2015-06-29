@@ -52,6 +52,45 @@ function Game(options) {
   };
 }
 
+
+/**
+ * Instantiates Player instances and write getter methods.
+ * @param {Game} instance
+ * @param {array<Player>} players
+ * @param {array<object>} optionsPlayers
+ */
+Game.addPlayerGetters = function (instance, players, optionsPlayers) {
+  for (var i = 0; i < optionsPlayers.length; i++) {
+    players[i] = new Player(optionsPlayers[i].id, optionsPlayers[i].chips);
+  }
+  Object.defineProperties(instance, {
+    /**
+     * @returns a (new) array with information about all players.
+     */
+    players: function () {
+      var p = [];
+      for (var i = 0; i < players.length; i++) {
+        p[i] = players[i].data()
+      }
+      return p;
+    },
+
+    /**
+     * @param {*} id
+     * @returns info concerning a specific player.
+     */
+    player: function (id) {
+      for (var i = 0; i < players.length; i++) {
+        if (players[i].id === id) {
+          return players[i].data();
+        }
+      }
+      return null;
+    }
+  });
+};
+
+
 Game.prototype = {
   /**
    * Updates the game with information about a player's action.

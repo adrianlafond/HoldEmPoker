@@ -7,35 +7,7 @@ function GameHoldem(options) {
   Game.call(this, options);
 
   var players = [];
-  for (var i = 0; i < options.players.length; i++) {
-    players[i] = new Player(options.players[i].id, options.players[i].chips);
-  }
-
-  Object.defineProperties(this, {
-    /**
-     * @returns a (new) array with information about all players.
-     */
-    players: function () {
-      var p = [];
-      for (var i = 0; i < players.length; i++) {
-        p[i] = players[i].data()
-      }
-      return p;
-    },
-
-    /**
-     * @param {*} id
-     * @returns info concerning a specific player.
-     */
-    player: function (id) {
-      for (var i = 0; i < players.length; i++) {
-        if (players[i].id === id) {
-          return players[i].data();
-        }
-      }
-      return null;
-    }
-  });
+  Game.addPlayerGetters(this, players, options.players);
 }
 
 GameHoldem.prototype = Object.create(Game.prototype);
