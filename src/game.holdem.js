@@ -1,5 +1,13 @@
 /**
  * Hold'em Poker. Child of Game.
+ * @see Game for additional options common to all poker games.
+ * @param {object} options
+ * @param {number=} options.minimumBet Default is 10.
+ * @param {number=} options.smallBlind Default is options.minimumBet / 2.
+ * @param {number=} options.ante Default is 0. Must be >= 0.
+ * @param {string=} options.variation Default is Poker.LIMIT; other options are
+ *   Poker.NO_LIMIT and Poker.POT_LIMIT.
+ * Possible future additions: straddles.
  */
 function GameHoldem(options) {
   // Call the Game parent, which validates and writes getters for options
@@ -8,10 +16,48 @@ function GameHoldem(options) {
 
   var players = [];
   Game.addPlayers(this, players, options.players);
+
+  var minBet = Game.validateBetOption(options, 'minimumBet', 10, 0);
+  var smallBlind = Game.validateBetOption(options, 'smallBlind', minBet / 2, 0, minBet);
+  var bigBlind = options.validateBetOption(options, 'bigBlind', minBet, 0, minBet);
+  var ante = options.validateBetOption(options, 'bigBlind', 0, 0);
+
+  var variation = Poker.LIMIT;
+  if (options.hasOwnProperty('variation') &&
+      (options.variation === Poker.LIMIT ||
+       options.variation === Poker.NO_LIMIT ||
+       options.variation === Poker.POT_LIMIT)) {
+    variaion = Poker.LIMIT;
+  } else {
+    throw '"variation" is not a valid hold\'em poker variant.';
+  }
+
+  Object.defineProperties(this, {
+    minimumBet: { get: function () { return minBet; }, enumerable: true },
+    variation: { get: function () { return variation; }, enumerable: true }
+  });
+  // deal hole cards
+  // small big
+  // big blind
+  // pre-flop betting
+  // burn card
+  // flop card
+  // flop card
+  // flop card
+  // flop betting round
+  // burn card
+  // turn
+  // turn betting round
+  // burn card
+  // river
+  // river betting round
+  // showdown
 }
 
 GameHoldem.prototype = Object.create(Game.prototype);
 GameHoldem.prototype.constructor = GameHoldem;
+
+
 
 // ;(function (root, factory) {
 //   /**

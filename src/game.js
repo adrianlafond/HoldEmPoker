@@ -90,6 +90,28 @@ Game.addPlayers = function (instance, players, optionsPlayers) {
 };
 
 
+/**
+ * Returns a valid numeric value for a betting option or else throws an error.
+ * @param {object} options
+ * @param {string} prop The property of options to be validated.
+ * @param {number} defaultValue
+ * @param {number} minValue
+ * @param {number=} maxValue Defaults to Number.MAX_VALUE.
+ */
+Game.validateBetOption = function (options, prop, defaultValue, minValue, maxValue) {
+  var value = options[prop];
+  maxValue = maxValue || Number.MAX_VALUE;
+  if (typeof value === 'undefined') {
+    return defaultValue;
+  } else if (typeof value === 'number' && !isNaN(value) && value >= minValue &&
+      value <= maxValue) {
+    return value;
+  } else {
+    throw 'The value for "', prop, '" is invalid.';
+  }
+};
+
+
 Game.prototype = {
   /**
    * Updates the game with information about a player's action.

@@ -12,6 +12,8 @@ function Card(options) {
   var face = (options.face === Poker.FACE_UP) ? Poker.FACE_UP : Poker.FACE_DOWN;
   var community = options.hasOwnProperty('community') ?
     !!options.community : false;
+  var hole = options.hasOwnProperty('hole') ?
+    (options.hole === true || options.pocket === true) : false;
 
   Object.defineProperties(this, {
     value: {

@@ -9,6 +9,11 @@ Object.defineProperties(Poker, {
   // Games.
   HOLDEM: { value: 'holdem', enumerable: true },
 
+  // Variations.
+  LIMIT: { value: 'limit', enumerable: true },
+  NO_LIMIT: { value: 'noLimit', enumerable: true },
+  POT_LIMIT: { value: 'potLimit', enumerable: true },
+
   // Actions.
   FOLD: { value: 'fold', enumerable: true },
   BET: { value: 'bet', enumerable: true },
