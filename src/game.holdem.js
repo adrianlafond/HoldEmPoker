@@ -21,6 +21,7 @@ function GameHoldem(options) {
   var smallBlind = Game.validateBetOption(options, 'smallBlind', minBet / 2, 0, minBet);
   var bigBlind = Game.validateBetOption(options, 'bigBlind', minBet, 0, minBet);
   var ante = Game.validateBetOption(options, 'bigBlind', 0, 0);
+  var maxRaises = Game.validateBetOption(options, 'maximumRaises', 3, 0);
 
   var variation = Poker.LIMIT;
   if (options.hasOwnProperty('variation')) {
@@ -34,15 +35,17 @@ function GameHoldem(options) {
   }
 
   Object.defineProperties(this, {
-    minimumBet: { get: function () { return minBet; }, enumerable: true },
+    minBet: { get: function () { return minBet; }, enumerable: true },
     smallBlind: { get: function () { return smallBlind; }, enumerable: true },
     bigBlind: { get: function () { return bigBlind; }, enumerable: true },
     ante: { get: function () { return ante; }, enumerable: true },
+    maxRaises: { get: function () { return maxRaises; }, enumerable: true },
     variation: { get: function () { return variation; }, enumerable: true }
   });
-  // deal hole cards
+  // ante
   // small big
   // big blind
+  // deal hole cards
   // pre-flop betting
   // burn card
   // flop card

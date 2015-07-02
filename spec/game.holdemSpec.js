@@ -16,7 +16,7 @@ describe('Holdem Poker Game', function () {
   }
 
   it('should have a default minimum bet of 10', function () {
-    expect(game.minimumBet).toBe(10);
+    expect(game.minBet).toBe(10);
   });
 
   it('should have a default small blind of 5', function () {
@@ -29,5 +29,9 @@ describe('Holdem Poker Game', function () {
 
   it('should have a default ante of 0', function () {
     expect(game.ante).toBe(0);
+  });
+
+  it('should have a default maximum raises of 3', function () {
+    expect(game.maxRaises).toBe(3);
   });
 });
