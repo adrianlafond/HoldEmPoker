@@ -1,10 +1,10 @@
-describe('Holdem Poker Game', function () {
+describe('Poker Game', function () {
   var players = [
     { id: 'fred', chips: 1000 },
     { id: 'jack', chips: 500 },
     { id: 'wendy', chips: 250 }
   ];
-  var game = new GameHoldem({
+  var game = new Game({
     id: 'holdem',
     type: Poker.HOLDEM,
     action: onAction,

@@ -19,21 +19,25 @@ function GameHoldem(options) {
 
   var minBet = Game.validateBetOption(options, 'minimumBet', 10, 0);
   var smallBlind = Game.validateBetOption(options, 'smallBlind', minBet / 2, 0, minBet);
-  var bigBlind = options.validateBetOption(options, 'bigBlind', minBet, 0, minBet);
-  var ante = options.validateBetOption(options, 'bigBlind', 0, 0);
+  var bigBlind = Game.validateBetOption(options, 'bigBlind', minBet, 0, minBet);
+  var ante = Game.validateBetOption(options, 'bigBlind', 0, 0);
 
   var variation = Poker.LIMIT;
-  if (options.hasOwnProperty('variation') &&
-      (options.variation === Poker.LIMIT ||
-       options.variation === Poker.NO_LIMIT ||
-       options.variation === Poker.POT_LIMIT)) {
-    variaion = Poker.LIMIT;
-  } else {
-    throw '"variation" is not a valid hold\'em poker variant.';
+  if (options.hasOwnProperty('variation')) {
+    if (options.variation === Poker.LIMIT ||
+        options.variation === Poker.NO_LIMIT ||
+        options.variation === Poker.POT_LIMIT) {
+      variation = options.variation;
+    } else {
+      throw String(options.variation) + ' is not a valid hold\'em poker variant.';
+    }
   }
 
   Object.defineProperties(this, {
     minimumBet: { get: function () { return minBet; }, enumerable: true },
+    smallBlind: { get: function () { return smallBlind; }, enumerable: true },
+    bigBlind: { get: function () { return bigBlind; }, enumerable: true },
+    ante: { get: function () { return ante; }, enumerable: true },
     variation: { get: function () { return variation; }, enumerable: true }
   });
   // deal hole cards

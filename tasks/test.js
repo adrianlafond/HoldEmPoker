@@ -80,7 +80,16 @@ gulp.task('test-pot', function () {
 });
 
 gulp.task('test-game', function () {
-  return gulp.src('./spec/game.Spec.js')
+  return gulp.src('./spec/gameSpec.js')
+    .pipe(jasmine({
+      integration: true,
+      vendor: src.concat(['./spec/pluck.js']),
+      keepRunner: true
+    }));
+});
+
+gulp.task('test-game-holdem', function () {
+  return gulp.src('./spec/game.holdemSpec.js')
     .pipe(jasmine({
       integration: true,
       vendor: src.concat(['./spec/pluck.js']),
@@ -96,5 +105,7 @@ gulp.task('test', function () {
     'test-hand',
     'test-player',
     'test-sidepot',
-    'test-pot');
+    'test-pot',
+    'test-game',
+    'test-game-holdem');
 });
