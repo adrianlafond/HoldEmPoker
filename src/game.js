@@ -112,6 +112,18 @@ Game.validateBetOption = function (options, prop, defaultValue, minValue, maxVal
 };
 
 
+/**
+ * @constructor for an Action passed to the action callback.
+ */
+Game.Action = function (player, action, data) {
+  Object.defineProperties(this, {
+    player: { get: function () { return player; }, enumerable: true },
+    action: { get: function () { return action; }, enumerable: true },
+    data: { get: function () { return data; }, enumerable: true }
+  });
+};
+
+
 Game.prototype = {
   /**
    * Updates the game with information about a player's action.

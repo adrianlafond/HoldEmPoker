@@ -18,6 +18,16 @@ Object.defineProperties(Poker, {
   FOLD: { value: 'fold', enumerable: true },
   BET: { value: 'bet', enumerable: true },
   CHECK: { value: 'check', enumerable: true },
+  ANTE: { value: 'ante', enumerable: true },
+  SMALL_BLIND: { value: 'smallBlind', enumerable: true },
+  BIG_BLIND: { value: 'bigBlind', enumerable: true },
+  DEAL_BURN_CARD: { value: 'dealBurnCard', enumerable: true },
+  DEAL_HOLE_CARD: { value: 'dealHoleCard', enumerable: true },
+  DEAL_COMMUNITY_CARD: { value: 'dealCommunityCard', enumerable: true },
+  PLAYER_BETTING_ACTION: { value: 'playerBettingAction', enumerable: true },
+  SHOWDOWN: { value: 'showdown', enumerable: true },
+  WIN_HAND: { value: 'winHand', enumerable: true },
+  DRAW_HAND: { value: 'drawHand', enumerable: true },
 
   // Card.
   FACE_UP: { value: 'faceUp', enumerable: true },
