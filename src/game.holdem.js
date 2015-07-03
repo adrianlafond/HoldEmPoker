@@ -17,6 +17,9 @@ function GameHoldem(options) {
   var players = [];
   Game.addPlayers(this, players, options.players);
 
+  var actions = [];
+  Game.addActions(this, actions);
+
   var minBet = Game.validateBetOption(options, 'minimumBet', 10, 0);
   var smallBlind = Game.validateBetOption(options, 'smallBlind', minBet / 2, 0, minBet);
   var bigBlind = Game.validateBetOption(options, 'bigBlind', minBet, 0, minBet);
@@ -35,13 +38,24 @@ function GameHoldem(options) {
   }
 
   Object.defineProperties(this, {
+    /**
+     * Getter methods for private variables.
+     */
     minBet: { get: function () { return minBet; }, enumerable: true },
     smallBlind: { get: function () { return smallBlind; }, enumerable: true },
     bigBlind: { get: function () { return bigBlind; }, enumerable: true },
     ante: { get: function () { return ante; }, enumerable: true },
     maxRaises: { get: function () { return maxRaises; }, enumerable: true },
-    variation: { get: function () { return variation; }, enumerable: true }
+    variation: { get: function () { return variation; }, enumerable: true },
+
+    /**
+     * @see Game.addActions#go().
+     */
+    go: function (info) {
+      //
+    }
   });
+
   // ante
   // small big
   // big blind

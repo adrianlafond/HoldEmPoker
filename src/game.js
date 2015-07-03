@@ -91,6 +91,77 @@ Game.addPlayers = function (instance, players, optionsPlayers) {
 
 
 /**
+ * Writes methods for action history and progress.
+ * @param {Game} instance
+ * @param {array>} history
+ */
+Game.addActions = function (instance, actions) {
+  Object.defineProperties(instance, {
+    /**
+     * Updates the game with information about a player's action. Designer to be
+     * overridden by a method in a specific game class.
+     * @param {object} info
+     * @param {*} info.id The ID of the player who must take action.
+     * @param {string} info.action The player's action; e.g., Poker.FOLD.
+     * @param {number=} info.value If action is Poker.BET, the amount.
+     */
+    go: function (info) {
+      //
+    },
+
+    /**
+     * @returns <array> copy of history of each action in the game.
+     */
+    history: function () {
+      var h = [];
+      actions.history.forEach(function (item, i) {
+        h[i] = {};
+        for (var key in item) {
+          if (item.hasOwnProperty(key)) {
+            h[i][key] = item[key];
+          }
+        }
+      });
+      return h;
+    },
+
+    /**
+     * @returns <Game.Action> clone of any open Game.Action.
+     */
+    action: function () {
+      return actions.action ? actions.action.clone() : null;
+    }
+  });
+};
+
+
+/**
+ * @constructor for an Action passed to the action callback.
+ */
+Game.Action = function (player, action, data) {
+  Object.defineProperties(this, {
+    player: { get: function () { return player; }, enumerable: true },
+    action: { get: function () { return action; }, enumerable: true },
+    data: { get: function () { return data; }, enumerable: true },
+    clone: {
+      value: function () {
+        var obj = data ? {} : null;
+        if (obj) {
+          for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+              obj[key] = data[key];
+            }
+          }
+        }
+        return new Game.Action(player, action, obj);
+      },
+      enumerable: true
+    }
+  });
+};
+
+
+/**
  * Returns a valid numeric value for a betting option or else throws an error.
  * @param {object} options
  * @param {string} prop The property of options to be validated.
@@ -107,32 +178,6 @@ Game.validateBetOption = function (options, prop, defaultValue, minValue, maxVal
       value <= maxValue) {
     return value;
   } else {
-    throw 'The value for "', prop, '" is invalid.';
-  }
-};
-
-
-/**
- * @constructor for an Action passed to the action callback.
- */
-Game.Action = function (player, action, data) {
-  Object.defineProperties(this, {
-    player: { get: function () { return player; }, enumerable: true },
-    action: { get: function () { return action; }, enumerable: true },
-    data: { get: function () { return data; }, enumerable: true }
-  });
-};
-
-
-Game.prototype = {
-  /**
-   * Updates the game with information about a player's action.
-   * @param {object} info
-   * @param {*} info.id The ID of the player who must take action.
-   * @param {string} info.action The player's action; e.g., Poker.FOLD.
-   * @param {number=} info.value If action is Poker.BET, the amount.
-   */
-  go: function (info) {
-    //
+    throw ['The value for "', prop, '" is invalid.'].join('');
   }
 };
