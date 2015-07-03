@@ -20,11 +20,10 @@ function GameHoldem(options) {
   var actions = [];
   Game.addActions(this, actions);
 
-  var minBet = Game.validateBetOption(options, 'minimumBet', 10, 0);
+  var minBet = Game.validateBetOption(options, 'minBet', 10, 0);
   var smallBlind = Game.validateBetOption(options, 'smallBlind', minBet / 2, 0, minBet);
-  var bigBlind = Game.validateBetOption(options, 'bigBlind', minBet, 0, minBet);
-  var ante = Game.validateBetOption(options, 'bigBlind', 0, 0);
-  var maxRaises = Game.validateBetOption(options, 'maximumRaises', 3, 0);
+  var ante = Game.validateBetOption(options, 'ante', 0, 0);
+  var maxRaises = Game.validateBetOption(options, 'maxRaises', 3, 0);
 
   var variation = Poker.LIMIT;
   if (options.hasOwnProperty('variation')) {
@@ -42,8 +41,8 @@ function GameHoldem(options) {
      * Getter methods for private variables.
      */
     minBet: { get: function () { return minBet; }, enumerable: true },
+    bigBlind: { get: function () { return minBet; }, enumerable: true },
     smallBlind: { get: function () { return smallBlind; }, enumerable: true },
-    bigBlind: { get: function () { return bigBlind; }, enumerable: true },
     ante: { get: function () { return ante; }, enumerable: true },
     maxRaises: { get: function () { return maxRaises; }, enumerable: true },
     variation: { get: function () { return variation; }, enumerable: true },

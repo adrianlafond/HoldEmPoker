@@ -4,12 +4,13 @@ describe('Holdem Poker Game', function () {
     { id: 'jack', chips: 500 },
     { id: 'wendy', chips: 250 }
   ];
-  var game = new GameHoldem({
+  var opts = {
     id: 'holdem',
     type: Poker.HOLDEM,
     action: onAction,
     players: players
-  });
+  };
+  var game = new GameHoldem(opts);
 
   function onAction(info) {
     //
@@ -33,5 +34,13 @@ describe('Holdem Poker Game', function () {
 
   it('should have a default maximum raises of 3', function () {
     expect(game.maxRaises).toBe(3);
+  });
+
+  it('will not allow a small blind larger than the minimum bet', function () {
+    opts.minBet = 20;
+    opts.smallBlind = 50;
+    expect(function () {
+      new GameHoldem(opts);
+    }).toThrow();
   });
 });
