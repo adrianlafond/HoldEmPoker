@@ -46,5 +46,5 @@ describe('Holdem Poker Game', function () {
   });
   it('will have a default variation of limit', function () {
     expect(game.variation).toBe(Poker.LIMIT);
-  })
+  });
 });
