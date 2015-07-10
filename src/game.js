@@ -66,25 +66,31 @@ Game.addPlayers = function (instance, players, optionsPlayers) {
     /**
      * @returns a (new) array with information about all players.
      */
-    players: function () {
-      var p = [];
-      for (var i = 0; i < players.length; i++) {
-        p[i] = players[i].data();
-      }
-      return p;
+    players: {
+      get: function () {
+        var p = [];
+        for (var i = 0; i < players.length; i++) {
+          p[i] = players[i].data();
+        }
+        return p;
+      },
+      enumerable: true
     },
 
     /**
      * @param {*} id
      * @returns info concerning a specific player.
      */
-    player: function (id) {
-      for (var i = 0; i < players.length; i++) {
-        if (players[i].id === id) {
-          return players[i].data();
+    player: {
+      value: function (id) {
+        for (var i = 0; i < players.length; i++) {
+          if (players[i].id === id) {
+            return players[i].data();
+          }
         }
-      }
-      return null;
+        return null;
+      },
+      enumerable: true
     }
   });
 };
