@@ -1,1 +1,4 @@
-// Load list of game src files.
+React.render(
+  <h1>Hello</h1>,
+  document.getElementById('demo')
+);

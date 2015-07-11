@@ -9,7 +9,7 @@
   "description": "A poker game engine.",
   "keywords": [],
   "scripts": {
-    "web": "http-server -c-1"
+    "demo": "http-server -c-1"
   },
   "homepage": "",
   "license": {
