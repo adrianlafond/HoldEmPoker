@@ -1,13 +1,13 @@
 [
-  "./src/card.js",
-  "./src/deck.js",
-  "./src/hand.js",
-  "./src/hand-static.js",
-  "./src/player.js",
-  "./src/sidepot.js",
-  "./src/pot.js",
-  "./src/game.js",
-  "./src/game.holdem.js",
-  "./src/poker.js",
-  "./src/poker-constants.js"
+  "src/card.js",
+  "src/deck.js",
+  "src/hand.js",
+  "src/hand-static.js",
+  "src/player.js",
+  "src/sidepot.js",
+  "src/pot.js",
+  "src/game.js",
+  "src/game.holdem.js",
+  "src/poker.js",
+  "src/poker-constants.js"
 ]

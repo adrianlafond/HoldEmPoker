@@ -6,9 +6,11 @@
   <title>Hold 'em Poker</title>
 
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/demo/css/style.css">
 </head>
 <body>
+
+  <div id="demo"></div>
 
   <div
     class="container"
@@ -19,7 +21,7 @@
     </div>
 
     <div
-      class="alert alert-danger alert-dismissable"
+      class="alert alert-danger"
       ng-if="status.error"
       ng-cloak>
       <button
@@ -154,18 +156,25 @@
 
 
   <!-- LIB FILES -->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.3/lodash.min.js"></script>
-  <script src="lib/disbranded.poker.js"></script>
-  <script src="lib/disbranded.poker.lingo.en.js"></script>
-  <script src="lib/disbranded.poker.game.holdem.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.min.jss"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/reqwest/1.1.6/reqwest.min.js"></script>
+
+  <!-- GAME FILES -->
+  <script src="src/cards.js"></script>
+  <script src="src/card.js"></script>
+  <script src="src/deck.js"></script>
+  <script src="src/hand.js"></script>
+  <script src="src/hand-static.js"></script>
+  <script src="src/player.js"></script>
+  <script src="src/sidepot.js"></script>
+  <script src="src/pot.js"></script>
+  <script src="src/game.js"></script>
+  <script src="src/game.holdem.js"></script>
+  <script src="src/poker.js"></script>
+  <script src="src/poker-constants.js"></script>
 
   <!-- APP FILES -->
-  <script src="js/game.js"></script>
-  <script src="js/game.ctrl.js"></script>
-  <script src="js/game.drtv.js"></script>
-  <script src="js/game.svc.js"></script>
+  <script src="/demo/js/app/app.react.js" type="text/jsx"></script>
 </body>
 </html>
