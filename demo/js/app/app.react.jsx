@@ -325,7 +325,7 @@
     render: function () {
       return (
         <div className="hole-cards">
-          <Card />
+          <Card card="AS" face="up" />
           <Card />
         </div>
       );
@@ -336,8 +336,81 @@
    *
    */
   var Card = React.createClass({
+    propTypes: {
+      card: React.PropTypes.string,
+      face: React.PropTypes.string
+    },
     render: function () {
-      return <div className="card"></div>;
+      var up = this.props.face === 'up';
+      var classes = 'card ' + (up ? 'up' : 'down');
+      var file = this.file(this.props.card);
+      console.log(file)
+      var style = (up && file) ? { backgroundImage: file } : null;
+      return (
+        <div
+          className={classes}
+          style={style}>
+        </div>
+      );
+    },
+    file: function (card) {
+      var files = {
+        '2C': '5_of_clubs.png',
+        '2D': '5_of_diamonds.png',
+        '2H': '5_of_hearts.png',
+        '2S': '5_of_spades.png',
+        '3C': '3_of_clubs.png',
+        '3D': '3_of_diamonds.png',
+        '3H': '3_of_hearts.png',
+        '3S': '3_of_spades.png',
+        '4C': '4_of_clubs.png',
+        '4D': '4_of_diamonds.png',
+        '4H': '4_of_hearts.png',
+        '4S': '4_of_spades.png',
+        '5C': '5_of_clubs.png',
+        '5D': '5_of_diamonds.png',
+        '5H': '5_of_hearts.png',
+        '5S': '5_of_spades.png',
+        '6C': '6_of_clubs.png',
+        '6D': '6_of_diamonds.png',
+        '6H': '6_of_hearts.png',
+        '6S': '6_of_spades.png',
+        '7C': '7_of_clubs.png',
+        '7D': '7_of_diamonds.png',
+        '7H': '7_of_hearts.png',
+        '7S': '7_of_spades.png',
+        '8C': '8_of_clubs.png',
+        '8D': '8_of_diamonds.png',
+        '8H': '8_of_hearts.png',
+        '8S': '8_of_spades.png',
+        '9C': '9_of_clubs.png',
+        '9D': '9_of_diamonds.png',
+        '9H': '9_of_hearts.png',
+        '9S': '9_of_spades.png',
+        'TC': '10_of_clubs.png',
+        'TD': '10_of_diamonds.png',
+        'TH': '10_of_hearts.png',
+        'TS': '10_of_spades.png',
+        'JC': 'jack_of_clubs.png',
+        'JD': 'jack_of_diamonds.png',
+        'JH': 'jack_of_hearts.png',
+        'JS': 'jack_of_spades.png',
+        'QC': 'queen_of_clubs.png',
+        'QD': 'queen_of_diamonds.png',
+        'QH': 'queen_of_hearts.png',
+        'QS': 'queen_of_spades.png',
+        'KC': 'king_of_clubs.png',
+        'KD': 'king_of_diamonds.png',
+        'KH': 'king_of_hearts.png',
+        'KS': 'king_of_spades.png',
+        'AC': 'ace_of_clubs.png',
+        'AD': 'ace_of_diamonds.png',
+        'AH': 'ace_of_hearts.png',
+        'AS': 'ace_of_spades.png',
+        'down': 'down.png'
+      };
+      var filename = files[card];
+      return filename ? ('url(/demo/cards/' + filename +')') : null;
     }
   });
 
