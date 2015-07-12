@@ -16,6 +16,7 @@
   background-position: 0 0;
   background-color: #eee;
   border-radius: 6px;
+  margin-right: 5px;
 }
 
 .table .player .hole-cards .down {
@@ -44,7 +45,12 @@
   color: #900;
 }
 
+.table .player .button {
+  margin: 0 0 0 8px;
+}
+
 .table .player .bet {
+  margin: 0 0 0 8px;
   color: #900;
 }
 
@@ -64,6 +70,7 @@
   background-position: 4px;
   background-color: #eee;
   border-radius: 6px;
+  margin: 0 5px 0 0;
 }
 
 .table .board .community-cards img {

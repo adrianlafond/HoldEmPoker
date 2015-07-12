@@ -10,155 +10,11 @@
 </head>
 <body>
 
-  <div id="demo"></div>
-
-  <div
-    class="container"
-    ng-controller="CtrlApp">
-
-    <div class="page-header">
-      <h1>Hold 'em Poker</h1>
-    </div>
-
-    <div
-      class="alert alert-danger"
-      ng-if="status.error"
-      ng-cloak>
-      <button
-        type="button"
-        class="close"
-        data-dismiss="alert"
-        aria-hidden="true"
-        ng-click="closeError()">
-        &times;
-      </button>
-      <p>{{status.error}}</p>
-    </div>
-
-    <!-- TABLE -->
-    <div class="table" ng-cloak>
-      <!-- PLAYERS 1 - 4 -->
-      <div class="row">
-        <div class="col-md-2 player" computer-player="1"></div>
-        <div class="col-md-2 player" computer-player="2"></div>
-        <div class="col-md-2 col-md-offset-4 player" computer-player="3"></div>
-        <div class="col-md-2 player" computer-player="4"></div>
-      </div>
-
-      <!-- THE BOARD / CENTER OF TABLE -->
-      <div class="row">
-        <div class="col-md-12">
-
-          <div class="board">
-            <div class="community-cards">
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-            </div>
-
-            <div class="pots" ng-if="status.active">
-              <span ng-repeat="chips in status.pots">
-                ${{chips}}
-              </span>
-            </div>
-
-            <div class="setup" ng-if="!status.active">
-              <select
-                class="form-control"
-                ng-model="settings.limit"
-                ng-options="opt as opt.label for opt in options.limits">
-              </select>
-
-              <button
-                class="btn btn-primary"
-                ng-click="deal()"
-                ng-disabled="">
-                Deal
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- PLAYERS 5 - 9 INCLUDING HUMAN -->
-      <div class="row">
-        <div class="col-md-2 player" computer-player="9"></div>
-        <div class="col-md-2 player" computer-player="8"></div>
-        <div class="col-md-4 player" ng-controller="CtrlHuman">
-          <!-- HUMAN -->
-          <div class="hole-cards" player-cards="human">
-            <div class="card"></div>
-            <div class="card"></div>
-          </div>
-          <h4 class="human" contenteditable>
-            Human
-            <span
-              class="label label-info"
-              ng-if="status.button === player.id">
-              D
-            </span>
-          </h4>
-          <h5>
-            $100
-            <span class="bet" ng-if="player.hasOwnProperty('bet')">
-              ${{player.bet}}
-            </span>
-          </h5>
-        </div>
-        <div class="col-md-2 player" computer-player="6"></div>
-        <div class="col-md-2 player" computer-player="5"></div>
-      </div>
-
-    </div>
-  </div>
-
-
-  <!-- COMPUTER PLAYER TEMPLATE -->
-  <script id="computer-player.html" type="text/ng-template">
-    <div ng-if="visible">
-      <div class="hole-cards" player-cards>
-        <div class="card"></div>
-        <div class="card"></div>
-      </div>
-      <h4
-        ng-class="{ seated: player.seated }">
-        {{player.seated ? player.name : '[empty]'}}
-        <span
-          class="label label-info"
-          ng-if="status.button === player.id">
-          D
-        </span>
-      </h4>
-      <h5>
-        ${{player ? player.chips : 0}}
-        <span class="bet" ng-if="player.hasOwnProperty('bet')">
-          ${{player.bet}}
-        </span>
-      </h5>
-      <div ng-if="!status.active">
-        <button
-          class="btn btn-default"
-          ng-if="!player.seated"
-          ng-click="addPlayer(seat)">
-          Add Player
-        </button>
-        <button
-          class="btn btn-default"
-          ng-if="player.seated"
-          ng-click="removePlayer(seat)">
-          Remove Player
-        </button>
-      </div>
-    </div>
-  </script>
-
+  <div id="demo" class="container"></div>
 
   <!-- LIB FILES -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/reqwest/1.1.6/reqwest.min.js"></script>
 
   <!-- GAME FILES -->
   <script src="src/card.js"></script>
@@ -174,6 +30,6 @@
   <script src="src/poker-constants.js"></script>
 
   <!-- APP FILES -->
-  <script src="/demo/js/app/app.react.js" type="text/jsx"></script>
+  <script src="/demo/js/app/app.react.jsx" type="text/jsx"></script>
 </body>
 </html>
