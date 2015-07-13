@@ -1,6 +1,5 @@
-.setup select {
-  display: inline;
-  width: auto;
+.setup .form-group {
+  margin-right: 8px;
 }
 
 /* PLAYER */

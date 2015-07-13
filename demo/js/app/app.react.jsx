@@ -16,7 +16,16 @@
       { name: 'Sophie', id: 'sophie', seated: true, chips: 100, cards: [], bet: 0 },
       { name: 'Tulip', id: 'tulip', seated: true, chips: 100, cards: [], bet: 0 }
     ],
+    variants: [
+      { label: 'Fixed Limit', value: Poker.FIXED_LIMIT },
+      { label: 'Pot Limit', value: Poker.POT_LIMIT },
+      { label: 'No Limit', value: Poker.NO_LIMIT }
+    ],
+    variant: Poker.FIXED_LIMIT,
+    pots: [0],
+    community: [],
     live: false,
+    game: null,
     updateGame: function () {},
     gameContext: null
   };
@@ -41,6 +50,39 @@
     app.players[seat].seated = false;
     console.log(app.players[seat])
     update();
+  }
+
+  // Start the hand.
+  function deal() {
+    app.live = true;
+    var players = [];
+    app.players.map(function (player) {
+      players.push({
+        id: player.id,
+        chips: player.chips
+      });
+    });
+    app.game = new Poker.game({
+      id: 'demo',
+      type: Poker.HOLDEM,
+      action: onGameAction,
+      players: players
+    });
+    update();
+  }
+
+  // Callback from
+  function onGameAction(action) {
+    console.log(action)
+  }
+
+  function playerById(id) {
+    for (var i = 0; i < app.players.length; i++) {
+      if (app.players[i].id === id) {
+        return app.players[i];
+      }
+    }
+    return null;
   }
 
 
@@ -117,7 +159,6 @@
     propTypes: {
       app: React.PropTypes.object.required
     },
-
     render: function () {
       return (
         <div className="table">
@@ -145,36 +186,10 @@
       return (
         <div className="row">
           <div className="col-md-12">
-
             <div className="board">
-              <div className="community-cards">
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-              </div>
-
-              <div className="pots" ng-if="status.active">
-                <span ng-repeat="chips in status.pots">
-                  chips
-                </span>
-              </div>
-
-              <div className="setup" ng-if="!status.active">
-                <select
-                  className="form-control"
-                  ng-model="settings.limit"
-                  ng-options="opt as opt.label for opt in options.limits">
-                </select>
-
-                <button
-                  className="btn btn-primary"
-                  ng-click="deal()"
-                  ng-disabled="">
-                  Deal
-                </button>
-              </div>
+              <CommunityCards app={this.props.app} />
+              <Pots app={this.props.app} />
+              <GameSetup app={this.props.app} />
             </div>
           </div>
         </div>
@@ -195,6 +210,76 @@
     }
   });
 
+
+  var CommunityCards = React.createClass({
+    propTypes: {
+      app: React.PropTypes.object.required
+    },
+    render: function () {
+      var cards = [];
+      for (var i = 0; i < 5; i++) {
+        cards[i] = <Card card={this.props.app.community[i]} face="up" />
+      }
+      return (
+        <div className="community-cards">{cards}</div>
+      );
+    }
+  })
+
+  var Pots = React.createClass({
+    propTypes: {
+      app: React.PropTypes.object.required
+    },
+    render: function () {
+      var items = [];
+      this.props.app.pots.map(function (chips, index) {
+        items[index] = (<span>{chips}</span>);
+      });
+      return this.props.app.live ? (
+        <div className="pots">{items}</div>
+      ) : null;
+    }
+  })
+
+  /**
+   * Set game options and start/deal.
+   */
+  var GameSetup = React.createClass({
+    propTypes: {
+      app: React.PropTypes.object.required
+    },
+    render: function () {
+      var variants = [];
+      app.variants.map(function (item, index) {
+        variants[index] = <option value={item.value}>{item.label}</option>
+      });
+      return this.props.app.live ? null : (
+        <div className="setup form-inline">
+          <div className="form-group">
+            <select
+              className="form-control"
+              value={app.variant}>
+              {variants}
+            </select>
+          </div>
+          <div className="form-group">
+            <button
+              className="btn btn-primary"
+              onClick={this.deal}>
+              Deal
+            </button>
+          </div>
+        </div>
+      );
+    },
+    deal: function () {
+      deal();
+    }
+  });
+
+  /**
+   *
+   */
   var PlayerMixin = {
     classes: function () {
       var str = 'col-md-2 player';
@@ -229,10 +314,10 @@
         <span className="bet">{player.bet}</span> : null;
       return (
         <div className={this.classes()}>
-          <PlayerCards />
+          <PlayerCards cards={player.cards.slice(0, 2)} />
           <h4 className={player.seated ? 'seated' : null}>
             { player.name }
-            <Button dealer={app.button === this.props.seat} />
+            <DealerButton dealer={app.button === this.props.seat} />
           </h4>
           <h5>
             { player.seated ? player.chips : null }
@@ -284,13 +369,14 @@
       seat: React.PropTypes.number
     },
 
+    //  cards={player.cards.slice(0, 2)} cards={player.cards.slice(0, 2)}
     render: function () {
       return (
         <div className={this.classes()} ng-controller="CtrlHuman">
           <PlayerCards />
           <h4 className="human" contenteditable>
             Human
-            <Button dealer={app.button === this.props.seat} />
+            <DealerButton dealer={app.button === this.props.seat} />
           </h4>
           <h5>
             $100
@@ -303,7 +389,7 @@
     }
   });
 
-  var Button = React.createClass({
+  var DealerButton = React.createClass({
     propTypes: {
       dealer: React.PropTypes.bool
     },
@@ -322,11 +408,21 @@
    *
    */
   var PlayerCards = React.createClass({
+    propTypes: {
+      cards: React.PropTypes.array,
+      face: React.PropTypes.oneOf['up', 'down']
+    },
+    getDefaultProps: function() {
+      return {
+        cards: [],
+        face: 'down'
+      };
+    },
     render: function () {
       return (
         <div className="hole-cards">
-          <Card card="AS" face="up" />
-          <Card />
+          <Card card={this.props.cards[0]} face={this.props.face} />
+          <Card card={this.props.cards[1]} face={this.props.face} />
         </div>
       );
     }
@@ -342,10 +438,12 @@
     },
     render: function () {
       var up = this.props.face === 'up';
-      var classes = 'card ' + (up ? 'up' : 'down');
+      var classes = 'card';
       var file = this.file(this.props.card);
-      console.log(file)
       var style = (up && file) ? { backgroundImage: file } : null;
+      if (file) {
+        classes += up ? ' up' : ' down';
+      }
       return (
         <div
           className={classes}
