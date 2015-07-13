@@ -36,6 +36,65 @@ function GameHoldem(options) {
     }
   }
 
+  var step = 'ante';
+  var steps = [
+    'ante',
+    'smallblind',
+    'bigblind',
+    'deal-hole1',
+    'deal-hole2',
+    'bet-flopreflop',
+    'burn-flop',
+    'flop1',
+    'flop2',
+    'flop3',
+    'bet-flop',
+    'burn-turn',
+    'turn',
+    'bet-turn',
+    'burn-river',
+    'river',
+    'bet-river',
+    'showdown'
+  ];
+
+  // Used for ensuring all players are accounted for in antes, betting rounds, etc.
+  var seats = [];
+
+  function go(info) {
+    switch (step) {
+      case 'ante':
+        doAnte();
+        break;
+      case 'smallblind':
+        doSmallBlind();
+        break;
+    }
+  }
+
+  function doAnte() {
+    if (ante) {
+      //
+    } else {
+      step = 'smallblind';
+      go();
+    }
+  }
+
+  function doSmallBlind() {
+    var a = new Game.Action(
+      players[0].id,
+      Poker.SMALL_BLIND,
+      { chips: smallBlind }
+    );
+    console.log(a.player);
+    console.log(a.action);
+    console.log(a.data)
+    // action();
+  }
+
+
+
   Object.defineProperties(this, {
     /**
      * Getter methods for private variables.
@@ -48,30 +107,15 @@ function GameHoldem(options) {
     variation: { get: function () { return variation; }, enumerable: true },
 
     /**
-     * @see Game.addActions#go().
+     * Updates the game with information about a player's action. Designer to be
+     * overridden by a method in a specific game class.
+     * @param {object} info
+     * @param {*} info.id The ID of the player who must take action.
+     * @param {string} info.action The player's action; e.g., Poker.FOLD.
+     * @param {number=} info.value If action is Poker.BET, the amount.
      */
-    go: function (info) {
-      //
-    }
+    go: { value: go, enumerable: true }
   });
-
-  // ante
-  // small big
-  // big blind
-  // deal hole cards
-  // pre-flop betting
-  // burn card
-  // flop card
-  // flop card
-  // flop card
-  // flop betting round
-  // burn card
-  // turn
-  // turn betting round
-  // burn card
-  // river
-  // river betting round
-  // showdown
 }
 
 GameHoldem.prototype = Object.create(Game.prototype);

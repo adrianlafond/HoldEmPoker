@@ -4,7 +4,7 @@
   var app = {
     title: 'Hold \'em Poker',
     error: null,
-    button: 0,
+    button: null,
     players: [
       { name: 'Eamon', id: 'eamon', seated: true, chips: 100, cards: [], bet: 0 },
       { name: 'Elizabeth', id: 'elizabeth', seated: true, chips: 100, cards: [], bet: 0 },
@@ -57,10 +57,13 @@
     app.live = true;
     var players = [];
     app.players.map(function (player) {
-      players.push({
-        id: player.id,
-        chips: player.chips
-      });
+      if (player.seated) {
+        players.push({
+          id: player.id,
+          chips: player.chips
+        });
+        app.button = player.id;
+      }
     });
     app.game = new Poker.game({
       id: 'demo',
@@ -69,6 +72,7 @@
       players: players
     });
     update();
+    app.game.go();
   }
 
   // Callback from
@@ -317,7 +321,7 @@
           <PlayerCards cards={player.cards.slice(0, 2)} />
           <h4 className={player.seated ? 'seated' : null}>
             { player.name }
-            <DealerButton dealer={app.button === this.props.seat} />
+            <DealerButton dealer={app.button === player.id} />
           </h4>
           <h5>
             { player.seated ? player.chips : null }

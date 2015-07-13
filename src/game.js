@@ -104,18 +104,6 @@ Game.addPlayers = function (instance, players, optionsPlayers) {
 Game.addActions = function (instance, actions) {
   Object.defineProperties(instance, {
     /**
-     * Updates the game with information about a player's action. Designer to be
-     * overridden by a method in a specific game class.
-     * @param {object} info
-     * @param {*} info.id The ID of the player who must take action.
-     * @param {string} info.action The player's action; e.g., Poker.FOLD.
-     * @param {number=} info.value If action is Poker.BET, the amount.
-     */
-    go: function (info) {
-      //
-    },
-
-    /**
      * @returns <array> copy of history of each action in the game.
      */
     history: function () {
@@ -132,6 +120,7 @@ Game.addActions = function (instance, actions) {
     },
 
     /**
+     * TODO: Uh-oh! This is a duplicate method name of this.action above!
      * @returns <Game.Action> clone of any open Game.Action.
      */
     action: function () {
