@@ -10,31 +10,35 @@
  * Possible future additions: straddles.
  */
 function GameHoldem(options) {
-  // Call the Game parent, which validates and writes getters for options
-  // common to all poker variants.
-  Game.call(this, options);
+  var data = {};
+  Game.call(this, options, data);
 
-  var players = [];
-  Game.addPlayers(this, players, options.players);
+  data.minBet = Game.validateBetOption('minBet', options.minBet, 10, 0);
+  data.smallBlind = Game.validateBetOption('smallBlind', options.smallBlind,
+    data.minBet / 2, 0, data.minBet);
+  data.ante = Game.validateBetOption('ante', options.ante, 0, 0);
+  data.maxRaises = Game.validateBetOption('maxRaises', options.maxRaises, 3, 0);
 
-  var actions = [];
-  Game.addActions(this, actions);
-
-  var minBet = Game.validateBetOption(options, 'minBet', 10, 0);
-  var smallBlind = Game.validateBetOption(options, 'smallBlind', minBet / 2, 0, minBet);
-  var ante = Game.validateBetOption(options, 'ante', 0, 0);
-  var maxRaises = Game.validateBetOption(options, 'maxRaises', 3, 0);
-
-  var variation = Poker.LIMIT;
-  if (options.hasOwnProperty('variation')) {
-    if (options.variation === Poker.LIMIT ||
-        options.variation === Poker.NO_LIMIT ||
-        options.variation === Poker.POT_LIMIT) {
-      variation = options.variation;
-    } else {
+  switch (options.variation) {
+    case Poker.LIMIT:
+    case Poker.NO_LIMIT:
+    case Poker.POT_LIMIT:
+      data.variation = options.variation;
+      break;
+    case undefined:
+    case null:
+      data.variation = Poker.LIMIT;
+      break;
+    default:
       throw String(options.variation) + ' is not a valid hold\'em poker variant.';
-    }
   }
+
+  Game.getter(this, data, 'minBet');
+  Game.getter(this, data, 'smallBlind');
+  Game.getter(this, data, 'bigBlind', 'minBet');
+  Game.getter(this, data, 'ante');
+  Game.getter(this, data, 'maxRaises');
+  Game.getter(this, data, 'variation');
 
   var step = 'ante';
   var steps = [
@@ -83,39 +87,29 @@ function GameHoldem(options) {
 
   function doSmallBlind() {
     var a = new Game.Action(
-      players[0].id,
+      data.players[0].id,
       Poker.SMALL_BLIND,
       { chips: smallBlind }
     );
-    console.log(a.player);
-    console.log(a.action);
-    console.log(a.data)
+    // console.log(a.player);
+    // console.log(a.action);
+    // console.log(a.data);
     // action();
   }
 
 
-
-  Object.defineProperties(this, {
-    /**
-     * Getter methods for private variables.
-     */
-    minBet: { get: function () { return minBet; }, enumerable: true },
-    bigBlind: { get: function () { return minBet; }, enumerable: true },
-    smallBlind: { get: function () { return smallBlind; }, enumerable: true },
-    ante: { get: function () { return ante; }, enumerable: true },
-    maxRaises: { get: function () { return maxRaises; }, enumerable: true },
-    variation: { get: function () { return variation; }, enumerable: true },
-
-    /**
-     * Updates the game with information about a player's action. Designer to be
-     * overridden by a method in a specific game class.
-     * @param {object} info
-     * @param {*} info.id The ID of the player who must take action.
-     * @param {string} info.action The player's action; e.g., Poker.FOLD.
-     * @param {number=} info.value If action is Poker.BET, the amount.
-     */
-    go: { value: go, enumerable: true }
-  });
+ /**
+  * Updates the game with information about a player's action. Designer to be
+  * overridden by a method in a specific game class.
+  * @param {object} info
+  * @param {*} info.id The ID of the player who must take action.
+  * @param {string} info.action The player's action; e.g., Poker.FOLD.
+  * @param {number=} info.value If action is Poker.BET, the amount.
+  */
+ Object.defineProperty(this, 'go', {
+   value: go,
+   enumerable: true,
+ })
 }
 
 GameHoldem.prototype = Object.create(Game.prototype);

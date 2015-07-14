@@ -9,7 +9,7 @@ describe('Poker Game', function () {
     type: Poker.HOLDEM,
     action: onAction,
     players: players
-  });
+  }, {});
 
   function onAction(info) {
     //
