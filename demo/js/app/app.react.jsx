@@ -75,9 +75,23 @@
     app.game.go();
   }
 
-  // Callback from
+  // Callback from game instance.
   function onGameAction(action) {
-    console.log(action)
+    var player = playerById(action.player);
+    var chips;
+    switch (action.type) {
+      case 'ante':
+        break;
+      case 'smallBlind':
+      case 'bigBlind':
+        player.chips -= action.data.chips;
+        update();
+        app.game.go({ action: action, data: { bet: chips } });
+        break;
+      case 'dealHole':
+        console.dir(action);
+        break;
+    }
   }
 
   function playerById(id) {

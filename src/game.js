@@ -20,7 +20,7 @@ function Game(options, data) {
   Game.validatePlayers(options.players, data);
   Game.getter(this, data, 'id');
   Game.getter(this, data, 'type');
-  Game.getter(this, data, 'action');
+  Game.getter(this, data, 'action', 'actionCallback');
   Game.addPlayerMethods(this, data);
   Game.addHistory(this, data);
 }
@@ -37,7 +37,7 @@ Game.validateId = function (id, data) {
 };
 Game.validateActionCallback = function (action, data) {
   if (typeof action === 'function') {
-    data.action = action;
+    data.actionCallback = action;
   } else {
     throw 'Game "action" callback is not defined.';
   }
@@ -157,25 +157,11 @@ Game.addHistory = function (instance, data) {
 /**
  * @constructor for an Action passed to the action callback.
  */
-Game.Action = function (player, action, data) {
+Game.Action = function (player, type, data) {
   Object.defineProperties(this, {
     player: { get: function () { return player; }, enumerable: true },
-    action: { get: function () { return action; }, enumerable: true },
-    data: { get: function () { return data; }, enumerable: true },
-    clone: {
-      value: function () {
-        var obj = data ? {} : null;
-        if (obj) {
-          for (var key in data) {
-            if (data.hasOwnProperty(key)) {
-              obj[key] = data[key];
-            }
-          }
-        }
-        return new Game.Action(player, action, obj);
-      },
-      enumerable: true
-    }
+    type: { get: function () { return type; }, enumerable: true },
+    data: { get: function () { return data; }, enumerable: true }
   });
 };
 

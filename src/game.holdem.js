@@ -11,6 +11,7 @@
  */
 function GameHoldem(options) {
   var data = {};
+  var action = {};
   Game.call(this, options, data);
 
   data.minBet = Game.validateBetOption('minBet', options.minBet, 10, 0);
@@ -40,63 +41,106 @@ function GameHoldem(options) {
   Game.getter(this, data, 'maxRaises');
   Game.getter(this, data, 'variation');
 
-  var step = 'ante';
-  var steps = [
-    'ante',
-    'smallblind',
-    'bigblind',
-    'deal-hole1',
-    'deal-hole2',
-    'bet-flopreflop',
-    'burn-flop',
-    'flop1',
-    'flop2',
-    'flop3',
-    'bet-flop',
-    'burn-turn',
-    'turn',
-    'bet-turn',
-    'burn-river',
-    'river',
-    'bet-river',
-    'showdown'
-  ];
+  action.step = null;
+  action.data = null;
 
-  // Used for ensuring all players are accounted for in antes, betting rounds, etc.
-  var seats = [];
-
-  function go(info) {
-    switch (step) {
-      case 'ante':
-        doAnte();
-        break;
-      case 'smallblind':
-        doSmallBlind();
-        break;
+  // Get a player by ID.
+  action.player = function (id) {
+    for (var i = 0; i < data.players.length; i++) {
+      if (data.players[i].id === id) {
+        return data.players[i];
+      }
     }
   }
+  // action.steps = [
+  //   'ante',
+  //   'smallblind',
+  //   'bigblind',
+  //   'dealHole1',
+  //   'deal-hole2',
+  //   'bet-flopreflop',
+  //   'burn-flop',
+  //   'flop1',
+  //   'flop2',
+  //   'flop3',
+  //   'bet-flop',
+  //   'burn-turn',
+  //   'turn',
+  //   'bet-turn',
+  //   'burn-river',
+  //   'river',
+  //   'bet-river',
+  //   'showdown'
+  // ];
 
-  function doAnte() {
-    if (ante) {
+  // Handle a user/AI action.
+  action.handleAction = function (info) {
+    // TODO: verify that info.action === data.action.
+    switch (action.step) {
+      case null:
+      case 'ante':
+        action.ante();
+        break;
+      case 'smallBlind':
+        action.player(data.action.player).chips -= data.action.data.chips;
+        action.bigBlind();
+        break;
+      case 'bigBlind':
+        action.player(data.action.player).chips -= data.action.data.chips;
+        action.dealHole();
+        break;
+    }
+    // if (!data.action && !info.action) {
+    //   return true;
+    // } else if (data.action.type === action.type) {
+    //   switch (action.type) {
+    //     case 'smallBlind':
+    //       break;
+    //   }
+    // }
+    // return false;
+  };
+
+  action.ante = function () {
+    action.step = 'ante';
+    if (data.ante) {
       //
     } else {
-      step = 'smallblind';
-      go();
+      action.smallBlind();
     }
-  }
+  };
 
-  function doSmallBlind() {
-    var a = new Game.Action(
-      data.players[0].id,
-      Poker.SMALL_BLIND,
-      { chips: smallBlind }
-    );
-    // console.log(a.player);
-    // console.log(a.action);
-    // console.log(a.data);
-    // action();
-  }
+  action.smallBlind = function () {
+    action.step = 'smallBlind';
+    if (data.smallBlind) {
+      data.action = new Game.Action(
+        data.players[0].id,
+        Poker.SMALL_BLIND,
+        { chips: Math.min(data.players[0].chips, data.smallBlind) }
+      );
+      data.actionCallback(data.action);
+    } else {
+      action.bigBlind();
+    }
+  };
 
+  action.bigBlind = function () {
+    action.step = 'bigBlind';
+    if (data.minBet) {
+      data.action = new Game.Action(
+        data.players[1].id,
+        Poker.BIG_BLIND,
+        { chips: Math.min(data.players[1].chips, data.minBet) }
+      );
+      data.actionCallback(data.action);
+    } else {
+      action.dealHole();
+    }
+  };
+
+  action.dealHole = function () {
+    console.log('action.dealHole()');
+  };
 
  /**
   * Updates the game with information about a player's action. Designer to be
@@ -107,7 +151,10 @@ function GameHoldem(options) {
   * @param {number=} info.value If action is Poker.BET, the amount.
   */
  Object.defineProperty(this, 'go', {
-   value: go,
+   value: function (info) {
+     action.handleAction(info);
+     // action[action.step].call(this, info);
+   },
    enumerable: true,
  })
 }
